@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <title>TaskPoint - Admin Panel</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+</head>
+<body class="bg-slate-100 p-6 max-w-2xl mx-auto space-y-6">
+
+  <h1 class="text-2xl font-bold text-slate-800">TaskPoint - অ্যাডমিন প্যানেল</h1>
+
+  <!-- Create New Task -->
+  <div class="bg-white p-5 rounded-xl shadow space-y-3">
+    <h2 class="font-bold text-lg">১. নতুন কাজ যোগ করুন (Task Create)</h2>
+    <input id="task-title" type="text" placeholder="কাজের শিরোনাম (যেমন: পেজ লাইক করুন)" class="w-full border p-2 rounded">
+    <textarea id="task-desc" placeholder="কাজের বিবরণ" class="w-full border p-2 rounded"></textarea>
+    <input id="task-link" type="text" placeholder="টাস্কের লিংক (URL)" class="w-full border p-2 rounded">
+    <button onclick="addTask()" class="bg-blue-600 text-white px-4 py-2 rounded font-bold">কাজ পাবলিশ করুন (৳২)</button>
+  </div>
+
+  <!-- Pending Task Submissions -->
+  <div class="bg-white p-5 rounded-xl shadow space-y-3">
+    <h2 class="font-bold text-lg">২. ইউজারদের জমার কাজ (Submissions)</h2>
+    <div id="submissions-list" class="space-y-3 text-sm"></div>
+  </div>
+
+  <!-- Pending Withdrawals -->
+  <div class="bg-white p-5 rounded-xl shadow space-y-3">
+    <h2 class="font-bold text-lg">৩. টাকা উত্তোলনের রিকোয়েস্ট (Withdrawals)</h2>
+    <div id="withdrawals-list" class="space-y-3 text-sm"></div>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCmoxuq4odi_L7U7wMflKrWhgbPMsPDOlo",
+      authDomain: "taskpoint-fa4be.firebaseapp.com",
+      projectId: "taskpoint-fa4be",
+      storageBucket: "taskpoint-fa4be.firebasestorage.app",
+      messagingSenderId: "378740952776",
+      appId: "1:378740952776:web:09af7b6e8f7d765bd81ffd",
+      measurementId: "G-34KHR9HSZM"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    function addTask() {
+      const title = document.getElementById('task-title').value;
+      const desc = document.getElementById('task-desc').value;
+      const link = document.getElementById('task-link').value;
+
+      if(!title || !link) return alert("শিরোনাম এবং লিংক দিন!");
+
+      db.collection('tasks').add({
+        title: title,
+        description: desc,
+        link: link,
+        reward: 2.00,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        alert("কাজ সফলভাবে পাবলিশ হয়েছে!");
+        document.getElementById('task-title').value = '';
+        document.getElementById('task-desc').value = '';
+        document.getElementById('task-link').value = '';
+      });
+    }
+
+    db.collection('submissions').where('status', '==', 'pending').onSnapshot(snapshot => {
+      const container = document.getElementById('submissions-list');
+      container.innerHTML = snapshot.empty ? '<p class="text-slate-400">কোনো পেন্ডিং কাজ নেই।</p>' : '';
+      
+      snapshot.forEach(doc => {
+        const item = doc.data();
+        container.innerHTML += `
+          <div class="border p-3 rounded space-y-1">
+            <p><b>ইউজার:</b> ${item.userName} (${item.userEmail})</p>
+            <p><b>প্রুফ:</b> ${item.proof}</p>
+            <div class="flex gap-2 mt-2">
+              <button onclick="approveSubmission('${doc.id}', '${item.userId}', ${item.reward})" class="bg-green-600 text-white px-3 py-1 rounded">Approve (৳${item.reward} যোগ হবে)</button>
+            </div>
+          </div>
+        `;
+      });
+    });
+
+    function approveSubmission(subId, userId, reward) {
+      db.collection('users').doc(userId).update({
+        balance: firebase.firestore.FieldValue.increment(reward)
+      }).then(() => {
+        db.collection('submissions').doc(subId).update({ status: 'approved' });
+        alert("কাজ সফলভাবে এপ্রুভ করা হয়েছে!");
+      });
+    }
+
+    db.collection('withdrawals').where('status', '==', 'pending').onSnapshot(snapshot => {
+      const container = document.getElementById('withdrawals-list');
+      container.innerHTML = snapshot.empty ? '<p class="text-slate-400">কোনো উইথড্র রিকোয়েস্ট নেই।</p>' : '';
+      
+      snapshot.forEach(doc => {
+        const item = doc.data();
+        container.innerHTML += `
+          <div class="border p-3 rounded space-y-1">
+            <p><b>ইউজার:</b> ${item.userName}</p>
+            <p><b>মেথড:</b> ${item.method} | <b>নম্বর:</b> ${item.number}</p>
+            <p><b>পরিমাণ:</b> ৳${item.amount}</p>
+            <button onclick="approveWithdrawal('${doc.id}')" class="bg-green-600 text-white px-3 py-1 rounded mt-2">পেমেন্ট সম্পন্ন হয়েছে (Paid)</button>
+          </div>
+        `;
+      });
+    });
+
+    function approveWithdrawal(wId) {
+      db.collection('withdrawals').doc(wId).update({ status: 'paid' }).then(() => {
+        alert("উইথড্র রিকোয়েস্ট কমপ্লিট করা হয়েছে!");
+      });
+    }
+  </script>
+</body>
+</html>
