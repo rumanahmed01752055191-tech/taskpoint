@@ -3,11 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TaskPoint</title>
-  <link rel="manifest" href="manifest.json">
-  <meta name="theme-color" content="#1a2332">
+  <title>TaskPoint - Earn & Promote</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- Firebase SDKs -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
@@ -15,99 +12,60 @@
 <body class="bg-slate-100 font-sans pb-24">
 
   <!-- Navbar -->
-  <nav class="bg-white shadow-sm p-4 flex justify-between items-center max-w-md mx-auto sticky top-0 z-50">
+  <nav class="bg-white shadow-sm p-4 flex justify-between items-center sticky top-0 z-50">
     <h1 class="text-xl font-bold text-slate-800">TaskPoint</h1>
     <div id="user-info">
-      <button id="login-btn" onclick="login()" class="bg-blue-600 text-white px-3 py-1.5 rounded-lg text-sm font-semibold">লগইন করুন</button>
-      <div id="user-profile" class="hidden text-sm">
-        <span id="user-name" class="font-bold text-slate-700"></span> | 
-        <span class="text-green-600 font-bold">৳<span id="user-balance">0.00</span></span>
-      </div>
+      <button onclick="document.getElementById('auth-box').scrollIntoView({behavior: 'smooth'})" class="bg-blue-600 text-white px-4 py-2 rounded-lg font-bold text-sm shadow">লগইন / রেজিস্টার</button>
     </div>
   </nav>
 
-  <main class="max-w-md mx-auto p-4 space-y-4">
+  <div class="max-w-md mx-auto p-4 space-y-6">
 
-    <!-- App Download Banner -->
-    <div class="bg-indigo-600 text-white p-3 rounded-xl flex justify-between items-center text-xs">
-      <span>📱 আমাদের অফিশিয়াল অ্যাপটি ডাউনলোড করুন!</span>
-      <a href="#" target="_blank" class="bg-white text-indigo-600 px-3 py-1.5 rounded-lg font-bold shadow">ডাউনলোড</a>
+    <!-- Auth Box -->
+    <div id="auth-box" class="bg-white p-5 rounded-2xl shadow space-y-3">
+      <h2 class="font-bold text-slate-800 text-sm">📱 মোবাইল নম্বর দিয়ে প্রবেশ করুন</h2>
+      <input id="user-phone" type="number" placeholder="মোবাইল নম্বর (যেমন: 017xxxxxxxx)" class="w-full border p-2.5 rounded-xl text-xs">
+      <input id="user-pass" type="password" placeholder="একটি পাসওয়ার্ড দিন" class="w-full border p-2.5 rounded-xl text-xs">
+      <div class="flex gap-2">
+        <button onclick="registerUser()" class="flex-1 bg-blue-600 text-white py-2.5 rounded-xl text-xs font-bold">রেজিস্ট্রেশন</button>
+        <button onclick="loginUser()" class="flex-1 bg-slate-800 text-white py-2.5 rounded-xl text-xs font-bold">লগইন</button>
+      </div>
     </div>
 
-    <!-- Promotion Card -->
-    <div class="bg-[#1a2332] text-white p-5 rounded-2xl shadow-lg">
-      <div class="flex justify-between items-center mb-3">
-        <span class="bg-blue-600 text-xs px-2.5 py-1 rounded-full font-semibold">✏️ প্রমোশন সার্ভিস</span>
+    <!-- Promotion Service Card -->
+    <div class="bg-slate-900 text-white p-5 rounded-2xl shadow-lg space-y-4">
+      <div class="flex justify-between items-center">
+        <span class="bg-blue-600 text-xs px-2.5 py-1 rounded-full font-bold">✏️ প্রমোশন সার্ভিস</span>
         <span class="text-xs text-slate-400">ফ্রি ট্রায়াল ও পেইড প্ল্যান</span>
       </div>
-      <h2 class="text-lg font-bold mb-2">সোশ্যাল মিডিয়া পেজ ও চ্যানেল প্রমোট করুন!</h2>
-      <div class="flex flex-wrap gap-2 text-xs mb-3">
-        <span class="bg-slate-700 px-3 py-1 rounded-full">🔴 YouTube</span>
-        <span class="bg-slate-700 px-3 py-1 rounded-full">🔵 Facebook</span>
-        <span class="bg-slate-700 px-3 py-1 rounded-full">🖤 TikTok</span>
-        <span class="bg-slate-700 px-3 py-1 rounded-full">🟣 Instagram</span>
-      </div>
-      <p class="text-xs text-slate-300 mb-4">
-        রিয়েল ইউজারদের মাধ্যমে আপনার ফলোয়ার, সাবস্ক্রাইবার, লাইক, কমেন্ট ও শেয়ার বাড়িয়ে নিন। আপনার পছন্দের প্ল্যান অনুযায়ী লিংক আমাদের অ্যাপে লাইভ করা হবে।
-      </p>
-      <div class="grid grid-cols-2 gap-3 text-center text-xs font-semibold mb-4">
-        <div class="bg-[#243044] p-3 rounded-xl">
-          <p class="text-slate-400">৩ দিন (ফ্রি)</p>
-          <p class="text-blue-400 text-sm mt-1">৳ ১১০</p>
-        </div>
-        <div class="bg-[#243044] p-3 rounded-xl">
-          <p class="text-slate-400">৭ দিন</p>
-          <p class="text-blue-400 text-sm mt-1">৳ ৩১০</p>
-        </div>
-        <div class="bg-[#243044] p-3 rounded-xl">
-          <p class="text-slate-400">১০ দিন</p>
-          <p class="text-blue-400 text-sm mt-1">৳ ৪১০</p>
-        </div>
-        <div class="bg-[#243044] p-3 rounded-xl">
-          <p class="text-slate-400">১৫ দিন</p>
-          <p class="text-blue-400 text-sm mt-1">৳ ৭১০</p>
-        </div>
-      </div>
-      <a href="https://wa.me/8801700000000?text=Hello,%20I%20want%20to%20promote%20my%20page" target="_blank" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 text-sm">
+      <h2 class="text-lg font-bold">সোশ্যাল মিডিয়া পেজ ও চ্যানেল প্রমোট করুন!</h2>
+      <p class="text-xs text-slate-300">রিয়েল ইউজারদের মাধ্যমে আপনার ফলোয়ার, সাবস্ক্রাইবার, লাইক, কমেন্ট ও শেয়ার বাড়িয়ে নিন।</p>
+      <a href="https://wa.me/" target="_blank" class="block text-center bg-emerald-500 text-white font-bold py-2.5 rounded-xl text-sm">
         💬 WhatsApp-এ প্রমোট বুক করুন
       </a>
     </div>
 
-    <!-- Referral Link Box -->
-    <div class="bg-white p-4 rounded-xl shadow-sm text-xs space-y-2">
-      <h3 class="font-bold text-slate-800">🎁 রেফার করে আয় (প্রতি রেফার ৫ টাকা)</h3>
-      <p class="text-slate-500">আপনার বন্ধুদের শেয়ার করুন এবং তারা একাউন্ট খুললেই পাবেন ৳৫।</p>
-      <div class="flex gap-2">
-        <input id="ref-link" readonly type="text" value="লগইন করলে রেফার লিংক পাবেন" class="w-full bg-slate-100 p-2 rounded-lg border">
-        <button onclick="copyRef()" class="bg-blue-600 text-white px-3 rounded-lg font-semibold">Copy</button>
-      </div>
-    </div>
-
-    <!-- Available Tasks List -->
-    <div class="bg-white p-4 rounded-xl shadow-sm space-y-3">
-      <h3 class="font-bold text-sm text-slate-800">অ্যাভেইলঅ্যাবল কাজ (প্রতিটি কাজ ৳২)</h3>
-      <div id="tasks-container" class="space-y-3 text-xs">
-        <p class="text-slate-400">কাজ লোড হচ্ছে...</p>
+    <!-- Social Tasks Section -->
+    <div class="space-y-3">
+      <h3 class="font-bold text-slate-800 text-base">📋 মাইক্রো টাস্ক (কাজ করে আয় করুন)</h3>
+      <div id="tasks-list" class="space-y-3">
+        <p class="text-xs text-center text-slate-400 py-4">কাজ লোড হচ্ছে...</p>
       </div>
     </div>
 
     <!-- Withdrawal Section -->
-    <div class="bg-white p-4 rounded-xl shadow-sm space-y-3">
-      <h3 class="font-bold text-sm text-slate-800">টাকা উত্তোলন (Min ৳100)</h3>
-      <select id="withdraw-method" class="w-full border p-2 text-xs rounded-lg">
+    <div id="withdraw-section" class="hidden bg-white p-4 rounded-xl shadow space-y-3">
+      <h3 class="font-bold text-sm text-slate-800">💸 টাকা উত্তোলন (Withdraw)</h3>
+      <select id="withdraw-method" class="w-full border p-2 rounded text-xs">
         <option value="bKash">বিকাশ (bKash)</option>
         <option value="Nagad">নগদ (Nagad)</option>
       </select>
-      <input id="withdraw-number" type="text" placeholder="মোবাইল নম্বর লিখুন" class="w-full border p-2 text-xs rounded-lg">
-      <input id="withdraw-amount" type="number" placeholder="পরিমাণ (সর্বনিম্ন ১০০ টাকা)" class="w-full border p-2 text-xs rounded-lg">
-      <button onclick="requestWithdraw()" class="w-full bg-slate-800 text-white py-2.5 rounded-lg text-xs font-semibold">উত্তোলনের রিকোয়েস্ট পাঠান</button>
+      <input id="withdraw-number" type="number" placeholder="মোবাইল নম্বর" class="w-full border p-2 rounded text-xs">
+      <input id="withdraw-amount" type="number" placeholder="পরিমাণ (নূন্যতম ৳৫০)" class="w-full border p-2 rounded text-xs">
+      <button onclick="requestWithdraw()" class="w-full bg-slate-800 text-white py-2 rounded-lg text-xs font-bold">উইথড্র রিকোয়েস্ট পাঠান</button>
     </div>
 
-    <!-- Instructions -->
-    <div class="bg-amber-50 border border-amber-200 p-3 rounded-xl text-xs text-amber-800">
-      <b>নির্দেশনা:</b> শুধু বৈধ কাজ করুন। কাজ শেষে স্ক্রিনশট জমা দিন। আপনিও আমাদের কাজ করে ফ্রিতে আয় করতে পারবেন!
-    </div>
-  </main>
+  </div>
 
   <script>
     const firebaseConfig = {
@@ -116,147 +74,118 @@
       projectId: "taskpoint-fa4be",
       storageBucket: "taskpoint-fa4be.firebasestorage.app",
       messagingSenderId: "378740952776",
-      appId: "1:378740952776:web:09af7b6e8f7d765bd81ffd",
-      measurementId: "G-34KHR9HSZM"
+      appId: "1:378740952776:web:09af7b6e8f7d765bd81ffd"
     };
 
     firebase.initializeApp(firebaseConfig);
     const auth = firebase.auth();
     const db = firebase.firestore();
 
-    let currentUserData = null;
+    let currentUser = null;
 
-    function login() {
-      const provider = new firebase.auth.GoogleAuthProvider();
-      auth.signInWithPopup(provider).then(res => {
-        const user = res.user;
-        const urlParams = new URLSearchParams(window.location.search);
-        const refBy = urlParams.get('ref');
+    function registerUser() {
+      const phone = document.getElementById('user-phone').value;
+      const pass = document.getElementById('user-pass').value;
+      if(!phone || !pass) return alert("নম্বর ও পাসওয়ার্ড দিন!");
 
-        const userRef = db.collection('users').doc(user.uid);
-        userRef.get().then(doc => {
-          if (!doc.exists) {
-            userRef.set({
-              name: user.displayName,
-              email: user.email,
-              balance: 0.00,
-              referredBy: refBy || null,
-              createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            });
+      const fakeEmail = phone + "@taskpoint.com";
+      auth.createUserWithEmailAndPassword(fakeEmail, pass)
+        .then((res) => {
+          db.collection('users').doc(res.user.uid).set({
+            phone: phone,
+            balance: 0,
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+          alert("রেজিস্ট্রেশন সফল হয়েছে!");
+        })
+        .catch(err => alert("ত্রুটি: " + err.message));
+    }
 
-            if (refBy) {
-              db.collection('users').doc(refBy).update({
-                balance: firebase.firestore.FieldValue.increment(5.00)
-              });
-            }
-          }
-        });
-      });
+    function loginUser() {
+      const phone = document.getElementById('user-phone').value;
+      const pass = document.getElementById('user-pass').value;
+      if(!phone || !pass) return alert("নম্বর ও পাসওয়ার্ড দিন!");
+
+      const fakeEmail = phone + "@taskpoint.com";
+      auth.signInWithEmailAndPassword(fakeEmail, pass)
+        .then(() => alert("লগইন সফল হয়েছে!"))
+        .catch(err => alert("লগইন ব্যর্থ: " + err.message));
     }
 
     auth.onAuthStateChanged(user => {
       if (user) {
-        document.getElementById('login-btn').classList.add('hidden');
-        document.getElementById('user-profile').classList.remove('hidden');
-        document.getElementById('user-name').innerText = user.displayName.split(" ")[0];
-
-        const refUrl = window.location.origin + window.location.pathname + '?ref=' + user.uid;
-        document.getElementById('ref-link').value = refUrl;
+        currentUser = user;
+        document.getElementById('auth-box').classList.add('hidden');
+        document.getElementById('withdraw-section').classList.remove('hidden');
 
         db.collection('users').doc(user.uid).onSnapshot(doc => {
           if (doc.exists) {
-            currentUserData = doc.data();
-            document.getElementById('user-balance').innerText = (currentUserData.balance || 0).toFixed(2);
+            const bal = doc.data().balance || 0;
+            document.getElementById('user-info').innerHTML = `
+              <div class="text-right">
+                <p class="text-xs font-bold text-slate-700">${doc.data().phone}</p>
+                <p class="text-xs text-green-600 font-extrabold">ব্যালেন্স: ৳${bal.toFixed(2)}</p>
+              </div>
+            `;
           }
         });
       }
-      loadTasks();
     });
 
-    function copyRef() {
-      const input = document.getElementById('ref-link');
-      input.select();
-      document.execCommand('copy');
-      alert("রেফার লিংক কপি করা হয়েছে!");
-    }
-
-    function loadTasks() {
-      const container = document.getElementById('tasks-container');
-      db.collection('tasks').onSnapshot(snapshot => {
-        container.innerHTML = '';
-        if(snapshot.empty) {
-          container.innerHTML = '<p class="text-slate-400">বর্তমানে কোনো কাজ নেই।</p>';
-          return;
-        }
-        snapshot.forEach(doc => {
-          const task = doc.data();
-          container.innerHTML += `
-            <div class="border p-3 rounded-lg space-y-2">
-              <div class="flex justify-between font-bold text-slate-700">
-                <span>${task.title}</span>
-                <span class="text-green-600">৳${task.reward || 2}</span>
-              </div>
-              <p class="text-slate-500">${task.description}</p>
-              <a href="${task.link}" target="_blank" class="inline-block bg-blue-50 text-blue-600 px-3 py-1 rounded font-semibold">লিংক ওপেন করুন</a>
-              <div class="flex gap-2 mt-2">
-                <input id="proof-${doc.id}" type="text" placeholder="কাজের প্রুফ/স্ক্রিনশট লিংক" class="w-full border p-1 rounded">
-                <button onclick="submitTaskProof('${doc.id}', '${task.reward || 2}')" class="bg-slate-800 text-white px-3 py-1 rounded font-semibold">জমা দিন</button>
-              </div>
+    db.collection('tasks').onSnapshot(snapshot => {
+      const list = document.getElementById('tasks-list');
+      if (snapshot.empty) {
+        list.innerHTML = '<p class="text-xs text-center text-slate-400 py-4">কোনো কাজ নেই।</p>';
+        return;
+      }
+      list.innerHTML = '';
+      snapshot.forEach(doc => {
+        const task = doc.data();
+        list.innerHTML += `
+          <div class="bg-white p-4 rounded-xl shadow-sm border space-y-2">
+            <div class="flex justify-between items-start">
+              <h4 class="font-bold text-sm text-slate-800">${task.title}</h4>
+              <span class="bg-green-100 text-green-700 font-bold text-xs px-2 py-0.5 rounded-full">+৳${task.reward || 2.00}</span>
             </div>
-          `;
-        });
+            <p class="text-xs text-slate-500">${task.description || 'লিংকে গিয়ে কাজ করুন।'}</p>
+            <a href="${task.link}" target="_blank" class="inline-block bg-blue-50 text-blue-600 font-bold text-xs px-3 py-1.5 rounded-lg">🔗 লিংক ওপেন করুন</a>
+            <div class="pt-2 flex gap-2">
+              <input id="proof-${doc.id}" type="text" placeholder="আপনার প্রুফ/ইউজারনেম দিন" class="border p-1.5 rounded text-xs flex-1">
+              <button onclick="submitTask('${doc.id}', '${task.title}', ${task.reward || 2.00})" class="bg-green-600 text-white text-xs px-3 py-1.5 rounded-lg font-bold">জমা দিন</button>
+            </div>
+          </div>
+        `;
       });
-    }
+    });
 
-    function submitTaskProof(taskId, reward) {
-      const user = auth.currentUser;
-      if (!user) return alert("লগইন করুন!");
+    function submitTask(taskId, taskTitle, reward) {
+      if (!currentUser) return alert("প্রথমে লগইন করুন!");
       const proof = document.getElementById(`proof-${taskId}`).value;
       if (!proof) return alert("প্রুফ লিখুন!");
 
       db.collection('submissions').add({
-        userId: user.uid,
-        userName: user.displayName,
-        userEmail: user.email,
-        taskId: taskId,
-        reward: parseFloat(reward),
-        proof: proof,
-        status: "pending",
+        taskId, taskTitle,
+        userId: currentUser.uid,
+        proof, reward,
+        status: 'pending',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       }).then(() => {
-        alert("কাজ সফলভাবে জমা দেওয়া হয়েছে! অ্যাডমিন চেক করে টাকা ব্যালেন্সে যোগ করে দেবে।");
+        alert("কাজ জমা হয়েছে!");
         document.getElementById(`proof-${taskId}`).value = '';
       });
     }
 
     function requestWithdraw() {
-      const user = auth.currentUser;
-      if (!user) return alert("লগইন করুন!");
-      
       const method = document.getElementById('withdraw-method').value;
       const number = document.getElementById('withdraw-number').value;
       const amount = parseFloat(document.getElementById('withdraw-amount').value);
-
-      if (!number || !amount) return alert("সঠিক বিবরণ দিন!");
-      if (amount < 100) return alert("সর্বনিম্ন ১০০ টাকা উত্তোলন করতে হবে!");
-      if (currentUserData.balance < amount) return alert("আপনার পর্যাপ্ত ব্যালেন্স নেই!");
+      if (!number || !amount) return alert("সব তথ্য দিন!");
 
       db.collection('withdrawals').add({
-        userId: user.uid,
-        userName: user.displayName,
-        method: method,
-        number: number,
-        amount: amount,
-        status: "pending",
+        userId: currentUser.uid, method, number, amount,
+        status: 'pending',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        db.collection('users').doc(user.uid).update({
-          balance: firebase.firestore.FieldValue.increment(-amount)
-        });
-        alert("উত্তোলন রিকোয়েস্ট সফলভাবে পাঠানো হয়েছে!");
-        document.getElementById('withdraw-number').value = '';
-        document.getElementById('withdraw-amount').value = '';
-      });
+      }).then(() => alert("উইথড্র রিকোয়েস্ট জমা হয়েছে!"));
     }
   </script>
 </body>
