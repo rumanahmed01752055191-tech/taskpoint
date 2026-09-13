@@ -25,7 +25,7 @@
     <div id="auth-box" class="bg-white p-5 rounded-2xl shadow space-y-3">
       <h2 class="font-bold text-slate-800 text-sm">📱 মোবাইল নম্বর দিয়ে প্রবেশ করুন</h2>
       <input id="user-phone" type="number" placeholder="মোবাইল নম্বর (যেমন: 017xxxxxxxx)" class="w-full border p-2.5 rounded-xl text-xs">
-      <input id="user-pass" type="password" placeholder="একটি পাসওয়ার্ড দিন" class="w-full border p-2.5 rounded-xl text-xs">
+      <input id="user-pass" type="password" placeholder="একটি পাসওয়ার্ড দিন (কমপক্ষে ৬ ডিজিট)" class="w-full border p-2.5 rounded-xl text-xs">
       <div class="flex gap-2">
         <button onclick="registerUser()" class="flex-1 bg-blue-600 text-white py-2.5 rounded-xl text-xs font-bold">রেজিস্ট্রেশন</button>
         <button onclick="loginUser()" class="flex-1 bg-slate-800 text-white py-2.5 rounded-xl text-xs font-bold">লগইন</button>
@@ -87,6 +87,7 @@
       const phone = document.getElementById('user-phone').value;
       const pass = document.getElementById('user-pass').value;
       if(!phone || !pass) return alert("নম্বর ও পাসওয়ার্ড দিন!");
+      if(pass.length < 6) return alert("পাসওয়ার্ড কমপক্ষে ৬ অক্ষরের হতে হবে!");
 
       const fakeEmail = phone + "@taskpoint.com";
       auth.createUserWithEmailAndPassword(fakeEmail, pass)
@@ -177,12 +178,13 @@
 
     function requestWithdraw() {
       const method = document.getElementById('withdraw-method').value;
-      const number = document.getElementById('withdraw-number').value;
+      const number = document.getElementById('withdraw-number-field'] || document.getElementById('withdraw-number').value;
       const amount = parseFloat(document.getElementById('withdraw-amount').value);
-      if (!number || !amount) return alert("সব তথ্য দিন!");
+      const phoneInput = document.getElementById('withdraw-number').value;
+      if (!phoneInput || !amount) return alert("সব তথ্য দিন!");
 
       db.collection('withdrawals').add({
-        userId: currentUser.uid, method, number, amount,
+        userId: currentUser.uid, method, number: phoneInput, amount,
         status: 'pending',
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       }).then(() => alert("উইথড্র রিকোয়েস্ট জমা হয়েছে!"));
