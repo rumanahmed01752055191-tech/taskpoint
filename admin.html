@@ -11,30 +11,38 @@
 
   <h1 class="text-2xl font-bold text-slate-800">TaskPoint - অ্যাডমিন প্যানেল</h1>
 
-  <!-- Create New Task -->
+  <!-- ১. নতুন কাজ যোগ করুন -->
   <div class="bg-white p-5 rounded-xl shadow space-y-3">
     <h2 class="font-bold text-lg">১. নতুন কাজ যোগ করুন (Task Create)</h2>
     <input id="task-title" type="text" placeholder="কাজের শিরোনাম (যেমন: ফেসবুক পেজ লাইক)" class="w-full border p-2 rounded">
     <textarea id="task-desc" placeholder="কাজের বিবরণ" class="w-full border p-2 rounded"></textarea>
     <input id="task-link" type="text" placeholder="টাস্কের লিংক (যেমন: https://facebook.com/...)" class="w-full border p-2 rounded">
-    <input id="task-reward" type="number" placeholder="রিওয়ার্ড বা পুরস্কার (যেমন: 5)" class="w-full border p-2 rounded">
+    <input id="task-reward" type="number" placeholder="রিওয়ার্ড বা পুরস্কার (যেমন: 2)" class="w-full border p-2 rounded">
     <button onclick="addTask()" class="bg-blue-600 text-white px-4 py-2 rounded font-bold w-full cursor-pointer">কাজ পাবলিশ করুন</button>
   </div>
 
-  <!-- Task List -->
+  <!-- ২. বর্তমান কাজ ডিলিট বা ম্যানেজ করার অপশন -->
   <div class="bg-white p-5 rounded-xl shadow space-y-3">
-    <h2 class="font-bold text-lg">২. বর্তমান একটিভ কাজসমূহ</h2>
-    <div id="admin-tasks-list" class="space-y-3 text-sm"></div>
+    <h2 class="font-bold text-lg">২. বর্তমান একটিভ কাজসমূহ (ডিলিট অপশনসহ)</h2>
+    <div id="admin-tasks-list" class="space-y-3 text-sm">
+      <p class="text-slate-400">কাজ লোড হচ্ছে...</p>
+    </div>
+  </div>
+
+  <!-- ৩. অন্যান্য সেকশন -->
+  <div class="bg-white p-5 rounded-xl shadow space-y-3">
+    <h2 class="font-bold text-lg">৩. ইউজারদের জমার কাজ ও উইথড্র</h2>
+    <p class="text-xs text-slate-500">বর্তমানে কোনো পেন্ডিং রিকোয়েস্ট নেই।</p>
   </div>
 
   <script>
     const firebaseConfig = {
-        apiKey: "AIzaSy...", 
-        authDomain: "taskpoint-xxx.firebaseapp.com",
-        projectId: "taskpoint-xxx",
-        storageBucket: "taskpoint-xxx.appspot.com",
-        messagingSenderId: "123456789",
-        appId: "1:123456789:web:abcde"
+        apiKey: "YOUR_API_KEY",
+        authDomain: "YOUR_AUTH_DOMAIN",
+        projectId: "YOUR_PROJECT_ID",
+        storageBucket: "YOUR_STORAGE_BUCKET",
+        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+        appId: "YOUR_APP_ID"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -51,14 +59,13 @@
         return;
       }
 
-      // ইউআরএল অটো-ফর্মাটিং (যদি কেউ ভুল করে fb:// বা অন্য কিছু দেয় তবে ঠিক করে নেওয়া)
       if (link.startsWith('fb://')) {
         const profileId = link.replace('fb://profile/', '').split('?')[0];
         link = `https://www.facebook.com/${profileId}`;
       } else if (link.startsWith('tg://')) {
         link = link.replace('tg://', 'https://t.me/');
       } else if (!link.startsWith('http://') && !link.startsWith('https://')) {
-        link = 'https://' + link; // যদি শুধু ডোমেইন লেখে তবুও ঠিক করে দেবে
+        link = 'https://' + link;
       }
 
       db.collection("tasks").add({
@@ -91,22 +98,25 @@
           html += `
             <div class="flex justify-between items-center bg-slate-50 p-3 rounded border">
               <div>
-                <p class="font-bold text-slate-800">${task.title}</p>
-                <p class="text-xs text-blue-600 truncate max-w-xs">${task.link}</p>
-                <p class="text-xs text-emerald-600 font-semibold">Reward: ৳${task.reward}</p>
+                <p class="font-bold text-slate-800">${task.title || 'Untitled'}</p>
+                <p class="text-xs text-blue-600 truncate max-w-xs">${task.link || '#'}</p>
+                <p class="text-xs text-emerald-600 font-semibold">Reward: ৳${task.reward || 0}</p>
               </div>
               <button onclick="deleteTask('${doc.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs font-bold cursor-pointer">ডিলিট</button>
             </div>
           `;
         });
-        listDiv.innerHTML = html || '<p class="text-slate-400">কোনো কাজ নেই</p>';
+        listDiv.innerHTML = html || '<p class="text-slate-400 text-center">কোনো কাজ নেই</p>';
       });
     }
 
     function deleteTask(id) {
-      if (confirm('আপনি কি এই কাজ ডিলিট করতে চান?')) {
+      if (confirm('আপনি কি এই কাজটি ডিলিট করতে চান?')) {
         db.collection("tasks").doc(id).delete().then(() => {
+          alert('কাজটি সফলভাবে ডিলিট করা হয়েছে!');
           loadAdminTasks();
+        }).catch((error) => {
+          alert('ডিলিট করতে সমস্যা হয়েছে।');
         });
       }
     }
