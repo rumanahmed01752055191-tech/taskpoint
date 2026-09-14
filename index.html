@@ -102,7 +102,7 @@
                         <span class="text-[10px] bg-blue-50 text-blue-600 font-bold px-2.5 py-1 rounded-full">Live</span>
                     </div>
                     <div id="dynamicTaskList" class="space-y-3">
-                        <p class="text-xs text-slate-400 text-center py-6">এই মুহূর্তে কোনো কাজ নেই। নতুন কাজ যোগ করা হচ্ছে...</p>
+                        <p class="text-xs text-slate-400 text-center py-6">কাজ লোড হচ্ছে...</p>
                     </div>
                 </div>
             </div>
@@ -146,7 +146,7 @@
         </nav>
     </div>
 
-    <!-- TASK MODAL (Updated with Screenshot & Mobile Number) -->
+    <!-- TASK MODAL -->
     <div id="taskModal" class="max-w-md mx-auto fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
         <div class="bg-white w-full rounded-3xl p-6 space-y-4 shadow-2xl">
             <h3 class="font-bold text-slate-800 text-sm" id="modalTaskTitle">Task Proof</h3>
@@ -215,10 +215,12 @@
         function loadLiveTasks() {
             db.collection('tasks').onSnapshot(snapshot => {
                 const container = document.getElementById('dynamicTaskList');
-                container.innerHTML = snapshot.empty ? '<p class="text-xs text-slate-400 text-center py-6">এই মুহূর্তে কোনো কাজ নেই। নতুন কাজ শীঘ্রই আসছে...</p>' : '';
+                container.innerHTML = snapshot.empty ? '<p class="text-xs text-slate-400 text-center py-6">এই মুহূর্তে কোনো কাজ নেই। নতুন কাজ যোগ করা হচ্ছে...</p>' : '';
                 
                 snapshot.forEach(doc => {
                     const task = doc.data();
+                    const taskLink = task.link && task.link.trim() !== '' && task.link !== '#' ? task.link : '';
+                    
                     container.innerHTML += `
                         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
                             <div class="space-y-1">
@@ -226,7 +228,7 @@
                                 <p class="text-xs text-slate-500">${task.description || ''}</p>
                                 <p class="text-xs font-extrabold text-emerald-600">Reward: ৳${task.reward}</p>
                             </div>
-                            <button onclick="openTaskModal('${task.title}', '${task.link || '#'}', ${task.reward})" class="bg-blue-600 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow">কাজ শুরু করুন</button>
+                            <button onclick="openTaskModal('${task.title}', '${taskLink}', ${task.reward})" class="bg-blue-600 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow">কাজ শুরু করুন</button>
                         </div>
                     `;
                 });
@@ -235,12 +237,17 @@
 
         function openTaskModal(title, link, reward) {
             currentTask = { title, reward };
-            if(link && link !== '#') {
+            
+            // যদি লিংকে আসল URL থাকে তবে ওপেন করবে, না হলে আটকে থাকবে না
+            if(link && link.startsWith('http')) {
                 window.open(link, '_blank');
+            } else {
+                console.log("No valid link provided for this task.");
             }
+
             document.getElementById('modalTaskTitle').innerText = title;
             document.getElementById('taskUserNumber').value = userPhone;
-            document.getElementById('taskScreenshot').value = ''; // Reset file input
+            document.getElementById('taskScreenshot').value = ''; 
             document.getElementById('taskModal').style.display = 'flex';
         }
 
