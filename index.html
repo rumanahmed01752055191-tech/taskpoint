@@ -23,54 +23,52 @@
         .tab-content.active { display: block; }
         .screen-view { display: none; }
         .screen-view.active { display: block; }
-
-        /* Netlify badge হাইড করার CSS */
-        iframe#netlify-badge, a[href*="netlify.com"] {
-            display: none !important;
-            opacity: 0 !important;
-            pointer-events: none !important;
-        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen pb-24">
 
     <!-- SCREEN 1: WELCOME INTRO -->
-    <div id="screen-welcome" class="screen-view active max-w-md mx-auto min-h-screen flex flex-col justify-between p-6 pb-16 bg-gradient-to-br from-indigo-900 via-blue-900 to-slate-900 text-white fixed inset-0 z-50 overflow-y-auto">
-        <div class="text-center pt-8 space-y-3">
+    <div id="screen-welcome" class="screen-view active max-w-md mx-auto min-h-screen flex flex-col justify-center items-center p-6 bg-gradient-to-br from-indigo-900 via-blue-900 to-slate-900 text-white fixed inset-0 z-50 overflow-y-auto">
+        
+        <div class="w-full max-w-sm space-y-5 text-center my-auto">
             <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl mx-auto flex items-center justify-center text-3xl shadow-xl border border-white/20">
                 🚀
             </div>
-            <h1 class="text-2xl font-extrabold tracking-tight">TaskPoint</h1>
-            <p class="text-xs text-blue-200">Micro Tasking & Earning Platform</p>
-        </div>
+            <div>
+                <h1 class="text-2xl font-extrabold tracking-tight">TaskPoint</h1>
+                <p class="text-xs text-blue-200">Micro Tasking & Earning Platform</p>
+            </div>
 
-        <div class="bg-white/10 backdrop-blur-md rounded-3xl p-5 border border-white/10 space-y-3 my-auto">
-            <h2 class="text-base font-bold text-center text-amber-300">স্বাগতম আমাদের প্ল্যাটফর্মে!</h2>
-            <p class="text-xs text-slate-200 leading-relaxed text-center">
-                এখানে আপনি প্রতিদিন ছোট ছোট কাজ যেমন—সোশ্যাল মিডিয়া সাবস্ক্রাইব, লাইক, কমেন্ট এবং শেয়ার করে খুব সহজেই ঘরে বসে টাকা আয় করতে পারবেন।
-            </p>
-            <div class="grid grid-cols-3 gap-2 pt-1 text-center">
-                <div class="bg-white/5 p-2.5 rounded-2xl border border-white/10">
-                    <i class="fa-solid fa-thumbs-up text-amber-400 mb-1 text-sm"></i>
-                    <p class="text-[10px] text-slate-300">লাইক ও কমেন্ট</p>
+            <div class="bg-white/15 backdrop-blur-md rounded-3xl p-5 border border-white/10 space-y-3 text-left">
+                <h2 class="text-base font-bold text-center text-amber-300">স্বাগতম আমাদের প্ল্যাটফর্মে!</h2>
+                <p class="text-xs text-slate-200 leading-relaxed text-center">
+                    এখানে আপনি প্রতিদিন ছোট ছোট কাজ যেমন—সোশ্যাল মিডিয়া সাবস্ক্রাইব, লাইক, কমেন্ট এবং শেয়ার করে খুব সহজেই ঘরে বসে টাকা আয় করতে পারবেন।
+                </p>
+                <div class="grid grid-cols-3 gap-2 pt-1 text-center">
+                    <div class="bg-white/5 p-2 rounded-xl border border-white/10">
+                        <i class="fa-solid fa-thumbs-up text-amber-400 mb-1 text-xs"></i>
+                        <p class="text-[9px] text-slate-300">লাইক ও কমেন্ট</p>
+                    </div>
+                    <div class="bg-white/5 p-2 rounded-xl border border-white/10">
+                        <i class="fa-solid fa-square-rss text-blue-400 mb-1 text-xs"></i>
+                        <p class="text-[9px] text-slate-300">সাবস্ক্রাইব</p>
+                    </div>
+                    <div class="bg-white/5 p-2 rounded-xl border border-white/10">
+                        <i class="fa-solid fa-wallet text-emerald-400 mb-1 text-xs"></i>
+                        <p class="text-[9px] text-slate-300">সহজ উইথড্র</p>
+                    </div>
                 </div>
-                <div class="bg-white/5 p-2.5 rounded-2xl border border-white/10">
-                    <i class="fa-solid fa-square-rss text-blue-400 mb-1 text-sm"></i>
-                    <p class="text-[10px] text-slate-300">সাবস্ক্রাইব</p>
-                </div>
-                <div class="bg-white/5 p-2.5 rounded-2xl border border-white/10">
-                    <i class="fa-solid fa-wallet text-emerald-400 mb-1 text-sm"></i>
-                    <p class="text-[10px] text-slate-300">সহজ উইথড্র</p>
-                </div>
+            </div>
+
+            <!-- বাটনটিকে লোগো থেকে অনেক ওপরে এবং সিকিউর জায়গায় রাখা হয়েছে -->
+            <div class="pt-2">
+                <button onclick="goToLoginScreen()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-2xl font-bold text-sm shadow-xl transition-all active:scale-95 flex items-center justify-center space-x-2 cursor-pointer relative z-50">
+                    <span>শুরু করুন (Get Started)</span>
+                    <i class="fa-solid fa-arrow-right"></i>
+                </button>
             </div>
         </div>
 
-        <div class="pt-4 pb-6">
-            <button id="getStartedBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-2xl font-bold text-sm shadow-xl transition-all active:scale-95 flex items-center justify-center space-x-2 cursor-pointer">
-                <span>শুরু করুন (Get Started)</span>
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
-        </div>
     </div>
 
     <!-- SCREEN 2: LOGIN / REGISTER -->
@@ -93,7 +91,7 @@
                     </div>
                 </div>
 
-                <button id="loginBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95 transition-all cursor-pointer">
+                <button onclick="performLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95 transition-all cursor-pointer">
                     লগইন / রেজিস্টার করুন
                 </button>
             </div>
@@ -344,25 +342,7 @@
         let completedCount = parseInt(localStorage.getItem('tp_completed')) || 0;
         let userPhone = localStorage.getItem('tp_phone') || '';
 
-        document.addEventListener("DOMContentLoaded", function() {
-            // সেফটি চেক ও ইভেন্ট বাইন্ডিং
-            const getStartedBtn = document.getElementById('getStartedBtn');
-            if(getStartedBtn) {
-                getStartedBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    goToLoginScreen();
-                });
-            }
-
-            const loginBtn = document.getElementById('loginBtn');
-            if(loginBtn) {
-                loginBtn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    performLogin();
-                });
-            }
-
-            // চেক করা ইউজার আগে থেকেই লগইন করা আছে কিনা
+        window.onload = function() {
             if (userPhone && userPhone.length >= 10) {
                 document.getElementById('screen-welcome').classList.remove('active');
                 document.getElementById('screen-login').classList.remove('active');
@@ -375,7 +355,7 @@
                 document.getElementById('screen-main').classList.remove('active');
             }
             updateUI();
-        });
+        };
 
         function goToLoginScreen() {
             document.getElementById('screen-welcome').classList.remove('active');
@@ -436,7 +416,7 @@
                 const cElem = document.getElementById('completedCount');
 
                 if(bElem) bElem.innerText = '৳' + balance.toFixed(2);
-                if(pElem) pElem.innerText = '৳' + balance.toFixed(2);
+                if(pElem) pElem.innerText = '৳' + balance.jsdelivr ? '' : '৳' + balance.toFixed(2);
                 if(cElem) cElem.innerText = completedCount;
 
                 localStorage.setItem('tp_balance', balance);
