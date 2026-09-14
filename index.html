@@ -130,9 +130,24 @@
 
             <!-- TAB 4: PROMOTION -->
             <div id="tab-promotion" class="tab-content space-y-4">
-                <div class="bg-white rounded-3xl p-6 text-center space-y-4 card-shadow border border-slate-100">
-                    <h3 class="font-bold text-slate-800 text-sm">Promotion</h3>
-                    <p class="text-xs text-slate-500">আপনার ইউটিউব চ্যানেল বা ফেসবুক পেজ প্রমোট করতে যোগাযোগ করুন।</p>
+                <div class="bg-white rounded-3xl p-6 card-shadow border border-slate-100 space-y-4">
+                    <div class="flex items-center space-x-3 border-b pb-3">
+                        <div class="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-bullhorn text-base"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-bold text-slate-800 text-sm">Promotion & Ads</h3>
+                            <p class="text-[11px] text-slate-400">আপনার পেজ বা চ্যানেল প্রমোট করুন</p>
+                        </div>
+                    </div>
+                    <div class="space-y-3 text-xs text-slate-600 leading-relaxed">
+                        <p>আপনার ইউটিউব চ্যানেল, ফেসবুক পেজ বা ভিডিও কম খরচে হাজার হাজার ইউজারের কাছে পৌঁছে দিতে আমাদের সাথে যোগাযোগ করুন।</p>
+                        <div class="bg-indigo-50 p-3.5 rounded-2xl border border-indigo-100 space-y-1">
+                            <p class="font-bold text-indigo-900">যোগাযোগের মাধ্যম:</p>
+                            <p class="text-slate-600">হোয়াটসঅ্যাপ: <span class="font-semibold text-indigo-600">01617411391</span></p>
+                        </div>
+                        <a href="https://wa.me/8801617411391" target="_blank" class="block w-full bg-emerald-500 text-white text-center py-3 rounded-xl font-bold shadow">হোয়াটসঅ্যাপে চ্যাট করুন</a>
+                    </div>
                 </div>
             </div>
         </main>
@@ -244,10 +259,9 @@
             document.getElementById('taskUserNumber').value = userPhone;
             document.getElementById('taskScreenshot').value = ''; 
             
-            // মডালের ভেতরে লিংকে যাওয়ার একটি পরিষ্কার বাটন রাখা হলো যাতে সাদা স্ক্রিন হয়ে আটকে না থাকে
             const linkContainer = document.getElementById('taskLinkContainer');
             if(link && link !== '#') {
-                linkContainer.innerHTML = `<a href="${link}" target="_blank" class="block bg-indigo-50 text-indigo-600 text-center py-2.5 rounded-xl font-bold text-xs border border-indigo-100">🔗 প্রথমে এখানে ক্লিক করে কাজ সম্পন্ন করুন</a>`;
+                linkContainer.innerHTML = `<a href="${link}" target="_blank" rel="noopener noreferrer" class="block bg-indigo-600 text-white text-center py-3 rounded-xl font-bold text-xs shadow-md">🔗 লিংকে ক্লিক করে কাজ সম্পন্ন করুন</a>`;
             } else {
                 linkContainer.innerHTML = '';
             }
