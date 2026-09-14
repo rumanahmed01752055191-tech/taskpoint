@@ -97,12 +97,24 @@
                 </div>
             </div>
 
-            <!-- TAB 4: PROMOTION -->
+            <!-- TAB 4: PROMOTION (Updated with professional texts) -->
             <div id="tab-promotion" class="tab-content space-y-4">
-                <div class="bg-indigo-900 text-white rounded-3xl p-6 shadow space-y-3">
-                    <h3 class="font-bold text-lg">প্রমোশন বক্স</h3>
-                    <p class="text-xs text-slate-200">আপনার চ্যানেল বা প্রজেক্ট প্রমোট করতে হোয়াটসঅ্যাপে যোগাযোগ করুন।</p>
-                    <a href="https://wa.me/8801617411391" target="_blank" class="block text-center bg-emerald-500 text-white py-3 rounded-xl font-bold text-sm">WhatsApp প্রমোশন</a>
+                <div class="bg-gradient-to-r from-indigo-900 to-blue-900 text-white rounded-3xl p-6 shadow-xl space-y-4 border border-blue-800">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-xl">📢</div>
+                        <div>
+                            <h3 class="font-extrabold text-lg">প্রমোশন বক্স (Promotion Box)</h3>
+                            <p class="text-[11px] text-blue-200">আপনার পেজ, চ্যানেল বা প্রজেক্ট হাজার হাজার ইউজারের কাছে পৌঁছে দিন!</p>
+                        </div>
+                    </div>
+                    <div class="bg-white/10 p-4 rounded-2xl text-xs space-y-2 border border-white/10 leading-relaxed">
+                        <p>✨ ফেসবুক পেজ বা গ্রুপ প্রমোট করুন।</p>
+                        <p>✨ ইউটিউব চ্যানেল সাবস্ক্রাইব ও ভিডিও ভিউ বাড়ান।</p>
+                        <p>✨ টেলিগ্রাম চ্যানেল বা গ্রুপ মেম্বার গ্রো করুন।</p>
+                    </div>
+                    <a href="https://wa.me/8801617411391" target="_blank" class="block text-center bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-xl font-bold text-sm shadow transition-all">
+                        <i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp এ প্রমোশন করান
+                    </a>
                 </div>
             </div>
         </main>
@@ -118,7 +130,7 @@
 
     <script>
         const firebaseConfig = {
-            apiKey: "AIzaSy...", // আপনার ফায়ারবেস কনফিগারেশন এখানে দেওয়া আছে
+            apiKey: "AIzaSy...", 
             authDomain: "taskpoint-xxx.firebaseapp.com",
             projectId: "taskpoint-xxx",
             storageBucket: "taskpoint-xxx.appspot.com",
@@ -161,7 +173,6 @@
                 let html = '';
                 snapshot.forEach((doc) => {
                     const task = doc.data();
-                    let taskUrl = task.link || '#';
                     html += `
                         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
                             <div>
@@ -169,7 +180,7 @@
                                 <p class="text-xs text-slate-500">${task.description || ''}</p>
                                 <p class="text-xs text-emerald-600 font-bold mt-1">Reward: ৳${task.reward}</p>
                             </div>
-                            <button onclick="startTask('${taskUrl}', ${task.reward}, '${task.title}')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow active:scale-95 cursor-pointer">
+                            <button onclick="startTask('${task.link}', ${task.reward}, '${task.title}')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow active:scale-95 cursor-pointer">
                                 Complete
                             </button>
                         </div>
@@ -179,8 +190,20 @@
             });
         }
 
+        // ত্রুটি এড়াতে ফিক্সড করা startTask ফাংশন
         function startTask(url, reward, title) {
-            window.open(url, '_blank');
+            let finalUrl = url || '#';
+            
+            // যদি ফায়ারবেস থেকে ফেসবুক বা অন্য কোনো অ্যাপ স্কিম লিংক আসে, তবে সেটিকে সঠিক ব্রাউজার লিংকে কনভার্ট করে নেবে
+            if (finalUrl.startsWith('fb://')) {
+                const profileId = finalUrl.replace('fb://profile/', '').split('?')[0];
+                finalUrl = `https://www.facebook.com/${profileId}`;
+            } else if (finalUrl.startsWith('tg://')) {
+                finalUrl = finalUrl.replace('tg://', 'https://t.me/');
+            }
+
+            window.open(finalUrl, '_blank');
+            
             setTimeout(() => {
                 balance += reward;
                 updateUI();
