@@ -67,7 +67,8 @@
         </div>
 
         <div>
-            <button id="startBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-2xl font-bold text-sm shadow-xl transition-all active:scale-95 flex items-center justify-center space-x-2">
+            <!-- সরাসরি ফাংশন কল যুক্ত করা হলো যাতে WebView এ কোনো মিস না হয় -->
+            <button onclick="goToLoginScreen()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-2xl font-bold text-sm shadow-xl transition-all active:scale-95 flex items-center justify-center space-x-2">
                 <span>শুরু করুন (Get Started)</span>
                 <i class="fa-solid fa-arrow-right"></i>
             </button>
@@ -94,7 +95,7 @@
                     </div>
                 </div>
 
-                <button id="loginBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95 transition-all">
+                <button onclick="performLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95 transition-all">
                     লগইন / রেজিস্টার করুন
                 </button>
             </div>
@@ -126,7 +127,7 @@
                         <p class="text-[10px] text-blue-100">Download TaskPoint APK</p>
                     </div>
                 </div>
-                <button id="downloadBtn" class="bg-white text-blue-600 px-4 py-2 rounded-xl text-xs font-extrabold shadow-md hover:bg-blue-50 active:scale-95 transition-all">
+                <button onclick="downloadApp()" class="bg-white text-blue-600 px-4 py-2 rounded-xl text-xs font-extrabold shadow-md hover:bg-blue-50 active:scale-95 transition-all">
                     Download APK
                 </button>
             </div>
@@ -248,7 +249,7 @@
                             <input type="number" id="withdrawAmount" placeholder="Min ৳100" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 font-medium">
                         </div>
 
-                        <button id="withdrawBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl font-bold text-sm shadow-md active:scale-95 transition-all">
+                        <button onclick="requestWithdrawal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl font-bold text-sm shadow-md active:scale-95 transition-all">
                             Request Withdrawal
                         </button>
                     </div>
@@ -341,93 +342,76 @@
 
     <!-- JavaScript Logic -->
     <script>
-        // নিরাপদ ডেটা রিডিং (ন্যূনতম জিরো হ্যান্ডলিং)
         let balance = parseFloat(localStorage.getItem('tp_balance')) || 0.00;
         let completedCount = parseInt(localStorage.getItem('tp_completed')) || 0;
         let userPhone = localStorage.getItem('tp_phone') || '';
 
         window.onload = function() {
-            try {
-                if (userPhone && userPhone.length >= 10) {
-                    document.getElementById('screen-welcome').classList.remove('active');
-                    document.getElementById('screen-login').classList.remove('active');
-                    document.getElementById('screen-main').classList.add('active');
-                    const phoneDisplay = document.getElementById('userPhoneDisplay');
-                    if(phoneDisplay) phoneDisplay.innerText = '#' + userPhone;
-                } else {
-                    document.getElementById('screen-welcome').classList.add('active');
-                    document.getElementById('screen-login').classList.remove('active');
-                    document.getElementById('screen-main').classList.remove('active');
-                }
-                updateUI();
-            } catch (err) {
-                console.error("Init Error: ", err);
-            }
-        };
-
-        // নিরাপদ ইভেন্ট লিসেনার
-        const startBtn = document.getElementById('startBtn');
-        if (startBtn) {
-            startBtn.addEventListener('click', function() {
+            // যদি আগে ফোন নম্বর সেভ করা থাকে তবে সোজা মেইন স্ক্রিনে যাবে, না হলে ওয়েলকাম স্ক্রিন দেখাবে
+            if (userPhone && userPhone.length >= 10) {
                 document.getElementById('screen-welcome').classList.remove('active');
-                document.getElementById('screen-login').classList.add('active');
-            });
-        }
-
-        const loginBtn = document.getElementById('loginBtn');
-        if (loginBtn) {
-            loginBtn.addEventListener('click', function() {
-                const phoneInputElem = document.getElementById('loginNumber');
-                const phoneInput = phoneInputElem ? phoneInputElem.value.trim() : '';
-                if (!phoneInput || phoneInput.length < 10) {
-                    alert('অনুগ্রহ করে সঠিক মোবাইল নাম্বার দিন।');
-                    return;
-                }
-                userPhone = phoneInput;
-                localStorage.setItem('tp_phone', userPhone);
-                
                 document.getElementById('screen-login').classList.remove('active');
                 document.getElementById('screen-main').classList.add('active');
                 const phoneDisplay = document.getElementById('userPhoneDisplay');
                 if(phoneDisplay) phoneDisplay.innerText = '#' + userPhone;
-                updateUI();
-            });
+            } else {
+                document.getElementById('screen-welcome').classList.add('active');
+                document.getElementById('screen-login').classList.remove('active');
+                document.getElementById('screen-main').classList.remove('active');
+            }
+            updateUI();
+        };
+
+        function goToLoginScreen() {
+            document.getElementById('screen-welcome').classList.remove('active');
+            document.getElementById('screen-login').classList.add('active');
         }
 
-        const downloadBtn = document.getElementById('downloadBtn');
-        if (downloadBtn) {
-            downloadBtn.addEventListener('click', function() {
-                window.location.href = "https://www.mediafire.com/file/28w1bahpxu1iilb/_TaskPoint_20171775.apk/file";
-            });
+        function performLogin() {
+            const phoneInputElem = document.getElementById('loginNumber');
+            const phoneInput = phoneInputElem ? phoneInputElem.value.trim() : '';
+            if (!phoneInput || phoneInput.length < 10) {
+                alert('অনুগ্রহ করে সঠিক মোবাইল নাম্বার দিন।');
+                return;
+            }
+            userPhone = phoneInput;
+            localStorage.setItem('tp_phone', userPhone);
+            
+            document.getElementById('screen-login').classList.remove('active');
+            document.getElementById('screen-main').classList.add('active');
+            const phoneDisplay = document.getElementById('userPhoneDisplay');
+            if(phoneDisplay) phoneDisplay.innerText = '#' + userPhone;
+            updateUI();
         }
 
-        const withdrawBtn = document.getElementById('withdrawBtn');
-        if (withdrawBtn) {
-            withdrawBtn.addEventListener('click', function() {
-                const accElem = document.getElementById('accountNumber');
-                const amtElem = document.getElementById('withdrawAmount');
-                const accountNumber = accElem ? accElem.value.trim() : '';
-                const amount = amtElem ? parseFloat(amtElem.value) : NaN;
+        function downloadApp() {
+            window.location.href = "https://www.mediafire.com/file/28w1bahpxu1iilb/_TaskPoint_20171775.apk/file";
+        }
 
-                if (!accountNumber || accountNumber.length < 10) {
-                    alert('দয়া করে সঠিক একাউন্ট নাম্বার লিখুন।');
-                    return;
-                }
-                if (isNaN(amount) || amount < 100) {
-                    alert('সর্বনিম্ন উইথড্র পরিমাণ ৳১০০।');
-                    return;
-                }
-                if (amount > balance) {
-                    alert('আপনার একাউন্টে পর্যাপ্ত ব্যালেন্স নেই।');
-                    return;
-                }
+        function requestWithdrawal() {
+            const accElem = document.getElementById('accountNumber');
+            const amtElem = document.getElementById('withdrawAmount');
+            const accountNumber = accElem ? accElem.value.trim() : '';
+            const amount = amtElem ? parseFloat(amtElem.value) : NaN;
 
-                balance -= amount;
-                updateUI();
-                alert('৳' + amount + ' উত্তোলনের রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে!');
-                if(accElem) accElem.value = '';
-                if(amtElem) amtElem.value = '';
-            });
+            if (!accountNumber || accountNumber.length < 10) {
+                alert('দয়া করে সঠিক একাউন্ট নাম্বার লিখুন।');
+                return;
+            }
+            if (isNaN(amount) || amount < 100) {
+                alert('সর্বনিম্ন উইথড্র পরিমাণ ৳১০০।');
+                return;
+            }
+            if (amount > balance) {
+                alert('আপনার একাউন্টে পর্যাপ্ত ব্যালেন্স নেই।');
+                return;
+            }
+
+            balance -= amount;
+            updateUI();
+            alert('৳' + amount + ' উত্তোলনের রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে!');
+            if(accElem) accElem.value = '';
+            if(amtElem) amtElem.value = '';
         }
 
         function updateUI() {
