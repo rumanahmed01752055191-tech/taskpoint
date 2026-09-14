@@ -41,7 +41,7 @@
                 <p class="text-xs text-slate-400">আপনার মোবাইল নাম্বার দিয়ে প্রবেশ করুন</p>
             </div>
             <div class="space-y-4">
-                <input type="number" id="loginNumber" placeholder="17XXXXXXXX" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none">
+                <input type="number" id="loginNumber" placeholder="017XXXXXXXX" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none">
                 <button type="button" onclick="performLogin()" class="w-full bg-blue-600 text-white py-4 rounded-2xl font-bold text-sm cursor-pointer">লগইন করুন</button>
             </div>
         </div>
@@ -102,7 +102,7 @@
                         <span class="text-[10px] bg-blue-50 text-blue-600 font-bold px-2.5 py-1 rounded-full">Live</span>
                     </div>
                     <div id="dynamicTaskList" class="space-y-3">
-                        <p class="text-xs text-slate-400 text-center py-6">কাজ লোড হচ্ছে...</p>
+                        <p class="text-xs text-slate-400 text-center py-6">এই মুহূর্তে কোনো কাজ নেই। নতুন কাজ যোগ করা হচ্ছে...</p>
                     </div>
                 </div>
             </div>
@@ -146,11 +146,21 @@
         </nav>
     </div>
 
-    <!-- TASK MODAL -->
+    <!-- TASK MODAL (Updated with Screenshot & Mobile Number) -->
     <div id="taskModal" class="max-w-md mx-auto fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
         <div class="bg-white w-full rounded-3xl p-6 space-y-4 shadow-2xl">
             <h3 class="font-bold text-slate-800 text-sm" id="modalTaskTitle">Task Proof</h3>
-            <input type="text" id="taskProofText" placeholder="আপনার প্রুফ বা ইউজারনেম লিখুন" class="w-full bg-slate-50 border rounded-xl px-3.5 py-3 text-xs">
+            
+            <div class="space-y-1">
+                <label class="text-[11px] font-bold text-slate-600">মোবাইল নাম্বার দিন:</label>
+                <input type="number" id="taskUserNumber" placeholder="017XXXXXXXX" class="w-full bg-slate-50 border rounded-xl px-3.5 py-3 text-xs">
+            </div>
+
+            <div class="space-y-1">
+                <label class="text-[11px] font-bold text-slate-600">স্ক্রিনশট বা প্রুফ আপলোড করুন:</label>
+                <input type="file" id="taskScreenshot" accept="image/*" class="w-full bg-slate-50 border rounded-xl px-3.5 py-2.5 text-xs">
+            </div>
+
             <button type="button" onclick="submitTaskProof()" class="w-full bg-blue-600 text-white py-3 rounded-xl font-bold text-xs">Submit Proof</button>
             <button type="button" onclick="closeTaskModal()" class="w-full bg-slate-100 text-slate-600 py-2.5 rounded-xl text-xs font-semibold">Cancel</button>
         </div>
@@ -190,7 +200,7 @@
 
         function performLogin() {
             const phone = document.getElementById('loginNumber').value.trim();
-            if(phone.length < 10) return alert("সঠিক নাম্বার দিন!");
+            if(phone.length < 10) return alert("সঠিক মোবাইল নাম্বার দিন!");
             
             userPhone = phone;
             localStorage.setItem('tp_phone', phone);
@@ -205,7 +215,7 @@
         function loadLiveTasks() {
             db.collection('tasks').onSnapshot(snapshot => {
                 const container = document.getElementById('dynamicTaskList');
-                container.innerHTML = snapshot.empty ? '<p class="text-xs text-slate-400 text-center py-6">এই মুহূর্তে কোনো কাজ নেই।</p>' : '';
+                container.innerHTML = snapshot.empty ? '<p class="text-xs text-slate-400 text-center py-6">এই মুহূর্তে কোনো কাজ নেই। নতুন কাজ শীঘ্রই আসছে...</p>' : '';
                 
                 snapshot.forEach(doc => {
                     const task = doc.data();
@@ -216,7 +226,7 @@
                                 <p class="text-xs text-slate-500">${task.description || ''}</p>
                                 <p class="text-xs font-extrabold text-emerald-600">Reward: ৳${task.reward}</p>
                             </div>
-                            <button onclick="openTaskModal('${task.title}', '${task.link}', ${task.reward})" class="bg-blue-600 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow">Complete</button>
+                            <button onclick="openTaskModal('${task.title}', '${task.link || '#'}', ${task.reward})" class="bg-blue-600 text-white px-3.5 py-2 rounded-xl text-xs font-bold shadow">কাজ শুরু করুন</button>
                         </div>
                     `;
                 });
@@ -225,8 +235,12 @@
 
         function openTaskModal(title, link, reward) {
             currentTask = { title, reward };
-            window.open(link, '_blank');
+            if(link && link !== '#') {
+                window.open(link, '_blank');
+            }
             document.getElementById('modalTaskTitle').innerText = title;
+            document.getElementById('taskUserNumber').value = userPhone;
+            document.getElementById('taskScreenshot').value = ''; // Reset file input
             document.getElementById('taskModal').style.display = 'flex';
         }
 
@@ -235,21 +249,33 @@
         }
 
         function submitTaskProof() {
-            const proof = document.getElementById('taskProofText').value;
-            if(!proof) return alert("প্রুফ লিখুন!");
+            const number = document.getElementById('taskUserNumber').value.trim();
+            const fileInput = document.getElementById('taskScreenshot');
+            
+            if(!number) return alert("দয়া করে আপনার মোবাইল নাম্বার দিন!");
+            if(fileInput.files.length === 0) return alert("দয়া করে কাজের একটি স্ক্রিনশট দিন!");
 
-            db.collection('submissions').add({
-                userId: userId || 'guest',
-                userName: userPhone,
-                taskTitle: currentTask.title,
-                proof: proof,
-                reward: currentTask.reward,
-                status: 'pending',
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                alert("প্রুফ সাবমিট হয়েছে! অ্যাডমিন এপ্রুভ করলে ব্যালেন্স যোগ হবে।");
-                closeTaskModal();
-            });
+            const reader = new FileReader();
+            reader.readAsDataURL(fileInput.files[0]);
+            reader.onload = function () {
+                const base64Image = reader.result;
+
+                db.collection('submissions').add({
+                    userId: userId || 'guest',
+                    userName: number,
+                    userPhone: number,
+                    taskTitle: currentTask.title,
+                    screenshot: base64Image,
+                    reward: currentTask.reward,
+                    status: 'pending',
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    alert("প্রুফ এবং স্ক্রিনশট সফলভাবে জমা হয়েছে!");
+                    closeTaskModal();
+                }).catch(error => {
+                    alert("সমস্যা হয়েছে: " + error.message);
+                });
+            };
         }
 
         function loadUserData() {
