@@ -21,6 +21,13 @@
         }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.4; }
+        }
+        .live-dot {
+            animation: pulse-slow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen pb-24">
@@ -135,6 +142,20 @@
         <main class="px-4 -mt-4 relative z-10">
             <!-- TAB 1: HOME -->
             <div id="tab-home" class="tab-content active space-y-5">
+                <!-- Live Active Users Badge -->
+                <div class="bg-white px-4 py-3 rounded-2xl card-shadow border border-slate-100 flex items-center justify-between">
+                    <div class="flex items-center space-x-2.5">
+                        <span class="relative flex h-3 w-3">
+                          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                          <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-500"></span>
+                        </span>
+                        <span class="text-xs font-bold text-slate-700">অনলাইন লাইভ ইউজার</span>
+                    </div>
+                    <div class="bg-emerald-50 text-emerald-600 px-3 py-1 rounded-xl text-xs font-extrabold border border-emerald-100">
+                        <span id="liveUserCount">1,428</span> জন সক্রিয়
+                    </div>
+                </div>
+
                 <div class="grid grid-cols-2 gap-3">
                     <div class="bg-white p-4 rounded-2xl card-shadow border border-slate-100 flex items-center space-x-3">
                         <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
@@ -372,7 +393,22 @@
                 document.getElementById('screen-main').style.display = 'none';
             }
             updateUI();
+            startLiveUserCounter();
         };
+
+        // Live Active Users Counter Simulator
+        function startLiveUserCounter() {
+            let baseUsers = 1420;
+            setInterval(() => {
+                const randomChange = Math.floor(Math.random() * 9) - 4; // -4 থেকে +4 পরিবর্তন
+                baseUsers += randomChange;
+                if (baseUsers < 1350) baseUsers = 1380;
+                const counterElem = document.getElementById('liveUserCount');
+                if (counterElem) {
+                    counterElem.innerText = baseUsers.toLocaleString();
+                }
+            }, 3000); // প্রতি ৩ সেকেন্ডে আপডেট হবে
+        }
 
         function openLoginScreen() {
             document.getElementById('screen-welcome').style.display = 'none';
