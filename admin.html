@@ -13,42 +13,52 @@
 
   <!-- Create New Task -->
   <div class="bg-white p-5 rounded-xl shadow space-y-3">
-    <h2 class="font-bold text-lg">নতুন কাজ যোগ করুন</h2>
-    <input id="task-title" type="text" placeholder="কাজের শিরোনাম (যেমন: টেলিগ্রাম জয়েন)" class="w-full border p-2 rounded">
+    <h2 class="font-bold text-lg">১. নতুন কাজ যোগ করুন (Task Create)</h2>
+    <input id="task-title" type="text" placeholder="কাজের শিরোনাম (যেমন: ফেসবুক পেজ লাইক)" class="w-full border p-2 rounded">
     <textarea id="task-desc" placeholder="কাজের বিবরণ" class="w-full border p-2 rounded"></textarea>
-    <input id="task-link" type="text" placeholder="সঠিক লিংক (যেমন: https://t.me/...)" class="w-full border p-2 rounded">
-    <input id="task-reward" type="number" placeholder="টাকা/রিওয়ার্ড (যেমন: 5)" class="w-full border p-2 rounded">
-    <button onclick="addTask()" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded font-bold w-full cursor-pointer">কাজ পাবলিশ করুন</button>
+    <input id="task-link" type="text" placeholder="টাস্কের লিংক (যেমন: https://facebook.com/...)" class="w-full border p-2 rounded">
+    <input id="task-reward" type="number" placeholder="রিওয়ার্ড বা পুরস্কার (যেমন: 5)" class="w-full border p-2 rounded">
+    <button onclick="addTask()" class="bg-blue-600 text-white px-4 py-2 rounded font-bold w-full cursor-pointer">কাজ পাবলিশ করুন</button>
   </div>
 
   <!-- Task List -->
   <div class="bg-white p-5 rounded-xl shadow space-y-3">
-    <h2 class="font-bold text-lg">চলমান কাজসমূহ</h2>
-    <div id="admin-tasks-list" class="space-y-2 text-sm"></div>
+    <h2 class="font-bold text-lg">২. বর্তমান একটিভ কাজসমূহ</h2>
+    <div id="admin-tasks-list" class="space-y-3 text-sm"></div>
   </div>
 
   <script>
-    // আপনার ফায়ারবেস কনফিগারেশন এখানে বসান (উভয় ফাইলে একই কনফিগারেশন হতে হবে)
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_AUTH_DOMAIN",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_STORAGE_BUCKET",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
+        apiKey: "AIzaSy...", 
+        authDomain: "taskpoint-xxx.firebaseapp.com",
+        projectId: "taskpoint-xxx",
+        storageBucket: "taskpoint-xxx.appspot.com",
+        messagingSenderId: "123456789",
+        appId: "1:123456789:web:abcde"
     };
+
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
     function addTask() {
-      const title = document.getElementById('task-title').value.trim();
-      const desc = document.getElementById('task-desc').value.trim();
-      const link = document.getElementById('task-link').value.trim();
-      const reward = parseFloat(document.getElementById('task-reward').value);
+      let title = document.getElementById('task-title').value.trim();
+      let desc = document.getElementById('task-desc').value.trim();
+      let link = document.getElementById('task-link').value.trim();
+      let reward = parseFloat(document.getElementById('task-reward').value);
 
       if (!title || !link || isNaN(reward)) {
-        alert('সকল তথ্য সঠিকভাবে পূরণ করুন');
+        alert('দয়া করে শিরোনাম, সঠিক লিংক এবং রিওয়ার্ড পূরণ করুন।');
         return;
+      }
+
+      // ইউআরএল অটো-ফর্মাটিং (যদি কেউ ভুল করে fb:// বা অন্য কিছু দেয় তবে ঠিক করে নেওয়া)
+      if (link.startsWith('fb://')) {
+        const profileId = link.replace('fb://profile/', '').split('?')[0];
+        link = `https://www.facebook.com/${profileId}`;
+      } else if (link.startsWith('tg://')) {
+        link = link.replace('tg://', 'https://t.me/');
+      } else if (!link.startsWith('http://') && !link.startsWith('https://')) {
+        link = 'https://' + link; // যদি শুধু ডোমেইন লেখে তবুও ঠিক করে দেবে
       }
 
       db.collection("tasks").add({
@@ -57,13 +67,18 @@
         link: link,
         reward: reward,
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        alert('সফলভাবে পাবলিশ হয়েছে!');
+      })
+      .then(() => {
+        alert('সফলভাবে নতুন কাজ পাবলিশ করা হয়েছে!');
         document.getElementById('task-title').value = '';
         document.getElementById('task-desc').value = '';
         document.getElementById('task-link').value = '';
         document.getElementById('task-reward').value = '';
         loadAdminTasks();
+      })
+      .catch((error) => {
+        console.error("Error adding task: ", error);
+        alert('কাজ যোগ করতে সমস্যা হয়েছে।');
       });
     }
 
@@ -80,7 +95,7 @@
                 <p class="text-xs text-blue-600 truncate max-w-xs">${task.link}</p>
                 <p class="text-xs text-emerald-600 font-semibold">Reward: ৳${task.reward}</p>
               </div>
-              <button onclick="deleteTask('${doc.id}')" class="bg-red-500 text-white px-3 py-1 rounded text-xs font-bold cursor-pointer">ডিলিট</button>
+              <button onclick="deleteTask('${doc.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs font-bold cursor-pointer">ডিলিট</button>
             </div>
           `;
         });
@@ -89,12 +104,16 @@
     }
 
     function deleteTask(id) {
-      if (confirm('ডিলিট করতে চান?')) {
-        db.collection("tasks").doc(id).delete().then(() => loadAdminTasks());
+      if (confirm('আপনি কি এই কাজ ডিলিট করতে চান?')) {
+        db.collection("tasks").doc(id).delete().then(() => {
+          loadAdminTasks();
+        });
       }
     }
 
-    window.onload = loadAdminTasks;
+    window.onload = function() {
+      loadAdminTasks();
+    };
   </script>
 </body>
 </html>
