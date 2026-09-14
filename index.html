@@ -186,32 +186,35 @@
                     </div>
                     
                     <div class="space-y-3">
+                        <!-- Task 1 -->
                         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
                             <div class="space-y-1">
                                 <h4 class="font-bold text-sm text-slate-800">Join Telegram Channel & Engage</h4>
                                 <p class="text-xs text-slate-500">Reward: <span class="font-bold text-emerald-600">৳5.00</span></p>
                             </div>
-                            <button type="button" onclick="completeTask(5, 'Join Telegram Channel')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md active:scale-95 cursor-pointer">
+                            <button type="button" onclick="startTask('https://t.me/your_telegram_channel', 5, 'Join Telegram Channel')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md active:scale-95 cursor-pointer">
                                 Complete
                             </button>
                         </div>
 
+                        <!-- Task 2 -->
                         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
                             <div class="space-y-1">
                                 <h4 class="font-bold text-sm text-slate-800">Subscribe YouTube & Watch</h4>
                                 <p class="text-xs text-slate-500">Reward: <span class="font-bold text-emerald-600">৳8.00</span></p>
                             </div>
-                            <button type="button" onclick="completeTask(8, 'Subscribe YouTube Video')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md active:scale-95 cursor-pointer">
+                            <button type="button" onclick="startTask('https://youtube.com/@your_youtube_channel', 8, 'Subscribe YouTube Video')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md active:scale-95 cursor-pointer">
                                 Complete
                             </button>
                         </div>
 
+                        <!-- Task 3 -->
                         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
                             <div class="space-y-1">
                                 <h4 class="font-bold text-sm text-slate-800">Facebook Page Like & Review</h4>
                                 <p class="text-xs text-slate-500">Reward: <span class="font-bold text-emerald-600">৳6.00</span></p>
                             </div>
-                            <button type="button" onclick="completeTask(6, 'Facebook Page Like')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md active:scale-95 cursor-pointer">
+                            <button type="button" onclick="startTask('https://facebook.com/your_facebook_page', 6, 'Facebook Page Like')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md active:scale-95 cursor-pointer">
                                 Complete
                             </button>
                         </div>
@@ -508,11 +511,18 @@
             }
         }
 
-        function completeTask(reward, taskName) {
-            balance += reward;
-            completedCount += 1;
-            updateUI();
-            alert('অভিনন্দন! "' + taskName + '" কাজটি সফলভাবে সম্পন্ন হয়েছে। আপনার অ্যাকাউন্টে ৳' + reward + ' যোগ হয়েছে।');
+        // নতুন ফাংশন: লিংকে নিয়ে যাবে এবং কাজ সম্পন্ন করবে
+        function startTask(taskUrl, reward, taskName) {
+            // ইউজারের ব্রাউজারে লিংকটি নতুন ট্যাবে ওপেন হবে
+            window.open(taskUrl, '_blank');
+
+            // ব্যালেন্স ও কাজের সংখ্যা আপডেট হবে
+            setTimeout(() => {
+                balance += reward;
+                completedCount += 1;
+                updateUI();
+                alert('অভিনন্দন! "' + taskName + '" কাজটি ভিজিট করার জন্য আপনার অ্যাকাউন্টে ৳' + reward + ' যোগ হয়েছে।');
+            }, 1000);
         }
     </script>
 </body>
