@@ -22,7 +22,7 @@
     <!-- WELCOME SCREEN -->
     <div id="screen-welcome" class="max-w-md mx-auto min-h-screen flex flex-col justify-center items-center p-6 bg-gradient-to-br from-indigo-900 via-blue-900 to-slate-900 text-white fixed inset-0 z-50 overflow-y-auto">
         <div class="w-full max-w-sm space-y-6 text-center my-auto">
-            <div class="w-20 h-20 bg-white/10 backdrop-blur-md rounded-3xl mx-auto flex items-center justify-center text-4xl shadow-2xl border border-white/20">🚀</div>
+            <div class="w-20 h-20 bg-white/15 backdrop-blur-md rounded-3xl mx-auto flex items-center justify-center text-4xl shadow-2xl border border-white/20">🚀</div>
             <div class="space-y-2">
                 <h1 class="text-3xl font-extrabold tracking-tight">TaskPoint</h1>
                 <p class="text-xs text-blue-200">Micro Tasking & Earning Platform</p>
@@ -128,7 +128,7 @@
                 </div>
             </div>
 
-            <!-- TAB 4: PROMOTION (Updated with full details & pricing) -->
+            <!-- TAB 4: PROMOTION (Updated with packages, colors & hidden number) -->
             <div id="tab-promotion" class="tab-content space-y-4">
                 <div class="bg-gradient-to-br from-indigo-900 via-slate-900 to-blue-900 rounded-3xl p-6 card-shadow text-white space-y-4 border border-indigo-500/30">
                     <div class="flex items-center space-x-3 border-b border-white/10 pb-3">
@@ -143,7 +143,7 @@
 
                     <div class="space-y-3 text-xs text-slate-200 leading-relaxed">
                         <p class="bg-white/10 p-3 rounded-2xl border border-white/10 backdrop-blur-sm">
-                            ইউটিউব, ফেসবুক, টিকটক, ইনস্টাগ্রাম ফলোয়ার + সাবস্ক্রাইবার বাড়াতে এবং ভিডিও লাইক, কমেন্ট ও শেয়ার বাড়াতে আমাদের সাথে যোগাযোগ করতে পারেন। আমাদের ওয়েবসাইটের সেবা সমূহ: প্রতিদিন ইউজাররা আপনাদের সোশাল মিডিয়া প্ল্যাটফর্মগুলো ফলো করবে + ভিডিও লাইক কমেন্ট ও শেয়ার করবে। চাইলে আপনিও ফ্রিতে ইনকাম করতে পারবেন ইউজারদের মতো।
+                            ইউটিউব, ফেসবুক, টিকটক, ইনস্টাগ্রাম ফলোয়ার + সাবস্ক্রাইবার বাড়াতে ও ভিডিও লাইক কমেন্ট শেয়ার বাড়াতে আমাদের সাথে যোগাযোগ করতে পারেন। আমাদের ওয়েবসাইটের সেবা সমূহ: প্রতিদিন ইউজাররা আপনাদের সোশাল মিডিয়া প্লাটফর্মগুলো ফলো করবে + ভিডিও লাইক কমেন্ট ও শেয়ার করবে। চাইলে আপনিও ফ্রিতে ইনকাম করতে পারবেন ইউজারদের মতো।
                         </p>
 
                         <!-- Pricing Table -->
@@ -161,7 +161,7 @@
 
                         <div class="bg-amber-500/20 border border-amber-500/30 p-3 rounded-2xl text-[11px] text-amber-200 space-y-1">
                             <p class="font-bold">💡 কাজের নিয়ম:</p>
-                            <p>কাজের নিয়ম অনুযায়ী লিংকগুলো আমাদের কাছে দিবেন এবং যেই প্ল্যান কিনবেন, ততদিন লিংকগুলো আমাদের অ্যাপের মধ্যে থাকবে ফলে প্রতিদিন আপনার সোশাল মিডিয়া প্ল্যাটফর্মগুলোতে ফলো, সাবস্ক্রাইবার, লাইক কমেন্ট ও শেয়ার বাড়বে।</p>
+                            <p>কাজের নিয়ম অনুযায়ী লিংকগুলো আমাদের কাছে দিবেন এবং যেই প্লান কিনবেন তত দিন লিংকগুলো আমাদের অ্যাপের মধ্যে থাকবে ফলে প্রতিদিন আপনার সোশাল মিডিয়া প্লাটফর্ম গুলো তে, ফলো, সাস্কাইভার, লাইক কমেন্ট ও শেয়ার বাড়বে।</p>
                         </div>
 
                         <!-- WhatsApp Action Button (Number Hidden) -->
@@ -290,10 +290,9 @@
             document.getElementById('taskModal').style.display = 'flex';
         }
 
-        // নিরাপদ পদ্ধতি: ব্রাউজারে সাদা স্ক্রিন আটকে থাকা রোধ করার জন্য টেস্টিং ও ফলব্যাক সহ ওপেন করার লজিক
+        // নিরাপদ পদ্ধতি যাতে হোয়াইট স্ক্রিন বা ক্র্যাশ না করে
         function openTaskLink(url) {
             let formattedUrl = url.trim();
-            // সাধারণ ট্যাবে লিঙ্ক ওপেন করার ফলে ফোন নিজে থেকেই অ্যাপ ইনস্টল থাকলে অ্যাপে রিডাইরেক্ট করে নেবে এবং সাদা স্ক্রিনের সমস্যা হবে না
             window.open(formattedUrl, '_blank');
         }
 
