@@ -6,8 +6,8 @@
     <title>TaskPoint - Micro Tasking & Earning Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #0f172a; }
@@ -128,7 +128,7 @@
                 </div>
             </div>
 
-            <!-- TAB 4: PROMOTION (Full Updated Section) -->
+            <!-- TAB 4: PROMOTION -->
             <div id="tab-promotion" class="tab-content space-y-4">
                 <div class="bg-gradient-to-br from-indigo-900 via-slate-900 to-blue-900 rounded-3xl p-6 card-shadow text-white space-y-4 border border-indigo-500/30">
                     <div class="flex items-center space-x-3 border-b border-white/10 pb-3">
@@ -151,7 +151,7 @@
                             <p class="font-bold text-amber-300 text-center uppercase tracking-wider text-[11px]">🎯 প্রমোশন প্ল্যান ও মূল্যতালিকা</p>
                             <div class="grid grid-cols-2 gap-2 text-[11px]">
                                 <div class="bg-white/10 p-2 rounded-xl flex justify-between items-center"><span>৩ দিন:</span> <strong class="text-emerald-400">১১০৳</strong></div>
-                                <div class="bg-white/10 p-2 rounded-xl flex justify-between items-center"><span>৭ দিন:</span> <strong class="text-emerald-400">৩১০৳</strong></div>
+                                <div class="bg-white/10 p-2 rounded-xl flex justify-between items-center"><span>৭ দিন:</span> <strong class="text-emerald-400">৩লোড৳</strong></div>
                                 <div class="bg-white/10 p-2 rounded-xl flex justify-between items-center"><span>১০ দিন:</span> <strong class="text-emerald-400">৪১০৳</strong></div>
                                 <div class="bg-white/10 p-2 rounded-xl flex justify-between items-center"><span>১৫ দিন:</span> <strong class="text-emerald-400">৭১০৳</strong></div>
                                 <div class="bg-white/10 p-2 rounded-xl flex justify-between items-center"><span>২০ দিন:</span> <strong class="text-emerald-400">৯১০৳</strong></div>
@@ -212,9 +212,9 @@
             projectId: "taskpoint-fa4be",
             storageBucket: "taskpoint-fa4be.firebasestorage.app",
             messagingSenderId: "378740952776",
-            appId: "1:378740952776:web:09af7b6e8f7d765bd81ffd",
-            measurementId: "G-34KHR9HSZM"
+            appId: "1:378740952776:web:09af7b6e8f7d765bd81ffd"
         };
+        
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
