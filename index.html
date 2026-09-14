@@ -73,10 +73,10 @@
         <div class="bg-white rounded-[2.5rem] p-8 card-shadow border border-slate-100 space-y-6">
             <div class="text-center space-y-2">
                 <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl mx-auto flex items-center justify-center text-2xl font-bold shadow-inner">
-                    <i class="fa-solid fa-phone"></i>
+                    <i class="fa-solid fa-lock"></i>
                 </div>
                 <h2 class="text-xl font-extrabold text-slate-800">Login / Register</h2>
-                <p class="text-xs text-slate-400">আপনার মোবাইল নাম্বার দিয়ে প্রবেশ করুন</p>
+                <p class="text-xs text-slate-400">মোবাইল নাম্বার ও পাসওয়ার্ড দিয়ে প্রবেশ করুন</p>
             </div>
 
             <div class="space-y-4">
@@ -85,6 +85,14 @@
                     <div class="flex items-center bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 focus-within:border-blue-500">
                         <span class="text-sm font-bold text-slate-500 mr-2">+880</span>
                         <input type="number" id="loginNumber" placeholder="17XXXXXXXX" class="w-full bg-transparent text-sm focus:outline-none font-medium">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Password / PIN</label>
+                    <div class="flex items-center bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 focus-within:border-blue-500">
+                        <span class="text-sm font-bold text-slate-500 mr-2"><i class="fa-solid fa-key"></i></span>
+                        <input type="password" id="loginPassword" placeholder="আপনার পাসওয়ার্ড দিন" class="w-full bg-transparent text-sm focus:outline-none font-medium">
                     </div>
                 </div>
 
@@ -361,11 +369,19 @@
 
         function performLogin() {
             const phoneInputElem = document.getElementById('loginNumber');
+            const passwordInputElem = document.getElementById('loginPassword');
             const phoneInput = phoneInputElem ? phoneInputElem.value.trim() : '';
+            const passwordInput = passwordInputElem ? passwordInputElem.value.trim() : '';
+
             if (!phoneInput || phoneInput.length < 10) {
                 alert('অনুগ্রহ করে সঠিক মোবাইল নাম্বার দিন।');
                 return;
             }
+            if (!passwordInput) {
+                alert('অনুগ্রহ করে পাসওয়ার্ড দিন।');
+                return;
+            }
+
             userPhone = phoneInput;
             localStorage.setItem('tp_phone', userPhone);
             
