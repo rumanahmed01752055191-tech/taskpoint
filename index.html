@@ -25,264 +25,370 @@
         .tab-content.active {
             display: block;
         }
+        .screen-view {
+            display: none;
+        }
+        .screen-view.active {
+            display: block;
+        }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen pb-24">
 
-    <!-- Header Banner -->
-    <header class="gradient-header text-white pt-6 pb-10 px-5 rounded-b-[2.5rem] shadow-lg relative overflow-hidden">
-        <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
-        <div class="flex justify-between items-center mb-4">
-            <div>
-                <p class="text-xs uppercase tracking-wider text-blue-100 font-semibold">Welcome to</p>
-                <h1 class="text-2xl font-extrabold tracking-tight">TaskPoint 🚀</h1>
+    <!-- SCREEN 1: WELCOME INTRO SCREEN -->
+    <div id="screen-welcome" class="screen-view active max-w-md mx-auto min-h-screen flex flex-col justify-between p-6 bg-gradient-to-br from-indigo-900 via-blue-900 to-slate-900 text-white fixed inset-0 z-50 overflow-y-auto">
+        <div class="text-center pt-10 space-y-4">
+            <div class="w-20 h-20 bg-white/10 backdrop-blur-md rounded-3xl mx-auto flex items-center justify-center text-4xl shadow-xl border border-white/20">
+                🚀
             </div>
-            <div class="bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full flex items-center space-x-2 border border-white/20 shadow-inner">
-                <i class="fa-solid fa-wallet text-amber-300"></i>
-                <span id="userBalance" class="font-bold text-sm">৳0.00</span>
+            <h1 class="text-3xl font-extrabold tracking-tight">TaskPoint</h1>
+            <p class="text-xs text-blue-200">Micro Tasking & Earning Platform</p>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-md rounded-3xl p-6 border border-white/10 space-y-4 my-auto">
+            <h2 class="text-lg font-bold text-center text-amber-300">স্বাগতম আমাদের প্ল্যাটফর্মে!</h2>
+            <p class="text-xs text-slate-200 leading-relaxed text-center">
+                এখানে আপনি প্রতিদিন ছোট ছোট কাজ যেমন—সোশ্যাল মিডিয়া সাবস্ক্রাইব, লাইক, কমেন্ট এবং শেয়ার করে খুব সহজেই ঘরে বসে টাকা আয় করতে পারবেন।
+            </p>
+            <div class="grid grid-cols-3 gap-2 pt-2 text-center">
+                <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
+                    <i class="fa-solid fa-thumbs-up text-amber-400 mb-1"></i>
+                    <p class="text-[10px] text-slate-300">ಲೈಕ್ & কমেন্ট</p>
+                </div>
+                <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
+                    <i class="fa-solid fa-square-rss text-blue-400 mb-1"></i>
+                    <p class="text-[10px] text-slate-300">সাবস্ক্রাইব</p>
+                </div>
+                <div class="bg-white/5 p-3 rounded-2xl border border-white/10">
+                    <i class="fa-solid fa-wallet text-emerald-400 mb-1"></i>
+                    <p class="text-[10px] text-slate-300">সহজ উইথড্র</p>
+                </div>
             </div>
         </div>
-        
-        <!-- App Download Banner Inside Header -->
-        <div class="mt-4 bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/20 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl bg-white text-blue-600 flex items-center justify-center font-bold text-lg shadow">
-                    <i class="fa-solid fa-mobile-screen"></i>
-                </div>
-                <div>
-                    <h2 class="text-xs font-bold">Android App Available</h2>
-                    <p class="text-[10px] text-blue-100">Download TaskPoint APK</p>
-                </div>
-            </div>
-            <button onclick="downloadApp()" class="bg-white text-blue-600 px-4 py-2 rounded-xl text-xs font-extrabold shadow-md hover:bg-blue-50 active:scale-95 transition-all">
-                Download APK
+
+        <div>
+            <button onclick="goToLogin()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-2xl font-bold text-sm shadow-xl transition-all active:scale-95 flex items-center justify-center space-x-2">
+                <span>শুরু করুন (Get Started)</span>
+                <i class="fa-solid fa-arrow-right"></i>
             </button>
         </div>
-    </header>
+    </div>
 
-    <!-- Main Container -->
-    <main class="max-w-md mx-auto px-4 -mt-4 relative z-10">
+    <!-- SCREEN 2: MOBILE NUMBER LOGIN / REGISTER SCREEN -->
+    <div id="screen-login" class="screen-view max-w-md mx-auto min-h-screen flex flex-col justify-center p-6 bg-slate-50 fixed inset-0 z-40 overflow-y-auto">
+        <div class="bg-white rounded-[2.5rem] p-8 card-shadow border border-slate-100 space-y-6">
+            <div class="text-center space-y-2">
+                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl mx-auto flex items-center justify-center text-2xl font-bold shadow-inner">
+                    <i class="fa-solid fa-phone"></i>
+                </div>
+                <h2 class="text-xl font-extrabold text-slate-800">Login / Register</h2>
+                <p class="text-xs text-slate-400">আপনার মোবাইল নাম্বার দিয়ে প্রবেশ করুন</p>
+            </div>
 
-        <!-- TAB 1: HOME -->
-        <div id="tab-home" class="tab-content active space-y-5">
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Mobile Number</label>
+                    <div class="flex items-center bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 focus-within:border-blue-500">
+                        <span class="text-sm font-bold text-slate-500 mr-2">+880</span>
+                        <input type="number" id="loginNumber" placeholder="17XXXXXXXX" class="w-full bg-transparent text-sm focus:outline-none font-medium">
+                    </div>
+                </div>
+
+                <button onclick="performLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95 transition-all">
+                    লগইন / রেজিস্টার করুন
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCREEN 3: MAIN APP INTERFACE (4 TABS) -->
+    <div id="screen-main" class="screen-view max-w-md mx-auto">
+        <!-- Header Banner -->
+        <header class="gradient-header text-white pt-6 pb-10 px-5 rounded-b-[2.5rem] shadow-lg relative overflow-hidden">
+            <div class="absolute -right-10 -top-10 w-40 h-40 bg-white/10 rounded-full blur-2xl"></div>
+            <div class="flex justify-between items-center mb-4">
+                <div>
+                    <p class="text-xs uppercase tracking-wider text-blue-100 font-semibold">Welcome to</p>
+                    <h1 class="text-2xl font-extrabold tracking-tight">TaskPoint 🚀</h1>
+                </div>
+                <div class="bg-white/20 backdrop-blur-md px-3.5 py-1.5 rounded-full flex items-center space-x-2 border border-white/20 shadow-inner">
+                    <i class="fa-solid fa-wallet text-amber-300"></i>
+                    <span id="userBalance" class="font-bold text-sm">৳0.00</span>
+                </div>
+            </div>
             
-            <!-- Quick Stats -->
-            <div class="grid grid-cols-2 gap-3">
-                <div class="bg-white p-4 rounded-2xl card-shadow border border-slate-100 flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
-                        <i class="fa-solid fa-list-check"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-medium">Completed</p>
-                        <h3 id="completedCount" class="text-lg font-bold text-slate-800">0</h3>
-                    </div>
-                </div>
-                <div class="bg-white p-4 rounded-2xl card-shadow border border-slate-100 flex items-center space-x-3">
-                    <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
-                        <i class="fa-solid fa-bullhorn"></i>
-                    </div>
-                    <div>
-                        <p class="text-xs text-slate-400 font-medium">Active Ads</p>
-                        <h3 class="text-lg font-bold text-slate-800">Verified</h3>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Task List Section -->
-            <div class="bg-white rounded-3xl p-5 card-shadow border border-slate-100">
-                <div class="flex justify-between items-center mb-4">
-                    <h3 class="font-bold text-slate-800 text-base flex items-center space-x-2">
-                        <i class="fa-solid fa-fire text-orange-500"></i>
-                        <span>Available Micro Tasks</span>
-                    </h3>
-                    <span class="text-xs bg-blue-50 text-blue-600 font-bold px-2.5 py-1 rounded-full">New</span>
-                </div>
-                
-                <div id="taskList" class="space-y-3">
-                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between hover:border-blue-300 transition-all">
-                        <div class="space-y-1">
-                            <h4 class="font-bold text-sm text-slate-800">Join Telegram Channel & Engage</h4>
-                            <p class="text-xs text-slate-500">Reward: <span class="font-bold text-emerald-600">৳5.00</span></p>
-                        </div>
-                        <button onclick="completeTask(1, 5, 'Join Telegram Channel')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md hover:bg-blue-700 active:scale-95 transition-all">
-                            Complete
-                        </button>
-                    </div>
-
-                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between hover:border-blue-300 transition-all">
-                        <div class="space-y-1">
-                            <h4 class="font-bold text-sm text-slate-800">Subscribe YouTube & Watch</h4>
-                            <p class="text-xs text-slate-500">Reward: <span class="font-bold text-emerald-600">৳8.00</span></p>
-                        </div>
-                        <button onclick="completeTask(2, 8, 'Subscribe YouTube Video')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md hover:bg-blue-700 active:scale-95 transition-all">
-                            Complete
-                        </button>
-                    </div>
-
-                    <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between hover:border-blue-300 transition-all">
-                        <div class="space-y-1">
-                            <h4 class="font-bold text-sm text-slate-800">Facebook Page Like & Review</h4>
-                            <p class="text-xs text-slate-500">Reward: <span class="font-bold text-emerald-600">৳6.00</span></p>
-                        </div>
-                        <button onclick="completeTask(3, 6, 'Facebook Page Like')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md hover:bg-blue-700 active:scale-95 transition-all">
-                            Complete
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 2: WITHDRAW (প্রোফাইল ও উইথড্র) -->
-        <div id="tab-withdraw" class="tab-content space-y-5">
-            <div class="bg-white rounded-3xl p-6 card-shadow border border-slate-100 text-center space-y-3">
-                <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto text-3xl font-bold border-4 border-blue-50 shadow-inner">
-                    <i class="fa-solid fa-user"></i>
-                </div>
-                <div>
-                    <h3 class="font-extrabold text-lg text-slate-800">TaskPoint Member</h3>
-                    <p class="text-xs text-slate-400">ID: #TP-90214</p>
-                </div>
-                <div class="pt-2 border-t border-slate-100 flex justify-around">
-                    <div>
-                        <p class="text-[10px] text-slate-400 uppercase font-semibold">Total Earned</p>
-                        <p id="profileEarned" class="text-base font-bold text-slate-800">৳0.00</p>
-                    </div>
-                    <div class="border-r border-slate-100"></div>
-                    <div>
-                        <p class="text-[10px] text-slate-400 uppercase font-semibold">Status</p>
-                        <p class="text-base font-bold text-emerald-600">Active</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Withdrawal Form -->
-            <div class="bg-white rounded-3xl p-6 card-shadow border border-slate-100 space-y-4">
-                <h3 class="font-bold text-slate-800 text-base flex items-center space-x-2">
-                    <i class="fa-solid fa-money-bill-transfer text-blue-600"></i>
-                    <span>Withdraw Funds</span>
-                </h3>
-
-                <div class="space-y-3">
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Select Method</label>
-                        <select id="withdrawMethod" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 font-medium">
-                            <option value="bkash">bKash</option>
-                            <option value="nagad">Nagad</option>
-                            <option value="rocket">Rocket</option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Account Number</label>
-                        <input type="number" id="accountNumber" placeholder="017XXXXXXXX" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 font-medium">
-                    </div>
-
-                    <div>
-                        <label class="block text-xs font-semibold text-slate-600 mb-1">Amount (BDT)</label>
-                        <input type="number" id="withdrawAmount" placeholder="Min ৳100" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 font-medium">
-                    </div>
-
-                    <button onclick="requestWithdrawal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl font-bold text-sm shadow-md active:scale-95 transition-all">
-                        Request Withdrawal
-                    </button>
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 3: SUPPORT -->
-        <div id="tab-support" class="tab-content space-y-5">
-            <div class="bg-white rounded-3xl p-6 card-shadow border border-slate-100 text-center space-y-4">
-                <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto text-2xl shadow">
-                    <i class="fa-brands fa-whatsapp"></i>
-                </div>
-                <div>
-                    <h3 class="font-extrabold text-lg text-slate-800">Need Immediate Support?</h3>
-                    <p class="text-xs text-slate-500 mt-1">Our team is active 24/7 on WhatsApp to assist you.</p>
-                </div>
-                
-                <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60">
-                    <p class="text-xs text-slate-400 font-medium">WhatsApp Helpline</p>
-                    <p class="text-base font-bold text-slate-800 mt-0.5">01617411391</p>
-                </div>
-
-                <a href="https://wa.me/8801617411391" target="_blank" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center space-x-2 transition-all active:scale-95">
-                    <i class="fa-brands fa-whatsapp text-lg"></i>
-                    <span>Chat with Support (01617411391)</span>
-                </a>
-            </div>
-        </div>
-
-        <!-- TAB 4: PROMOTION (প্রমোশন ট্যাব) -->
-        <div id="tab-promotion" class="tab-content space-y-5">
-            <div class="bg-gradient-to-br from-indigo-900 to-slate-900 text-white rounded-3xl p-6 card-shadow space-y-4">
+            <!-- App Download Banner Inside Header -->
+            <div class="mt-4 bg-white/10 backdrop-blur-md rounded-2xl p-3.5 border border-white/20 flex items-center justify-between">
                 <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-amber-400 text-xl font-bold shadow-inner">
-                        <i class="fa-solid fa-rectangle-ad"></i>
+                    <div class="w-10 h-10 rounded-xl bg-white text-blue-600 flex items-center justify-center font-bold text-lg shadow">
+                        <i class="fa-solid fa-mobile-screen"></i>
                     </div>
                     <div>
-                        <h3 class="font-extrabold text-lg">প্রমোশন বক্স</h3>
-                        <p class="text-xs text-blue-200">আপনার চ্যানেল বা প্রজেক্ট প্রমোট করুন</p>
+                        <h2 class="text-xs font-bold">Android App Available</h2>
+                        <p class="text-[10px] text-blue-100">Download TaskPoint APK</p>
                     </div>
                 </div>
-
-                <p class="text-xs text-slate-300 leading-relaxed pt-2 border-t border-white/10">
-                    আমাদের প্ল্যাটফর্মে আপনার সোশ্যাল মিডিয়া পেজ বা প্রজেক্ট প্রচার করতে নিচের প্যাকেজগুলো বেছে নিন। বিস্তারিত জানতে সরাসরি হোয়াটসঅ্যাপে যোগাযোগ করুন।
-                </p>
-
-                <!-- Package Lists -->
-                <div class="space-y-2.5">
-                    <div class="bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/10 flex justify-between items-center text-xs font-semibold">
-                        <span class="text-blue-200">🚀 ৩ দিনের প্রমোশন প্যাকেজ</span>
-                        <span class="text-amber-300 font-bold">Active</span>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/10 flex justify-between items-center text-xs font-semibold">
-                        <span class="text-blue-200">⭐ ৭ দিনের প্রমোশন প্যাকেজ</span>
-                        <span class="text-amber-300 font-bold">Popular</span>
-                    </div>
-                    <div class="bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/10 flex justify-between items-center text-xs font-semibold">
-                        <span class="text-blue-200">💎 ৩০ দিনের মেগা প্রমোশন প্যাকেজ</span>
-                        <span class="text-amber-300 font-bold">Best</span>
-                    </div>
-                </div>
-
-                <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/10 flex justify-between items-center text-xs font-semibold">
-                    <span class="text-blue-200">WhatsApp Number:</span>
-                    <span class="text-emerald-300 font-bold">01617411391</span>
-                </div>
-
-                <a href="https://wa.me/8801617411391?text=Hello%20TaskPoint%20Team,%20I%20want%20to%20buy%20a%20promotion%20package." target="_blank" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center space-x-2 transition-all active:scale-95">
-                    <i class="fa-brands fa-whatsapp text-lg"></i>
-                    <span>WhatsApp Chat (01617411391)</span>
-                </a>
+                <button onclick="downloadApp()" class="bg-white text-blue-600 px-4 py-2 rounded-xl text-xs font-extrabold shadow-md hover:bg-blue-50 active:scale-95 transition-all">
+                    Download APK
+                </button>
             </div>
-        </div>
+        </header>
 
-    </main>
+        <!-- Main Container (Top Content Starts Here) -->
+        <main class="px-4 -mt-4 relative z-10">
 
-    <!-- Bottom Navigation Bar (4 Tabs: Home, Withdraw, Support, Promotion) -->
-    <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 backdrop-blur-md border-t border-slate-200 px-4 py-3 flex justify-around items-center z-50 rounded-t-3xl shadow-lg">
-        <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center space-y-1 text-blue-600 font-bold transition-all">
-            <i class="fa-solid fa-house text-lg"></i>
-            <span class="text-[10px]">Home</span>
-        </button>
-        <button onclick="switchTab('withdraw')" id="nav-withdraw" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-slate-600 font-medium transition-all">
-            <i class="fa-solid fa-wallet text-lg"></i>
-            <span class="text-[10px]">Withdraw</span>
-        </button>
-        <button onclick="switchTab('support')" id="nav-support" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-slate-600 font-medium transition-all">
-            <i class="fa-solid fa-headset text-lg"></i>
-            <span class="text-[10px]">Support</span>
-        </button>
-        <button onclick="switchTab('promotion')" id="nav-promotion" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-slate-600 font-medium transition-all">
-            <i class="fa-solid fa-rectangle-ad text-lg"></i>
-            <span class="text-[10px]">Promotion</span>
-        </button>
-    </nav>
+            <!-- TAB 1: HOME -->
+            <div id="tab-home" class="tab-content active space-y-5">
+                
+                <!-- Quick Stats -->
+                <div class="grid grid-cols-2 gap-3">
+                    <div class="bg-white p-4 rounded-2xl card-shadow border border-slate-100 flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-list-check"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-medium">Completed</p>
+                            <h3 id="completedCount" class="text-lg font-bold text-slate-800">0</h3>
+                        </div>
+                    </div>
+                    <div class="bg-white p-4 rounded-2xl card-shadow border border-slate-100 flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-xl bg-indigo-50 text-indigo-600 flex items-center justify-center font-bold">
+                            <i class="fa-solid fa-bullhorn"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-slate-400 font-medium">Active Ads</p>
+                            <h3 class="text-lg font-bold text-slate-800">Verified</h3>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Task List Section -->
+                <div class="bg-white rounded-3xl p-5 card-shadow border border-slate-100">
+                    <div class="flex justify-between items-center mb-4">
+                        <h3 class="font-bold text-slate-800 text-base flex items-center space-x-2">
+                            <i class="fa-solid fa-fire text-orange-500"></i>
+                            <span>Available Micro Tasks</span>
+                        </h3>
+                        <span class="text-xs bg-blue-50 text-blue-600 font-bold px-2.5 py-1 rounded-full">New</span>
+                    </div>
+                    
+                    <div id="taskList" class="space-y-3">
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between hover:border-blue-300 transition-all">
+                            <div class="space-y-1">
+                                <h4 class="font-bold text-sm text-slate-800">Join Telegram Channel & Engage</h4>
+                                <p class="text-xs text-slate-500">Reward: <span class="font-bold text-emerald-600">৳5.00</span></p>
+                            </div>
+                            <button onclick="completeTask(1, 5, 'Join Telegram Channel')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md hover:bg-blue-700 active:scale-95 transition-all">
+                                Complete
+                            </button>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between hover:border-blue-300 transition-all">
+                            <div class="space-y-1">
+                                <h4 class="font-bold text-sm text-slate-800">Subscribe YouTube & Watch</h4>
+                                <p class="text-xs text-slate-500">Reward: <span class="font-bold text-emerald-600">৳8.00</span></p>
+                            </div>
+                            <button onclick="completeTask(2, 8, 'Subscribe YouTube Video')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md hover:bg-blue-700 active:scale-95 transition-all">
+                                Complete
+                            </button>
+                        </div>
+
+                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between hover:border-blue-300 transition-all">
+                            <div class="space-y-1">
+                                <h4 class="font-bold text-sm text-slate-800">Facebook Page Like & Review</h4>
+                                <p class="text-xs text-slate-500">Reward: <span class="font-bold text-emerald-600">৳6.00</span></p>
+                            </div>
+                            <button onclick="completeTask(3, 6, 'Facebook Page Like')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md hover:bg-blue-700 active:scale-95 transition-all">
+                                Complete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 2: WITHDRAW -->
+            <div id="tab-withdraw" class="tab-content space-y-5">
+                <div class="bg-white rounded-3xl p-6 card-shadow border border-slate-100 text-center space-y-3">
+                    <div class="w-20 h-20 bg-blue-100 text-blue-600 rounded-full flex items-center justify-center mx-auto text-3xl font-bold border-4 border-blue-50 shadow-inner">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-lg text-slate-800">TaskPoint Member</h3>
+                        <p id="userPhoneDisplay" class="text-xs text-slate-400">#017XXXXXXXX</p>
+                    </div>
+                    <div class="pt-2 border-t border-slate-100 flex justify-around">
+                        <div>
+                            <p class="text-[10px] text-slate-400 uppercase font-semibold">Total Earned</p>
+                            <p id="profileEarned" class="text-base font-bold text-slate-800">৳0.00</p>
+                        </div>
+                        <div class="border-r border-slate-100"></div>
+                        <div>
+                            <p class="text-[10px] text-slate-400 uppercase font-semibold">Status</p>
+                            <p class="text-base font-bold text-emerald-600">Active</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Withdrawal Form -->
+                <div class="bg-white rounded-3xl p-6 card-shadow border border-slate-100 space-y-4">
+                    <h3 class="font-bold text-slate-800 text-base flex items-center space-x-2">
+                        <i class="fa-solid fa-money-bill-transfer text-blue-600"></i>
+                        <span>Withdraw Funds</span>
+                    </h3>
+
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Select Method</label>
+                            <select id="withdrawMethod" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 font-medium">
+                                <option value="bkash">bKash</option>
+                                <option value="nagad">Nagad</option>
+                                <option value="rocket">Rocket</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Account Number</label>
+                            <input type="number" id="accountNumber" placeholder="017XXXXXXXX" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 font-medium">
+                        </div>
+
+                        <div>
+                            <label class="block text-xs font-semibold text-slate-600 mb-1">Amount (BDT)</label>
+                            <input type="number" id="withdrawAmount" placeholder="Min ৳100" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 font-medium">
+                        </div>
+
+                        <button onclick="requestWithdrawal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl font-bold text-sm shadow-md active:scale-95 transition-all">
+                            Request Withdrawal
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 3: SUPPORT -->
+            <div id="tab-support" class="tab-content space-y-5">
+                <div class="bg-white rounded-3xl p-6 card-shadow border border-slate-100 text-center space-y-4">
+                    <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-2xl flex items-center justify-center mx-auto text-2xl shadow">
+                        <i class="fa-brands fa-whatsapp"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-lg text-slate-800">Need Immediate Support?</h3>
+                        <p class="text-xs text-slate-500 mt-1">Our team is active 24/7 on WhatsApp to assist you.</p>
+                    </div>
+                    
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200/60">
+                        <p class="text-xs text-slate-400 font-medium">WhatsApp Helpline</p>
+                        <p class="text-base font-bold text-slate-800 mt-0.5">01617411391</p>
+                    </div>
+
+                    <a href="https://wa.me/8801617411391" target="_blank" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center space-x-2 transition-all active:scale-95">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>Chat with Support (01617411391)</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- TAB 4: PROMOTION -->
+            <div id="tab-promotion" class="tab-content space-y-5">
+                <div class="bg-gradient-to-br from-indigo-900 to-slate-900 text-white rounded-3xl p-6 card-shadow space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center text-amber-400 text-xl font-bold shadow-inner">
+                            <i class="fa-solid fa-rectangle-ad"></i>
+                        </div>
+                        <div>
+                            <h3 class="font-extrabold text-lg">প্রমোশন বক্স</h3>
+                            <p class="text-xs text-blue-200">আপনার চ্যানেল বা প্রজেক্ট প্রমোট করুন</p>
+                        </div>
+                    </div>
+
+                    <p class="text-xs text-slate-300 leading-relaxed pt-2 border-t border-white/10">
+                        আমাদের প্ল্যাটফর্মে আপনার সোশ্যাল মিডিয়া পেজ বা প্রজেক্ট প্রচার করতে নিচের প্যাকেজগুলো বেছে নিন। বিস্তারিত জানতে সরাসরি হোয়াটসঅ্যাপে যোগাযোগ করুন।
+                    </p>
+
+                    <div class="space-y-2.5">
+                        <div class="bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/10 flex justify-between items-center text-xs font-semibold">
+                            <span class="text-blue-200">🚀 ৩ দিনের প্রমোশন প্যাকেজ</span>
+                            <span class="text-amber-300 font-bold">Active</span>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/10 flex justify-between items-center text-xs font-semibold">
+                            <span class="text-blue-200">⭐ ৭ দিনের প্রমোশন প্যাকেজ</span>
+                            <span class="text-amber-300 font-bold">Popular</span>
+                        </div>
+                        <div class="bg-white/10 backdrop-blur-md rounded-xl p-3.5 border border-white/10 flex justify-between items-center text-xs font-semibold">
+                            <span class="text-blue-200">💎 ৩০ দিনের মেগা প্রমোশন প্যাকেজ</span>
+                            <span class="text-amber-300 font-bold">Best</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-white/10 backdrop-blur-md rounded-2xl p-3 border border-white/10 flex justify-between items-center text-xs font-semibold">
+                        <span class="text-blue-200">WhatsApp Number:</span>
+                        <span class="text-emerald-300 font-bold">01617411391</span>
+                    </div>
+
+                    <a href="https://wa.me/8801617411391?text=Hello%20TaskPoint%20Team,%20I%20want%20to%20buy%20a%20promotion%20package." target="_blank" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 rounded-xl font-bold text-sm shadow-lg flex items-center justify-center space-x-2 transition-all active:scale-95">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>WhatsApp Chat (01617411391)</span>
+                    </a>
+                </div>
+            </div>
+
+        </main>
+
+        <!-- Bottom Navigation Bar (Fixed at Bottom) -->
+        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 backdrop-blur-md border-t border-slate-200 px-4 py-3 flex justify-around items-center z-50 rounded-t-3xl shadow-lg">
+            <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center space-y-1 text-blue-600 font-bold transition-all">
+                <i class="fa-solid fa-house text-lg"></i>
+                <span class="text-[10px]">Home</span>
+            </button>
+            <button onclick="switchTab('withdraw')" id="nav-withdraw" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-slate-600 font-medium transition-all">
+                <i class="fa-solid fa-wallet text-lg"></i>
+                <span class="text-[10px]">Withdraw</span>
+            </button>
+            <button onclick="switchTab('support')" id="nav-support" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-slate-600 font-medium transition-all">
+                <i class="fa-solid fa-headset text-lg"></i>
+                <span class="text-[10px]">Support</span>
+            </button>
+            <button onclick="switchTab('promotion')" id="nav-promotion" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-slate-600 font-medium transition-all">
+                <i class="fa-solid fa-rectangle-ad text-lg"></i>
+                <span class="text-[10px]">Promotion</span>
+            </button>
+        </nav>
+    </div>
 
     <!-- JavaScript Logic -->
     <script>
         let balance = parseFloat(localStorage.getItem('tp_balance')) || 0.00;
         let completedCount = parseInt(localStorage.getItem('tp_completed')) || 0;
+        let userPhone = localStorage.getItem('tp_phone') || '';
+
+        // Check if already logged in
+        window.onload = function() {
+            if (userPhone) {
+                document.getElementById('screen-welcome').classList.remove('active');
+                document.getElementById('screen-login').classList.remove('active');
+                document.getElementById('screen-main').classList.add('active');
+                document.getElementById('userPhoneDisplay').innerText = '#' + userPhone;
+            }
+            updateUI();
+        };
+
+        function goToLogin() {
+            document.getElementById('screen-welcome').classList.remove('active');
+            document.getElementById('screen-login').classList.add('active');
+        }
+
+        function performLogin() {
+            const phoneInput = document.getElementById('loginNumber').value;
+            if (!phoneInput || phoneInput.length < 10) {
+                alert('অনুগ্রহ করে সঠিক মোবাইল নাম্বার দিন।');
+                return;
+            }
+            userPhone = phoneInput;
+            localStorage.setItem('tp_phone', userPhone);
+            
+            document.getElementById('screen-login').classList.remove('active');
+            document.getElementById('screen-main').classList.add('active');
+            document.getElementById('userPhoneDisplay').innerText = '#' + userPhone;
+            updateUI();
+        }
 
         function updateUI() {
             document.getElementById('userBalance').innerText = '৳' + balance.toFixed(2);
@@ -291,8 +397,6 @@
             localStorage.setItem('tp_balance', balance);
             localStorage.setItem('tp_completed', completedCount);
         }
-
-        updateUI();
 
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
@@ -314,7 +418,7 @@
             balance += reward;
             completedCount += 1;
             updateUI();
-            alert('Congratulations! Task "' + taskName + '" completed successfully. ৳' + reward + ' added to your balance.');
+            alert('অভিনন্দন! "' + taskName + '" কাজটি সফলভাবে সম্পন্ন হয়েছে। আপনার অ্যাকাউন্টে ৳' + reward + ' যোগ হয়েছে।');
         }
 
         function requestWithdrawal() {
@@ -323,27 +427,27 @@
             const amount = parseFloat(document.getElementById('withdrawAmount').value);
 
             if (!accountNumber || accountNumber.length < 10) {
-                alert('Please enter a valid account number.');
+                alert('দয়া করে সঠিক একাউন্ট নাম্বার লিখুন।');
                 return;
             }
             if (isNaN(amount) || amount < 100) {
-                alert('Minimum withdrawal amount is ৳100.');
+                alert('সর্বনিম্ন উইথড্র পরিমাণ ৳১০০।');
                 return;
             }
             if (amount > balance) {
-                alert('Insufficient balance for this withdrawal.');
+                alert('আপনার একাউন্টে পর্যাপ্ত ব্যালেন্স নেই।');
                 return;
             }
 
             balance -= amount;
             updateUI();
-            alert('Withdrawal request of ৳' + amount + ' via ' + method.toUpperCase() + ' submitted successfully!');
+            alert('৳' + amount + ' উত্তোলনের রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে!');
             document.getElementById('accountNumber').value = '';
             document.getElementById('withdrawAmount').value = '';
         }
 
         function downloadApp() {
-            window.location.href = "https://drive.google.com/uc?export=download&id=1oNqwSKBXRcOosTlpEO-FQSr6Hdfql74O";
+            window.location.href = "https://www.mediafire.com/file/28w1bahpxu1iilb/_TaskPoint_20171775.apk/file";
         }
     </script>
 </body>
