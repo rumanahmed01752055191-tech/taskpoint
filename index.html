@@ -22,7 +22,7 @@
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         .screen-view { display: none; }
-        .screen-view.active { display: block; }
+        .screen-view.active { display: block !important; }
     </style>
 </head>
 <body class="bg-slate-50 min-h-screen pb-24">
@@ -60,9 +60,8 @@
                 </div>
             </div>
 
-            <!-- বাটনটিকে লোগো থেকে অনেক ওপরে এবং সিকিউর জায়গায় রাখা হয়েছে -->
             <div class="pt-2">
-                <button onclick="goToLoginScreen()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-2xl font-bold text-sm shadow-xl transition-all active:scale-95 flex items-center justify-center space-x-2 cursor-pointer relative z-50">
+                <button type="button" id="startBtn" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-2xl font-bold text-sm shadow-xl transition-all active:scale-95 flex items-center justify-center space-x-2 cursor-pointer relative z-50">
                     <span>শুরু করুন (Get Started)</span>
                     <i class="fa-solid fa-arrow-right"></i>
                 </button>
@@ -91,7 +90,7 @@
                     </div>
                 </div>
 
-                <button onclick="performLogin()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95 transition-all cursor-pointer">
+                <button type="button" id="loginSubmitBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-bold text-sm shadow-lg active:scale-95 transition-all cursor-pointer">
                     লগইন / রেজিস্টার করুন
                 </button>
             </div>
@@ -123,7 +122,7 @@
                         <p class="text-[10px] text-blue-100">Download TaskPoint APK</p>
                     </div>
                 </div>
-                <button onclick="downloadApp()" class="bg-white text-blue-600 px-4 py-2 rounded-xl text-xs font-extrabold shadow-md hover:bg-blue-50 active:scale-95 transition-all cursor-pointer">
+                <button type="button" onclick="downloadApp()" class="bg-white text-blue-600 px-4 py-2 rounded-xl text-xs font-extrabold shadow-md hover:bg-blue-50 active:scale-95 transition-all cursor-pointer">
                     Download APK
                 </button>
             </div>
@@ -168,7 +167,7 @@
                                 <h4 class="font-bold text-sm text-slate-800">Join Telegram Channel & Engage</h4>
                                 <p class="text-xs text-slate-500">Reward: <span class="font-bold text-emerald-600">৳5.00</span></p>
                             </div>
-                            <button onclick="completeTask(5, 'Join Telegram Channel')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md active:scale-95 cursor-pointer">
+                            <button type="button" onclick="completeTask(5, 'Join Telegram Channel')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md active:scale-95 cursor-pointer">
                                 Complete
                             </button>
                         </div>
@@ -178,7 +177,7 @@
                                 <h4 class="font-bold text-sm text-slate-800">Subscribe YouTube & Watch</h4>
                                 <p class="text-xs text-slate-500">Reward: <span class="font-bold text-emerald-600">৳8.00</span></p>
                             </div>
-                            <button onclick="completeTask(8, 'Subscribe YouTube Video')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md active:scale-95 cursor-pointer">
+                            <button type="button" onclick="completeTask(8, 'Subscribe YouTube Video')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md active:scale-95 cursor-pointer">
                                 Complete
                             </button>
                         </div>
@@ -188,7 +187,7 @@
                                 <h4 class="font-bold text-sm text-slate-800">Facebook Page Like & Review</h4>
                                 <p class="text-xs text-slate-500">Reward: <span class="font-bold text-emerald-600">৳6.00</span></p>
                             </div>
-                            <button onclick="completeTask(6, 'Facebook Page Like')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md active:scale-95 cursor-pointer">
+                            <button type="button" onclick="completeTask(6, 'Facebook Page Like')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow-md active:scale-95 cursor-pointer">
                                 Complete
                             </button>
                         </div>
@@ -245,7 +244,7 @@
                             <input type="number" id="withdrawAmount" placeholder="Min ৳100" class="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-blue-500 font-medium">
                         </div>
 
-                        <button onclick="requestWithdrawal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl font-bold text-sm shadow-md active:scale-95 transition-all cursor-pointer">
+                        <button type="button" onclick="requestWithdrawal()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-xl font-bold text-sm shadow-md active:scale-95 transition-all cursor-pointer">
                             Request Withdrawal
                         </button>
                     </div>
@@ -317,19 +316,19 @@
 
         <!-- Bottom Navigation Bar -->
         <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 backdrop-blur-md border-t border-slate-200 px-4 py-3 flex justify-around items-center z-50 rounded-t-3xl shadow-lg">
-            <button onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center space-y-1 text-blue-600 font-bold transition-all cursor-pointer">
+            <button type="button" onclick="switchTab('home')" id="nav-home" class="flex flex-col items-center space-y-1 text-blue-600 font-bold transition-all cursor-pointer">
                 <i class="fa-solid fa-house text-lg"></i>
                 <span class="text-[10px]">Home</span>
             </button>
-            <button onclick="switchTab('withdraw')" id="nav-withdraw" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-slate-600 font-medium transition-all cursor-pointer">
+            <button type="button" onclick="switchTab('withdraw')" id="nav-withdraw" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-slate-600 font-medium transition-all cursor-pointer">
                 <i class="fa-solid fa-wallet text-lg"></i>
                 <span class="text-[10px]">Withdraw</span>
             </button>
-            <button onclick="switchTab('support')" id="nav-support" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-slate-600 font-medium transition-all cursor-pointer">
+            <button type="button" onclick="switchTab('support')" id="nav-support" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-slate-600 font-medium transition-all cursor-pointer">
                 <i class="fa-solid fa-headset text-lg"></i>
                 <span class="text-[10px]">Support</span>
             </button>
-            <button onclick="switchTab('promotion')" id="nav-promotion" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-slate-600 font-medium transition-all cursor-pointer">
+            <button type="button" onclick="switchTab('promotion')" id="nav-promotion" class="flex flex-col items-center space-y-1 text-slate-400 hover:text-slate-600 font-medium transition-all cursor-pointer">
                 <i class="fa-solid fa-rectangle-ad text-lg"></i>
                 <span class="text-[10px]">Promotion</span>
             </button>
@@ -342,7 +341,23 @@
         let completedCount = parseInt(localStorage.getItem('tp_completed')) || 0;
         let userPhone = localStorage.getItem('tp_phone') || '';
 
-        window.onload = function() {
+        // ইভেন্ট লিসেনার সরাসরি যুক্ত করা হলো যাতে ক্লিকে কোনো মিস না হয়
+        document.addEventListener("DOMContentLoaded", function() {
+            const startBtn = document.getElementById('startBtn');
+            if(startBtn) {
+                startBtn.onclick = function() {
+                    document.getElementById('screen-welcome').classList.remove('active');
+                    document.getElementById('screen-login').classList.add('active');
+                };
+            }
+
+            const loginSubmitBtn = document.getElementById('loginSubmitBtn');
+            if(loginSubmitBtn) {
+                loginSubmitBtn.onclick = function() {
+                    performLogin();
+                };
+            }
+
             if (userPhone && userPhone.length >= 10) {
                 document.getElementById('screen-welcome').classList.remove('active');
                 document.getElementById('screen-login').classList.remove('active');
@@ -355,12 +370,7 @@
                 document.getElementById('screen-main').classList.remove('active');
             }
             updateUI();
-        };
-
-        function goToLoginScreen() {
-            document.getElementById('screen-welcome').classList.remove('active');
-            document.getElementById('screen-login').classList.add('active');
-        }
+        });
 
         function performLogin() {
             const phoneInputElem = document.getElementById('loginNumber');
@@ -416,7 +426,7 @@
                 const cElem = document.getElementById('completedCount');
 
                 if(bElem) bElem.innerText = '৳' + balance.toFixed(2);
-                if(pElem) pElem.innerText = '৳' + balance.jsdelivr ? '' : '৳' + balance.toFixed(2);
+                if(pElem) pElem.innerText = '৳' + balance.toFixed(2);
                 if(cElem) cElem.innerText = completedCount;
 
                 localStorage.setItem('tp_balance', balance);
