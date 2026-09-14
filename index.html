@@ -261,12 +261,22 @@
             
             const linkContainer = document.getElementById('taskLinkContainer');
             if(link && link !== '#') {
-                linkContainer.innerHTML = `<a href="${link}" target="_blank" rel="noopener noreferrer" class="block bg-indigo-600 text-white text-center py-3 rounded-xl font-bold text-xs shadow-md">🔗 লিংকে ক্লিক করে কাজ সম্পন্ন করুন</a>`;
+                // সরাসরি জাভাস্ক্রিপ্ট ফাংশন দিয়ে লিংক ওপেন করানোর ব্যবস্থা করা হলো যাতে অ্যাপে সাদা হয়ে না আটকে থাকে
+                linkContainer.innerHTML = `<button type="button" onclick="openTaskLink('${link}')" class="w-full bg-indigo-600 text-white text-center py-3 rounded-xl font-bold text-xs shadow-md cursor-pointer">🔗 লিংকে ক্লিক করে কাজ সম্পন্ন করুন</button>`;
             } else {
                 linkContainer.innerHTML = '';
             }
 
             document.getElementById('taskModal').style.display = 'flex';
+        }
+
+        function openTaskLink(url) {
+            try {
+                // অ্যান্ড্রয়েড বা আইওএস অ্যাপের ভেতরে এক্সটার্নাল ব্রাউজারে লিংক পাঠানোর নিরাপদ পদ্ধতি
+                window.open(url, '_system');
+            } catch (e) {
+                window.location.href = url;
+            }
         }
 
         function closeTaskModal() {
