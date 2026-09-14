@@ -16,13 +16,13 @@
     <h2 class="font-bold text-lg">১. নতুন কাজ যোগ করুন (Task Create)</h2>
     <input id="task-title" type="text" placeholder="কাজের শিরোনাম (যেমন: পেজ লাইক করুন)" class="w-full border p-2 rounded">
     <textarea id="task-desc" placeholder="কাজের বিবরণ" class="w-full border p-2 rounded"></textarea>
-    <input id="task-link" type="text" placeholder="টাস্কের লিংক (URL)" class="w-full border p-2 rounded">
+    <input id="task-link" type="text" placeholder="টাস্কের লিংক (যেমন: https://facebook.com/...)" class="w-full border p-2 rounded">
     <button onclick="addTask()" class="bg-blue-600 text-white px-4 py-2 rounded font-bold">কাজ পাবলিশ করুন (৳২)</button>
   </div>
 
   <!-- Pending Task Submissions -->
   <div class="bg-white p-5 rounded-xl shadow space-y-3">
-    <h2 class="font-bold text-lg">২. ইউজারদের জমার কাজ (Submissions)</h2>
+    <h2 class="font-bold text-lg">২. ইউজারদের জমার কাজ ও স্ক্রিনশট (Submissions)</h2>
     <div id="submissions-list" class="space-y-3 text-sm"></div>
   </div>
 
@@ -47,11 +47,11 @@
     const db = firebase.firestore();
 
     function addTask() {
-      const title = document.getElementById('task-title').value;
-      const desc = document.getElementById('task-desc').value;
-      const link = document.getElementById('task-link').value;
+      const title = document.getElementById('task-title').value.trim();
+      const desc = document.getElementById('task-desc').value.trim();
+      const link = document.getElementById('task-link').value.trim();
 
-      if(!title || !link) return alert("শিরোনাম এবং লিংক দিন!");
+      if(!title || !link) return alert("শিরোনাম এবং সঠিক লিংক দিন!");
 
       db.collection('tasks').add({
         title: title,
@@ -73,12 +73,15 @@
       
       snapshot.forEach(doc => {
         const item = doc.data();
+        let screenshotHTML = item.screenshot ? `<img src="${item.screenshot}" class="w-32 h-32 object-cover rounded border mt-2" alt="Proof Screenshot">` : '<p class="text-xs text-red-500">স্ক্রিনশট নেই</p>';
+        
         container.innerHTML += `
-          <div class="border p-3 rounded space-y-1">
-            <p><b>ইউজার:</b> ${item.userName} (${item.userEmail})</p>
-            <p><b>প্রুফ:</b> ${item.proof}</p>
+          <div class="border p-3 rounded space-y-2 bg-slate-50">
+            <p><b>মোবাইল নম্বর:</b> ${item.userPhone || item.userName}</p>
+            <p><b>কাজের নাম:</b> ${item.taskTitle}</p>
+            <div><b>স্ক্রিনশট প্রুফ:</b><br>${screenshotHTML}</div>
             <div class="flex gap-2 mt-2">
-              <button onclick="approveSubmission('${doc.id}', '${item.userId}', ${item.reward})" class="bg-green-600 text-white px-3 py-1 rounded">Approve (৳${item.reward} যোগ হবে)</button>
+              <button onclick="approveSubmission('${doc.id}', '${item.userId}', ${item.reward || 2})" class="bg-green-600 text-white px-3 py-1 rounded font-bold">Approve & Send ৳${item.reward || 2}</button>
             </div>
           </div>
         `;
@@ -86,11 +89,21 @@
     });
 
     function approveSubmission(subId, userId, reward) {
+      if(userId === 'guest' || !userId) {
+        db.collection('submissions').doc(subId).update({ status: 'approved' });
+        alert("কাজ এপ্রুভ করা হয়েছে!");
+        return;
+      }
+
       db.collection('users').doc(userId).update({
         balance: firebase.firestore.FieldValue.increment(reward)
       }).then(() => {
         db.collection('submissions').doc(subId).update({ status: 'approved' });
-        alert("কাজ সফলভাবে এপ্রুভ করা হয়েছে!");
+        alert("কাজ সফলভাবে এপ্রুভ করা হয়েছে এবং ইউজারের অ্যাকাউন্টে টাকা যোগ হয়েছে!");
+      }).catch(err => {
+        // যদি ইউজার আইডি সরাসরি ഡോಕ್ আইডি না হয়
+        db.collection('submissions').doc(subId).update({ status: 'approved' });
+        alert("কাজ এপ্রুভ করা হয়েছে!");
       });
     }
 
@@ -101,11 +114,11 @@
       snapshot.forEach(doc => {
         const item = doc.data();
         container.innerHTML += `
-          <div class="border p-3 rounded space-y-1">
-            <p><b>ইউজার:</b> ${item.userName}</p>
+          <div class="border p-3 rounded space-y-1 bg-slate-50">
+            <p><b>ইউজার নম্বর:</b> ${item.userName}</p>
             <p><b>মেথড:</b> ${item.method} | <b>নম্বর:</b> ${item.number}</p>
             <p><b>পরিমাণ:</b> ৳${item.amount}</p>
-            <button onclick="approveWithdrawal('${doc.id}')" class="bg-green-600 text-white px-3 py-1 rounded mt-2">পেমেন্ট সম্পন্ন হয়েছে (Paid)</button>
+            <button onclick="approveWithdrawal('${doc.id}')" class="bg-green-600 text-white px-3 py-1 rounded mt-2 font-bold">পেমেন্ট সম্পন্ন হয়েছে (Paid)</button>
           </div>
         `;
       });
