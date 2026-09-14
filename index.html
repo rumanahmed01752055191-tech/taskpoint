@@ -151,6 +151,9 @@
         <div class="bg-white w-full rounded-3xl p-6 space-y-4 shadow-2xl">
             <h3 class="font-bold text-slate-800 text-sm" id="modalTaskTitle">Task Proof</h3>
             
+            <!-- Link Visit Button Inside Modal -->
+            <div id="taskLinkContainer"></div>
+
             <div class="space-y-1">
                 <label class="text-[11px] font-bold text-slate-600">মোবাইল নাম্বার দিন:</label>
                 <input type="number" id="taskUserNumber" placeholder="017XXXXXXXX" class="w-full bg-slate-50 border rounded-xl px-3.5 py-3 text-xs">
@@ -219,7 +222,7 @@
                 
                 snapshot.forEach(doc => {
                     const task = doc.data();
-                    const taskLink = task.link && task.link.trim() !== '' && task.link !== '#' ? task.link : '';
+                    const taskLink = task.link || '#';
                     
                     container.innerHTML += `
                         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-100 flex items-center justify-between">
@@ -237,17 +240,18 @@
 
         function openTaskModal(title, link, reward) {
             currentTask = { title, reward };
-            
-            // যদি লিংকে আসল URL থাকে তবে ওপেন করবে, না হলে আটকে থাকবে না
-            if(link && link.startsWith('http')) {
-                window.open(link, '_blank');
-            } else {
-                console.log("No valid link provided for this task.");
-            }
-
             document.getElementById('modalTaskTitle').innerText = title;
             document.getElementById('taskUserNumber').value = userPhone;
             document.getElementById('taskScreenshot').value = ''; 
+            
+            // মডালের ভেতরে লিংকে যাওয়ার একটি পরিষ্কার বাটন রাখা হলো যাতে সাদা স্ক্রিন হয়ে আটকে না থাকে
+            const linkContainer = document.getElementById('taskLinkContainer');
+            if(link && link !== '#') {
+                linkContainer.innerHTML = `<a href="${link}" target="_blank" class="block bg-indigo-50 text-indigo-600 text-center py-2.5 rounded-xl font-bold text-xs border border-indigo-100">🔗 প্রথমে এখানে ক্লিক করে কাজ সম্পন্ন করুন</a>`;
+            } else {
+                linkContainer.innerHTML = '';
+            }
+
             document.getElementById('taskModal').style.display = 'flex';
         }
 
