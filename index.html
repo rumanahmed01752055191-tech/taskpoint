@@ -109,7 +109,6 @@
         <main class="px-4 -mt-4 relative z-10 mb-24">
             <!-- HOME TAB -->
             <div id="tab-home" class="tab-content active space-y-4">
-                
                 <a href="https://docs.google.com/uc?export=download&id=1nXkqNYmz8A2C-s2dUFLa_xq_yQybw06i" target="_blank" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3.5 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 shadow-lg cursor-pointer transition">
                     <i class="fa-solid fa-download text-sm"></i>
                     <span>অ্যান্ড্রয়েড অ্যাপ ডাউনলোড করুন (.APK)</span>
@@ -122,6 +121,22 @@
                     </h3>
                     <div id="tasks-container" class="space-y-3">
                         <p class="text-xs text-slate-400 text-center py-4">কাজ লোড হচ্ছে...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- MY SUBMISSIONS TAB -->
+            <div id="tab-submissions" class="tab-content space-y-4">
+                <div class="bg-white p-5 rounded-3xl card-shadow border border-slate-100 space-y-3">
+                    <div class="flex justify-between items-center border-b pb-2">
+                        <h3 class="font-bold text-slate-800 text-base flex items-center space-x-2">
+                            <i class="fa-solid fa-clipboard-list text-blue-600"></i>
+                            <span>আমার জমাকৃত কাজসমূহ</span>
+                        </h3>
+                        <span id="total-sub-count" class="bg-blue-50 text-blue-600 text-xs font-bold px-2.5 py-1 rounded-full">০ টি</span>
+                    </div>
+                    <div id="my-submissions-container" class="space-y-3 pt-1">
+                        <p class="text-xs text-slate-400 text-center py-4">সাবমিশন লোড হচ্ছে...</p>
                     </div>
                 </div>
             </div>
@@ -230,9 +245,13 @@
                 <h3 class="font-bold text-lg text-slate-800">কাজের প্রুফ জমা দিন</h3>
                 <p id="modal-task-title" class="text-xs text-slate-500 font-semibold"></p>
                 
-                <div class="space-y-2">
-                    <label class="block text-xs font-bold text-slate-600">কাজের স্ক্রিনশট ছবি সিলেক্ট করুন:</label>
-                    <input type="file" id="proof-file" accept="image/*" class="w-full border border-slate-300 p-2.5 rounded-xl text-xs bg-slate-50 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-150">
+                <div class="space-y-1.5">
+                    <label class="block text-xs font-bold text-slate-600">কাজের স্ক্রিনশট ছবি সিলেক্ট করুন (বাধ্যতামূলক):</label>
+                    <!-- এখানে ফাইলের পাশে গ্যালারিতে কেটে ছোট করে নেওয়ার নির্দেশনা যোগ করা হয়েছে -->
+                    <p class="text-[10px] text-amber-600 font-semibold bg-amber-50 p-2 rounded-xl border border-amber-200">
+                        <i class="fa-solid fa-circle-info mr-1"></i> ছবিটি গ্যালারি থেকে ক্রপ বা কেটে ছোট করে সিলেক্ট করুন।
+                    </p>
+                    <input type="file" id="proof-file" accept="image/*" class="w-full border border-slate-300 p-2.5 rounded-xl text-xs bg-slate-50 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                 </div>
 
                 <div class="flex space-x-2 pt-2">
@@ -260,7 +279,7 @@
                 </div>
 
                 <div class="space-y-3">
-                    <h3 class="font-bold text-sm text-amber-600">পেন্ডিং কাজ ও প্রুফ স্ক্রিনশট</h3>
+                    <h3 class="font-bold text-sm text-amber-600">পেন্ডিং কাজসমূহ</h3>
                     <div id="admin-pending-tasks" class="space-y-2 text-xs"><p class="text-slate-400">লোডিং...</p></div>
                 </div>
 
@@ -271,13 +290,23 @@
             </div>
         </div>
 
+        <!-- IMAGE VIEW MODAL FOR ADMIN -->
+        <div id="image-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4" style="display: none;">
+            <div class="bg-white rounded-3xl p-4 max-w-sm w-full space-y-3 text-center">
+                <h3 class="font-bold text-sm text-slate-800">কাজের স্ক্রিনশট</h3>
+                <img id="modal-img-preview" src="" class="w-full rounded-2xl max-h-80 object-contain border">
+                <button onclick="document.getElementById('image-modal').style.display='none'" class="w-full bg-slate-200 text-slate-700 py-2 rounded-xl font-bold text-xs">বন্ধ করুন</button>
+            </div>
+        </div>
+
         <!-- NAV -->
-        <nav class="fixed bottom-12 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-3 flex justify-around items-center z-40 rounded-t-3xl shadow-lg">
-            <button onclick="switchTab('home')" id="nav-home" class="text-blue-600 font-bold flex flex-col items-center text-[10px]"><i class="fa-solid fa-house text-lg"></i>Home</button>
-            <button onclick="switchTab('referral')" id="nav-referral" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-users text-lg"></i>Referral</button>
-            <button onclick="switchTab('withdraw')" id="nav-withdraw" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-wallet text-lg"></i>Withdraw</button>
-            <button onclick="switchTab('promotion')" id="nav-promotion" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-bullhorn text-lg"></i>Promotion</button>
-            <button onclick="switchTab('profile')" id="nav-profile" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-user text-lg"></i>Profile</button>
+        <nav class="fixed bottom-12 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t border-slate-200 px-1 py-3 flex justify-around items-center z-40 rounded-t-3xl shadow-lg">
+            <button onclick="switchTab('home')" id="nav-home" class="text-blue-600 font-bold flex flex-col items-center text-[9px]"><i class="fa-solid fa-house text-base"></i>Home</button>
+            <button onclick="switchTab('submissions')" id="nav-submissions" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-clipboard-list text-base"></i>Submissions</button>
+            <button onclick="switchTab('referral')" id="nav-referral" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-users text-base"></i>Referral</button>
+            <button onclick="switchTab('withdraw')" id="nav-withdraw" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-wallet text-base"></i>Withdraw</button>
+            <button onclick="switchTab('promotion')" id="nav-promotion" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-bullhorn text-base"></i>Promotion</button>
+            <button onclick="switchTab('profile')" id="nav-profile" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-user text-base"></i>Profile</button>
         </nav>
     </div>
 
@@ -346,6 +375,7 @@
                 });
 
                 loadUserTasks();
+                loadMySubmissions();
             } else {
                 document.getElementById('screen-welcome').style.display = 'flex';
                 setTimeout(() => {
@@ -511,21 +541,21 @@
 
                         let actionButton = '';
                         if (status === 'pending') {
-                            actionButton = `<button disabled class="bg-amber-500 text-white px-4 py-2 rounded-xl text-xs font-bold cursor-not-allowed">পেন্ডিং</button>`;
+                            actionButton = `<button disabled class="bg-amber-500 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold cursor-not-allowed">পেন্ডিং</button>`;
                         } else if (status === 'approved') {
-                            actionButton = `<button disabled class="bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold cursor-not-allowed">এপ্রুভড</button>`;
+                            actionButton = `<button disabled class="bg-emerald-600 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold cursor-not-allowed">এপ্রুভড</button>`;
                         } else if (status === 'rejected') {
-                            actionButton = `<button onclick="openProofModal('${task.link}', '${task.title}', ${task.reward})" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow cursor-pointer">রিজেক্টেড - পুনরায় জমা দিন</button>`;
+                            actionButton = `<button onclick="openProofModal('${task.link}', '${task.title}', ${task.reward})" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow cursor-pointer">রিজেক্টেড - পুনরায়</button>`;
                         } else {
-                            actionButton = `<button onclick="openProofModal('${task.link}', '${task.title}', ${task.reward})" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow cursor-pointer">কাজ শুরু করুন</button>`;
+                            actionButton = `<button onclick="openProofModal('${task.link}', '${task.title}', ${task.reward})" class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1.5 rounded-xl text-[11px] font-bold shadow cursor-pointer">কাজ শুরু</button>`;
                         }
 
                         html += `
-                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
-                                <div>
-                                    <h4 class="font-bold text-sm text-slate-800">${task.title}</h4>
-                                    <p class="text-xs text-slate-500">${task.description || ''}</p>
-                                    <p class="text-xs text-emerald-600 font-bold mt-1">Reward: ৳${task.reward}</p>
+                            <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
+                                <div class="pr-2">
+                                    <h4 class="font-bold text-xs text-slate-800">${task.title}</h4>
+                                    <p class="text-[10px] text-slate-500">${task.description || ''}</p>
+                                    <p class="text-[11px] text-emerald-600 font-bold mt-0.5">Reward: ৳${task.reward}</p>
                                 </div>
                                 ${actionButton}
                             </div>
@@ -533,6 +563,43 @@
                     });
                     container.innerHTML = html || '<p class="text-xs text-slate-400 text-center py-4">বর্তমানে কোনো কাজ নেই</p>';
                 });
+            });
+        }
+
+        function loadMySubmissions() {
+            const container = document.getElementById('my-submissions-container');
+            const countBadge = document.getElementById('total-sub-count');
+
+            db.collection("task_submissions").where("phone", "==", userPhone).onSnapshot((snapshot) => {
+                let html = '';
+                let count = snapshot.size;
+                countBadge.innerText = count + ' টি';
+
+                snapshot.forEach((doc) => {
+                    let sub = doc.data();
+                    let status = sub.status || 'pending';
+                    
+                    let statusBadge = '';
+                    if(status === 'pending') {
+                        statusBadge = `<span class="bg-amber-100 text-amber-700 font-bold px-2.5 py-1 rounded-lg text-[10px]">পেন্ডিং (Pending)</span>`;
+                    } else if(status === 'approved') {
+                        statusBadge = `<span class="bg-emerald-100 text-emerald-700 font-bold px-2.5 py-1 rounded-lg text-[10px]">এপ্রুভড (Approved)</span>`;
+                    } else if(status === 'rejected') {
+                        statusBadge = `<span class="bg-red-100 text-red-700 font-bold px-2.5 py-1 rounded-lg text-[10px]">রিজেক্টেড (Rejected)</span>`;
+                    }
+
+                    html += `
+                        <div class="p-3.5 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-between">
+                            <div class="space-y-1">
+                                <h4 class="font-bold text-xs text-slate-800">${sub.taskTitle || 'কাজ'}</h4>
+                                <p class="text-[11px] text-emerald-600 font-bold">রিওয়ার্ড: ৳${sub.reward || 0}</p>
+                            </div>
+                            <div>${statusBadge}</div>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html || '<p class="text-xs text-slate-400 text-center py-4">আপনি এখনো কোনো কাজ জমা দেননি</p>';
             });
         }
 
@@ -566,46 +633,54 @@
 
         function submitTaskProof() {
             const fileInput = document.getElementById('proof-file');
-            if (fileInput.files.length === 0) { 
-                alert('দয়া করে কাজের একটি স্ক্রিনশট ছবি সিলেক্ট করুন'); 
-                return; 
+            if (fileInput.files.length === 0) {
+                alert('দয়া করে কাজের একটি স্ক্রিনশট ছবি সিলেক্ট করুন!');
+                return;
             }
 
             const file = fileInput.files[0];
             const btn = document.getElementById('submit-btn');
-            btn.innerText = "আপলোড হচ্ছে...";
+            btn.innerText = "প্রসেসিং হচ্ছে...";
             btn.disabled = true;
 
             const reader = new FileReader();
-            
-            reader.onerror = function () {
-                alert('ফাইল পড়তে সমস্যা হয়েছে। অন্য ছবি সিলেক্ট করুন।');
-                btn.innerText = "জমা দিন";
-                btn.disabled = false;
+            reader.onload = function(e) {
+                const img = new Image();
+                img.onload = function() {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 400; 
+                    const scaleSize = MAX_WIDTH / img.width;
+                    canvas.width = MAX_WIDTH;
+                    canvas.height = img.height * scaleSize;
+
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.5);
+
+                    btn.innerText = "জমা হচ্ছে...";
+                    db.collection("task_submissions").add({
+                        phone: userPhone,
+                        taskTitle: selectedTask.title,
+                        reward: selectedTask.reward,
+                        screenshot: compressedBase64,
+                        status: "pending",
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }).then(() => {
+                        btn.innerText = "জমা দিন";
+                        btn.disabled = false;
+                        closeProofModal();
+                        loadUserTasks();
+                        loadMySubmissions();
+                        switchTab('submissions');
+                    }).catch(err => {
+                        alert('ত্রুটি: ' + err.message);
+                        btn.innerText = "জমা দিন";
+                        btn.disabled = false;
+                    });
+                }
+                img.src = e.target.result;
             };
-
-            reader.onload = function (event) {
-                const base64Image = event.target.result;
-
-                db.collection("task_submissions").add({
-                    phone: userPhone,
-                    taskTitle: selectedTask.title,
-                    reward: selectedTask.reward,
-                    proofImage: base64Image,
-                    status: "pending",
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(() => {
-                    btn.innerText = "জমা দিন";
-                    btn.disabled = false;
-                    closeProofModal();
-                    loadUserTasks();
-                }).catch(err => {
-                    alert('ত্রুটি: ' + err.message);
-                    btn.innerText = "জমা দিন";
-                    btn.disabled = false;
-                });
-            };
-
             reader.readAsDataURL(file);
         }
 
@@ -656,13 +731,13 @@
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-' + tabName).classList.add('active');
             
-            ['home', 'referral', 'withdraw', 'promotion', 'profile'].forEach(t => {
+            ['home', 'submissions', 'referral', 'withdraw', 'promotion', 'profile'].forEach(t => {
                 const btn = document.getElementById('nav-' + t);
                 if(btn) {
                     if(t === tabName) {
-                        btn.className = "text-blue-600 font-bold flex flex-col items-center text-[10px]";
+                        btn.className = "text-blue-600 font-bold flex flex-col items-center text-[9px]";
                     } else {
-                        btn.className = "text-slate-400 font-medium flex flex-col items-center text-[10px]";
+                        btn.className = "text-slate-400 font-medium flex flex-col items-center text-[9px]";
                     }
                 }
             });
@@ -714,6 +789,7 @@
                     let uPhone = sub.phone || 'অজানা';
                     let tTitle = sub.taskTitle || 'কাজ';
                     let tReward = sub.reward || 0;
+                    let imgData = sub.screenshot || '';
                     
                     html += `
                         <div class="bg-slate-50 p-3.5 rounded-2xl border space-y-2">
@@ -721,7 +797,7 @@
                                 <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md font-bold text-[11px]">📞 ইউজার নাম্বার: ${uPhone}</span>
                                 <p class="font-bold text-slate-800 text-xs mt-1">কাজ: ${tTitle} (৳${tReward})</p>
                             </div>
-                            ${sub.proofImage ? `<a href="${sub.proofImage}" target="_blank"><img src="${sub.proofImage}" class="w-24 h-24 object-cover rounded-xl border"></a>` : ''}
+                            ${imgData ? `<button onclick="viewImage('${imgData}')" class="bg-indigo-50 text-indigo-600 px-3 py-1.5 rounded-xl font-bold text-[11px] border border-indigo-200 cursor-pointer w-full"><i class="fa-solid fa-image mr-1"></i> স্ক্রিনশট দেখুন</button>` : ''}
                             <div class="flex space-x-2 pt-1">
                                 <button onclick="approveTask('${subId}', '${uPhone}', ${tReward})" class="bg-emerald-500 text-white px-3 py-2 rounded-xl font-bold text-xs w-1/2 cursor-pointer">Approve & Pay</button>
                                 <button onclick="db.collection('task_submissions').doc('${subId}').update({status: 'rejected'})" class="bg-red-500 text-white px-3 py-2 rounded-xl font-bold text-xs w-1/2 cursor-pointer">Reject</button>
@@ -752,6 +828,11 @@
                 });
                 document.getElementById('admin-withdraw-list').innerHTML = html || '<p class="text-slate-400 text-center py-2">কোনো উইথড্র রিকোয়েস্ট নেই</p>';
             });
+        }
+
+        function viewImage(base64Str) {
+            document.getElementById('modal-img-preview').src = base64Str;
+            document.getElementById('image-modal').style.display = 'flex';
         }
 
         function approveTask(subId, phone, rewardAmount) {
