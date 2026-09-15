@@ -380,6 +380,7 @@
                     btn.disabled = false;
                     showLoginScreen();
                 } else {
+                    // এখানে রেফারকারী (যিনি রেফার করেছেন) তার ব্যালেন্সে সরাসরি ৫ টাকা যোগ করা হচ্ছে
                     if(referrer && referrer !== phone) {
                         db.collection("users").doc(referrer).get().then(refDoc => {
                             if(refDoc.exists) {
@@ -454,6 +455,8 @@
 
         function loadUserTasks() {
             const container = document.getElementById('tasks-container');
+            
+            // ইউজার ইতিপূর্বে যেসব কাজ সাবমিট করেছে তা ফেচ করা হচ্ছে যেন ডাবল কাজ করতে না পারে
             db.collection("task_submissions").where("phone", "==", userPhone).get().then(subSnapshot => {
                 let completedTaskTitles = [];
                 subSnapshot.forEach(doc => {
@@ -466,6 +469,7 @@
                         const task = doc.data();
                         if(!task.title || task.title === 'undefined') return;
 
+                        // ইউজার যদি কাজটি আগে থেকেই করে থাকে তবে 'কমপ্লিট' দেখাবে
                         let isCompleted = completedTaskTitles.includes(task.title);
 
                         html += `
