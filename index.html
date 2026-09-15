@@ -245,12 +245,18 @@
                 <h3 class="font-bold text-lg text-slate-800">কাজের প্রুফ জমা দিন</h3>
                 <p id="modal-task-title" class="text-xs text-slate-500 font-semibold"></p>
                 
-                <div class="space-y-1.5">
-                    <label class="block text-xs font-bold text-slate-600">কাজের স্ক্রিনশট ছবি সিলেক্ট করুন (বাধ্যতামূলক):</label>
-                    <!-- এখানে ফাইলের পাশে গ্যালারিতে কেটে ছোট করে নেওয়ার নির্দেশনা যোগ করা হয়েছে -->
-                    <p class="text-[10px] text-amber-600 font-semibold bg-amber-50 p-2 rounded-xl border border-amber-200">
-                        <i class="fa-solid fa-circle-info mr-1"></i> ছবিটি গ্যালারি থেকে ক্রপ বা কেটে ছোট করে সিলেক্ট করুন।
-                    </p>
+                <div class="space-y-2">
+                    <label class="block text-xs font-bold text-slate-600">কাজের স্ক্রিনশট ছবি সিলেক্ট করুন:</label>
+                    <!-- এখানে ফাইলের সাইজ ও গ্যালারিতে ক্রপ করে ছোট করার নোটিশটি যুক্ত করা হয়েছে -->
+                    <div class="bg-amber-50 border border-amber-200 p-3 rounded-2xl space-y-1">
+                        <p class="text-[11px] font-bold text-amber-800 flex items-center">
+                            <i class="fa-solid fa-triangle-exclamation mr-1.5 text-amber-600"></i> ফাইল সাইজ খুব বেশি বড় দেওয়া যাবে না!
+                        </p>
+                        <p class="text-[10px] text-amber-700 leading-relaxed">
+                            ছবি আপলোড করার আগে গ্যালারি থেকে ক্রপ বা কেটে ছোট করে নিন, যাতে সাইজ কম হয় ও দ্রুত আপলোড হয়।
+                        </p>
+                    </div>
+
                     <input type="file" id="proof-file" accept="image/*" class="w-full border border-slate-300 p-2.5 rounded-xl text-xs bg-slate-50 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                 </div>
 
