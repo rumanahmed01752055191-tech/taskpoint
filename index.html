@@ -396,7 +396,6 @@
                     btn.disabled = false;
                     showLoginScreen();
                 } else {
-                    // রেফারকারী খোঁজার জন্য সিক্রেট কোড অথবা সরাসরি নাম্বার দুটিই চেক করা হবে
                     let refQuery = db.collection("users");
                     
                     let processRegistration = (referrerPhone) => {
@@ -428,12 +427,10 @@
                     };
 
                     if (referralInput) {
-                        // যদি ইনপুটে সিক্রেট কোড দেওয়া হয়, তবে ডাটাবেজ থেকে খুঁজে বের করা কে ওই কোডের মালিক
                         db.collection("users").where("refCode", "==", referralInput).get().then(snapshot => {
                             if (!snapshot.empty) {
                                 processRegistration(snapshot.docs[0].id);
                             } else {
-                                // যদি কোড না মিলে, তবে ধরে নেওয়া যাক সরাসরি নাম্বার দেওয়া হয়েছে
                                 processRegistration(referralInput);
                             }
                         }).catch(() => {
@@ -540,7 +537,23 @@
             document.getElementById('proof-file').value = '';
             document.getElementById('proof-modal').style.display = 'flex';
             if(url && url !== 'undefined' && url !== '') {
-                window.open(url, '_blank');
+                // অ্যান্ড্রয়েড অ্যাপে ওয়েবভিউয়ের বাইরে এক্সটার্নাল ব্রাউজার বা অ্যাপে লিংক ওপেন করার ফিক্স
+                try {
+                    if (window.Android && typeof window.Android.openExternal === 'function') {
+                        window.Android.openExternal(url);
+                    } else {
+                        // যদি অ্যাপের ভেতরে ট্যাগ করা না থাকে, তবে _system বা _blank দিয়ে এক্সটার্নাল ব্রাউজারে ফোর্স করা
+                        let a = document.createElement('a');
+                        a.href = url;
+                        a.target = '_blank';
+                        a.rel = 'noopener noreferrer';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                    }
+                } catch(e) {
+                    window.open(url, '_system');
+                }
             }
         }
 
