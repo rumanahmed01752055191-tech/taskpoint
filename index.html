@@ -22,7 +22,7 @@
 
     <!-- WELCOME SCREEN WITH LOGO -->
     <div id="screen-welcome" class="max-w-md mx-auto min-h-screen flex flex-col justify-center items-center p-6 bg-gradient-to-br from-indigo-950 via-blue-900 to-slate-900 text-white fixed inset-0 z-50">
-        <div class="w-full max-w-sm space-y-6 text-center">
+        <div class="max-w-sm w-full space-y-6 text-center">
             <div class="relative w-24 h-24 mx-auto">
                 <div class="absolute inset-0 bg-blue-500 rounded-3xl blur-xl opacity-50 animate-pulse"></div>
                 <div class="relative w-24 h-24 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-3xl mx-auto flex items-center justify-center text-4xl shadow-2xl border border-white/20">
@@ -82,13 +82,26 @@
     <!-- MAIN APP -->
     <div id="screen-main" class="max-w-md mx-auto" style="display: none;">
         <header class="gradient-header text-white pt-6 pb-10 px-5 rounded-b-[2.5rem] shadow-lg">
-            <div class="flex justify-between items-center mb-4">
+            <div class="flex justify-between items-center mb-3">
                 <h1 class="text-xl font-extrabold" onclick="secretAdminTrigger()" style="cursor: pointer;">TaskPoint 🚀</h1>
                 <div class="bg-white/20 px-3.5 py-1.5 rounded-full flex items-center space-x-2">
                     <i class="fa-solid fa-wallet text-amber-300"></i>
                     <span id="userBalance" class="font-bold text-sm">৳0.00</span>
                 </div>
             </div>
+            
+            <!-- ৫০০০+ লাইভ ইউজার কাউন্টার ব্যাজ -->
+            <div class="flex justify-between items-center bg-white/10 px-3.5 py-2 rounded-2xl border border-white/10 mb-2">
+                <div class="flex items-center space-x-2">
+                    <span class="relative flex h-2.5 w-2.5">
+                      <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                    </span>
+                    <span class="text-[11px] font-medium text-blue-100">লাইভ একটিভ ইউজার:</span>
+                </div>
+                <span id="liveUserCount" class="font-extrabold text-xs text-emerald-300">৫,১৫২ জন</span>
+            </div>
+
             <div class="text-xs text-blue-100 px-1">
                 লগইনকৃত নাম্বার: <span id="displayUserPhone" class="font-bold text-white"></span>
             </div>
@@ -141,9 +154,9 @@
                 </div>
             </div>
 
-            <!-- PROFILE TAB (এখানে সাপোর্ট অপশন রাখা হয়েছে) -->
+            <!-- PROFILE TAB -->
             <div id="tab-profile" class="tab-content space-y-4">
-                <div class="bg-white rounded-3xl p-6 card-shadow space-y-5 text-center">
+                <div class="bg-white rounded-3xl p-6 card-shadow space-y-4 text-center">
                     <div class="w-20 h-20 bg-blue-50 text-blue-600 rounded-full mx-auto flex items-center justify-center text-3xl shadow-inner border border-blue-100">
                         <i class="fa-solid fa-user"></i>
                     </div>
@@ -157,8 +170,14 @@
                         <span class="text-base font-extrabold text-emerald-600" id="profileBalanceDisplay">৳0.00</span>
                     </div>
 
-                    <!-- প্রফাইলের ভেতরে সাপোর্ট বাটন -->
-                    <div class="space-y-2">
+                    <!-- লগইন ঝামেলা ছাড়া সরাসরি ড্রাইভ ডাউনলোড লিংক -->
+                    <a href="https://drive.google.com/uc?export=download&id=1rldYsqtTYUaobdZ8f8Jngj-QaGN7W-cE&confirm=t" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 shadow cursor-pointer transition">
+                        <i class="fa-solid fa-download text-sm"></i>
+                        <span>অ্যান্ড্রয়েড অ্যাপ ডাউনলোড করুন (.APK)</span>
+                    </a>
+
+                    <!-- প্রফাইলের ভেতরে সাপোর্ট ও লগআউট বাটন -->
+                    <div class="space-y-2 pt-1">
                         <button onclick="openHiddenSupport()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 shadow cursor-pointer transition">
                             <i class="fa-brands fa-whatsapp text-base"></i>
                             <span>সাপোর্ট (WhatsApp)</span>
@@ -268,7 +287,7 @@
             </div>
         </div>
 
-        <!-- NAV (নিচের নেভিগেশন বার - ৫টি অপশন) -->
+        <!-- NAV -->
         <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 backdrop-blur-md border-t border-slate-200 px-2 py-3 flex justify-around items-center z-40 rounded-t-3xl shadow-lg">
             <button onclick="switchTab('home')" id="nav-home" class="text-blue-600 font-bold flex flex-col items-center text-[10px]"><i class="fa-solid fa-house text-lg"></i>Home</button>
             <button onclick="switchTab('referral')" id="nav-referral" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-users text-lg"></i>Referral</button>
@@ -295,7 +314,20 @@
         let balance = parseFloat(localStorage.getItem('tp_balance')) || 0.00;
         let selectedTask = null;
 
+        // ৫০০০+ লাইভ ইউজার আসা-যাওয়া করার অ্যানিমেশন ফাংশন
+        function startLiveUserSimulation() {
+            let baseUsers = 5140;
+            setInterval(() => {
+                let change = Math.floor(Math.random() * 15) - 6;
+                baseUsers += change;
+                if(baseUsers < 5000) baseUsers = 5020;
+                document.getElementById('liveUserCount').innerText = baseUsers.toLocaleString('bn-BD') + ' জন';
+            }, 3000);
+        }
+
         window.onload = function() {
+            startLiveUserSimulation();
+
             const urlParams = new URLSearchParams(window.location.search);
             const refParam = urlParams.get('ref');
             if(refParam) {
@@ -624,7 +656,7 @@
                     html += `
                         <div class="bg-slate-50 p-3.5 rounded-2xl border space-y-2">
                             <div>
-                                <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md font-bold text-[11px]">📞 ইউজার: ${uPhone}</span>
+                                <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md font-bold text-[11px]">📞 ইউজাররা: ${uPhone}</span>
                                 <p class="font-bold text-slate-800 text-xs mt-1">কাজ: ${tTitle} (৳${tReward})</p>
                             </div>
                             ${sub.proofImage ? `<a href="${sub.proofImage}" target="_blank"><img src="${sub.proofImage}" class="w-24 h-24 object-cover rounded-xl border"></a>` : ''}
