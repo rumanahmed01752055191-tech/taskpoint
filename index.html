@@ -6,7 +6,6 @@
     <title>TaskPoint - Micro Tasking Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
     <style>
@@ -20,21 +19,19 @@
 </head>
 <body class="bg-slate-50 min-h-screen pb-24">
 
-    <!-- SCREEN 1: WELCOME INTRO -->
+    <!-- WELCOME -->
     <div id="screen-welcome" class="max-w-md mx-auto min-h-screen flex flex-col justify-center items-center p-6 bg-gradient-to-br from-indigo-900 via-blue-900 to-slate-900 text-white fixed inset-0 z-50">
         <div class="w-full max-w-sm space-y-5 text-center">
             <div class="w-16 h-16 bg-white/10 backdrop-blur-md rounded-2xl mx-auto flex items-center justify-center text-3xl shadow-xl border border-white/20">🚀</div>
             <div>
                 <h1 class="text-2xl font-extrabold">TaskPoint</h1>
-                <p class="text-xs text-blue-200">Micro Tasking & Earning Platform</p>
+                <p class="text-xs text-blue-200">Micro Tasking Platform</p>
             </div>
-            <button onclick="openLoginScreen()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-2xl font-bold text-sm shadow-xl cursor-pointer">
-                শুরু করুন (Get Started)
-            </button>
+            <button onclick="openLoginScreen()" class="w-full bg-blue-600 hover:bg-blue-500 text-white py-4 rounded-2xl font-bold text-sm shadow-xl cursor-pointer">শুরু করুন</button>
         </div>
     </div>
 
-    <!-- SCREEN 2: LOGIN -->
+    <!-- LOGIN -->
     <div id="screen-login" class="max-w-md mx-auto min-h-screen flex flex-col justify-center p-6 bg-slate-50 fixed inset-0 z-40" style="display: none;">
         <div class="bg-white rounded-[2.5rem] p-8 card-shadow border border-slate-100 space-y-6">
             <div class="text-center space-y-2">
@@ -48,11 +45,11 @@
         </div>
     </div>
 
-    <!-- SCREEN 3: MAIN APP -->
+    <!-- MAIN APP -->
     <div id="screen-main" class="max-w-md mx-auto" style="display: none;">
         <header class="gradient-header text-white pt-6 pb-10 px-5 rounded-b-[2.5rem] shadow-lg">
             <div class="flex justify-between items-center mb-4">
-                <h1 class="text-xl font-extrabold">TaskPoint 🚀</h1>
+                <h1 class="text-xl font-extrabold" onclick="secretAdminTrigger()" style="cursor: pointer;">TaskPoint 🚀</h1>
                 <div class="bg-white/20 px-3.5 py-1.5 rounded-full flex items-center space-x-2">
                     <i class="fa-solid fa-wallet text-amber-300"></i>
                     <span id="userBalance" class="font-bold text-sm">৳0.00</span>
@@ -61,7 +58,7 @@
         </header>
 
         <main class="px-4 -mt-4 relative z-10">
-            <!-- TAB 1: HOME -->
+            <!-- HOME TAB -->
             <div id="tab-home" class="tab-content active space-y-4">
                 <div class="bg-white p-5 rounded-3xl card-shadow border border-slate-100">
                     <h3 class="font-bold text-slate-800 text-base mb-3 flex items-center space-x-2">
@@ -74,7 +71,7 @@
                 </div>
             </div>
 
-            <!-- TAB 2: WITHDRAW -->
+            <!-- WITHDRAW TAB -->
             <div id="tab-withdraw" class="tab-content space-y-4">
                 <div class="bg-white rounded-3xl p-6 card-shadow border border-slate-100 space-y-4">
                     <h3 class="font-bold text-slate-800 text-base">টাকা উত্তোলন (Withdraw)</h3>
@@ -88,7 +85,7 @@
                 </div>
             </div>
 
-            <!-- TAB 3: SUPPORT -->
+            <!-- SUPPORT TAB -->
             <div id="tab-support" class="tab-content space-y-4">
                 <div class="bg-white rounded-3xl p-6 card-shadow text-center space-y-4">
                     <h3 class="font-bold text-lg">সাপোর্ট</h3>
@@ -96,47 +93,66 @@
                 </div>
             </div>
 
-            <!-- TAB 4: PROMOTION -->
+            <!-- PROMOTION TAB -->
             <div id="tab-promotion" class="tab-content space-y-4">
                 <div class="bg-gradient-to-r from-indigo-900 to-blue-900 text-white rounded-3xl p-6 shadow-xl space-y-4 border border-blue-800">
-                    <div class="flex items-center space-x-3">
-                        <div class="w-10 h-10 bg-white/10 rounded-xl flex items-center justify-center text-xl">📢</div>
-                        <div>
-                            <h3 class="font-extrabold text-lg">সোশ্যাল মিডিয়া প্রমোশন</h3>
-                            <p class="text-[11px] text-blue-200">ইউটিউব, ফেসবুক, টিকটক, ইনস্টাগ্রাম ফলোয়ার ও সাবস্ক্রাইবার বাড়ান!</p>
-                        </div>
-                    </div>
-
-                    <div class="bg-white/10 p-4 rounded-2xl text-xs space-y-2 border border-white/10 leading-relaxed">
-                        <p class="font-semibold text-amber-300">✨ আমাদের সেবাসমূহ:</p>
-                        <p>• প্রতিদিন রিয়েল ইউজাররা আপনার সোশ্যাল মিডিয়া পেজ বা চ্যানেল ফলো, লাইক, কমেন্ট ও শেয়ার করবে।</p>
-                        <p>• নিজের পছন্দমতো প্যাকেজ বেছে নিয়ে খুব সহজেই আপনার প্রমোশন নিশ্চিত করুন।</p>
-                    </div>
-
-                    <!-- Pricing Table -->
-                    <div class="bg-white/5 p-3 rounded-2xl border border-white/10 space-y-1.5 text-xs">
-                        <p class="font-bold text-amber-300 mb-2">🎁 প্রমোশন প্যাকেজসমূহ:</p>
-                        <div class="flex justify-between py-1 border-b border-white/10"><span>৩ দিন</span> <span class="font-bold text-emerald-400">৳১১০</span></div>
-                        <div class="flex justify-between py-1 border-b border-white/10"><span>৭ দিন</span> <span class="font-bold text-emerald-400">৳৩১০</span></div>
-                        <div class="flex justify-between py-1 border-b border-white/10"><span>১০ দিন</span> <span class="font-bold text-emerald-400">৳৪১০</span></div>
-                        <div class="flex justify-between py-1 border-b border-white/10"><span>১৫ দিন</span> <span class="font-bold text-emerald-400">৳৭১০</span></div>
-                        <div class="flex justify-between py-1 border-b border-white/10"><span>২০ দিন</span> <span class="font-bold text-emerald-400">৳৯১০</span></div>
-                        <div class="flex justify-between py-1"><span>৩০ দিন</span> <span class="font-bold text-emerald-400">৳১২৫০</span></div>
-                    </div>
-
-                    <p class="text-[11px] text-blue-200 leading-relaxed">
-                        💡 <strong>নিয়ম:</strong> যে প্ল্যান কিনবেন, সেই অনুযায়ী আপনার লিংকগুলো আমাদের অ্যাপে থাকবে, ফলে প্রতিদিন আপনার প্ল্যাটফর্মে ফলোয়ার ও এনগেজমেন্ট বাড়তে থাকবে।
-                    </p>
-
-                    <a href="https://wa.me/8801617411391" target="_blank" class="block text-center bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-xl font-bold text-sm shadow transition-all cursor-pointer">
-                        <i class="fa-brands fa-whatsapp mr-1"></i> WhatsApp এ প্রমোশন করান
-                    </a>
+                    <h3 class="font-extrabold text-lg">সোশ্যাল মিডিয়া প্রমোশন</h3>
+                    <a href="https://wa.me/8801617411391" target="_blank" class="block text-center bg-emerald-500 text-white py-3 rounded-xl font-bold text-sm shadow">WhatsApp এ যোগাযোগ করুন</a>
                 </div>
             </div>
         </main>
 
-        <!-- Bottom Nav -->
-        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 backdrop-blur-md border-t border-slate-200 px-4 py-3 flex justify-around items-center z-50 rounded-t-3xl shadow-lg">
+        <!-- SUBMIT PROOF MODAL -->
+        <div id="proof-modal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4" style="display: none;">
+            <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-4">
+                <h3 class="font-bold text-lg text-slate-800">কাজের প্রুফ জমা দিন</h3>
+                <p id="modal-task-title" class="text-xs text-slate-500 font-semibold"></p>
+                <textarea id="proof-text" placeholder="কাজের প্রমাণ বা স্ক্রিনশটের লিংক দিন..." class="w-full border p-3 rounded-xl text-sm h-24"></textarea>
+                <div class="flex space-x-2">
+                    <button onclick="closeProofModal()" class="w-1/2 bg-slate-200 text-slate-700 py-2.5 rounded-xl font-bold text-xs">বাতিল</button>
+                    <button onclick="submitTaskProof()" class="w-1/2 bg-blue-600 text-white py-2.5 rounded-xl font-bold text-xs">জমা দিন</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- HIDDEN SECRET ADMIN PANEL MODAL -->
+        <div id="secret-admin-modal" class="fixed inset-0 bg-slate-900/90 z-50 p-4 overflow-y-auto" style="display: none;">
+            <div class="max-w-md mx-auto bg-white rounded-3xl p-6 space-y-6 my-6">
+                <div class="flex justify-between items-center border-b pb-3">
+                    <h2 class="font-extrabold text-lg text-slate-800">🛡️ সিক্রেট অ্যাডমিন প্যানেল</h2>
+                    <button onclick="closeSecretAdmin()" class="bg-slate-200 px-3 py-1 rounded-full text-xs font-bold">বন্ধ করুন</button>
+                </div>
+
+                <!-- ১. কাজ যোগ করুন -->
+                <div class="space-y-3 bg-slate-50 p-4 rounded-2xl">
+                    <h3 class="font-bold text-sm text-blue-600">নতুন কাজ যোগ করুন</h3>
+                    <input id="admin-title" type="text" placeholder="কাজের শিরোনাম" class="w-full border p-2 rounded-xl text-xs">
+                    <textarea id="admin-desc" placeholder="কাজের বিবরণ" class="w-full border p-2 rounded-xl text-xs"></textarea>
+                    <input id="admin-link" type="text" placeholder="কাজের লিংক (https://...)" class="w-full border p-2 rounded-xl text-xs">
+                    <input id="admin-reward" type="number" placeholder="রিওয়ার্ড (টাকা)" class="w-full border p-2 rounded-xl text-xs">
+                    <button onclick="adminAddTask()" class="w-full bg-blue-600 text-white py-2 rounded-xl font-bold text-xs">কাজ পাবলিশ করুন</button>
+                </div>
+
+                <!-- ২. পেন্ডিং কাজ ও প্রুফ -->
+                <div class="space-y-3">
+                    <h3 class="font-bold text-sm text-amber-600">পেন্ডিং কাজ ও স্ক্রিনশট প্রুফ</h3>
+                    <div id="admin-pending-tasks" class="space-y-2 text-xs">
+                        <p class="text-slate-400">লোডিং...</p>
+                    </div>
+                </div>
+
+                <!-- ৩. উইথড্র রিকোয়েস্ট -->
+                <div class="space-y-3">
+                    <h3 class="font-bold text-sm text-emerald-600">উইথড্র রিকোয়েস্টসমূহ</h3>
+                    <div id="admin-withdraw-list" class="space-y-2 text-xs">
+                        <p class="text-slate-400">লোডিং...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- NAV -->
+        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 backdrop-blur-md border-t border-slate-200 px-4 py-3 flex justify-around items-center z-40 rounded-t-3xl shadow-lg">
             <button onclick="switchTab('home')" id="nav-home" class="text-blue-600 font-bold flex flex-col items-center text-[10px]"><i class="fa-solid fa-house text-lg"></i>Home</button>
             <button onclick="switchTab('withdraw')" id="nav-withdraw" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-wallet text-lg"></i>Withdraw</button>
             <button onclick="switchTab('support')" id="nav-support" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-headset text-lg"></i>Support</button>
@@ -146,18 +162,19 @@
 
     <script>
         const firebaseConfig = {
-            apiKey: "AIzaSy...", 
-            authDomain: "taskpoint-xxx.firebaseapp.com",
-            projectId: "taskpoint-xxx",
-            storageBucket: "taskpoint-xxx.appspot.com",
-            messagingSenderId: "123456789",
-            appId: "1:123456789:web:abcde"
+            apiKey: "YOUR_API_KEY", 
+            authDomain: "YOUR_PROJECT.firebaseapp.com",
+            projectId: "YOUR_PROJECT_ID",
+            storageBucket: "YOUR_PROJECT.appspot.com",
+            messagingSenderId: "123456",
+            appId: "1:123:web:abc"
         };
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
 
         let balance = parseFloat(localStorage.getItem('tp_balance')) || 0.00;
         let userPhone = localStorage.getItem('tp_phone') || '';
+        let selectedTask = null;
 
         window.onload = function() {
             if (userPhone && userPhone.length >= 10) {
@@ -196,7 +213,7 @@
                                 <p class="text-xs text-slate-500">${task.description || ''}</p>
                                 <p class="text-xs text-emerald-600 font-bold mt-1">Reward: ৳${task.reward}</p>
                             </div>
-                            <button onclick="startTask('${task.link}', ${task.reward}, '${task.title}')" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow active:scale-95 cursor-pointer">
+                            <button onclick="openProofModal('${task.link}', '${task.title}', ${task.reward})" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow cursor-pointer">
                                 Complete
                             </button>
                         </div>
@@ -206,33 +223,55 @@
             });
         }
 
-        function startTask(url, reward, title) {
-            let finalUrl = url || '#';
-            if (finalUrl.startsWith('fb://')) {
-                const profileId = finalUrl.replace('fb://profile/', '').split('?')[0];
-                finalUrl = `https://www.facebook.com/${profileId}`;
-            } else if (finalUrl.startsWith('tg://')) {
-                finalUrl = finalUrl.replace('tg://', 'https://t.me/');
-            }
+        function openProofModal(url, title, reward) {
+            selectedTask = { title, reward };
+            document.getElementById('modal-task-title').innerText = title;
+            document.getElementById('proof-modal').style.display = 'flex';
+            window.open(url, '_blank');
+        }
 
-            window.open(finalUrl, '_blank');
-            
-            setTimeout(() => {
-                balance += reward;
-                updateUI();
-                alert('অভিনন্দন! "' + title + '" সম্পন্ন হয়েছে। একাউন্টে ৳' + reward + ' যোগ হয়েছে।');
-            }, 1000);
+        function closeProofModal() {
+            document.getElementById('proof-modal').style.display = 'none';
+        }
+
+        function submitTaskProof() {
+            const proof = document.getElementById('proof-text').value.trim();
+            if (!proof) { alert('দয়া করে প্রুফ বা স্ক্রিনশটের লিংক দিন'); return; }
+
+            db.collection("task_submissions").add({
+                phone: userPhone,
+                taskTitle: selectedTask.title,
+                reward: selectedTask.reward,
+                proof: proof,
+                status: "pending",
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                alert('কাজের প্রুফ সফলভাবে জমা হয়েছে!');
+                document.getElementById('proof-text').value = '';
+                closeProofModal();
+            });
         }
 
         function requestWithdrawal() {
+            const method = document.getElementById('withdrawMethod').value;
             const acc = document.getElementById('accountNumber').value.trim();
             const amt = parseFloat(document.getElementById('withdrawAmount').value);
+            
             if (!acc || isNaN(amt) || amt < 100) { alert('সঠিক তথ্য ও সর্বনিম্ন ১০০ টাকা দিন'); return; }
             if (amt > balance) { alert('পর্যাপ্ত ব্যালেন্স নেই'); return; }
 
-            balance -= amt;
-            updateUI();
-            alert('উইথড্র রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে!');
+            db.collection("withdrawals").add({
+                phone: userPhone,
+                method: method,
+                account: acc,
+                amount: amt,
+                status: "pending",
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                balance -= amt;
+                updateUI();
+                alert('উইথড্র রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে!');
+            });
         }
 
         function updateUI() {
@@ -241,15 +280,92 @@
         }
 
         function switchTab(tabName) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove.apply(el.classList, ['active']));
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-' + tabName).classList.add('active');
-            ['home', 'withdraw', 'support', 'promotion'].forEach(t => {
-                const btn = document.getElementById('nav-' + t);
-                if (t === tabName) {
-                    btn.className = "text-blue-600 font-bold flex flex-col items-center text-[10px]";
+        }
+
+        // --- SECRET ADMIN LOGIC ---
+        let clickCount = 0;
+        function secretAdminTrigger() {
+            clickCount++;
+            if (clickCount >= 3) {
+                clickCount = 0;
+                const pin = prompt("অ্যাডমিন পিন কোড দিন:");
+                if (pin === "1234") { // আপনার গোপন পিন এখানে পরিবর্তন করতে পারেন
+                    document.getElementById('secret-admin-modal').style.display = 'block';
+                    loadAdminData();
                 } else {
-                    btn.className = "text-slate-400 font-medium flex flex-col items-center text-[10px]";
+                    alert('ভুল পিন!');
                 }
+            }
+        }
+
+        function closeSecretAdmin() {
+            document.getElementById('secret-admin-modal').style.display = 'none';
+        }
+
+        function adminAddTask() {
+            const title = document.getElementById('admin-title').value;
+            const desc = document.getElementById('admin-desc').value;
+            const link = document.getElementById('admin-link').value;
+            const reward = document.getElementById('admin-reward').value;
+
+            if (!title || !reward) { alert('সব ফিল্ড পূরণ করুন'); return; }
+
+            db.collection("tasks").add({
+                title, description: desc, link, reward: Number(reward),
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+            }).then(() => {
+                alert('কাজ সফলভাবে যোগ হয়েছে!');
+                document.getElementById('admin-title').value = '';
+                document.getElementById('admin-desc').value = '';
+                document.getElementById('admin-link').value = '';
+                document.getElementById('admin-reward').value = '';
+            });
+        }
+
+        function loadAdminData() {
+            // Load Submissions
+            db.collection("task_submissions").where("status", "==", "pending").onSnapshot((snapshot) => {
+                let html = '';
+                snapshot.forEach((doc) => {
+                    let sub = doc.data();
+                    html += `
+                        <div class="bg-slate-50 p-2.5 rounded-xl border flex justify-between items-center">
+                            <div>
+                                <p class="font-bold">ইউজার: ${sub.phone}</p>
+                                <p class="text-blue-600">কাজ: ${sub.taskTitle} (৳${sub.reward})</p>
+                                <p class="text-slate-500">প্রুফ: <a href="${sub.proof}" target="_blank" class="underline text-blue-500">${sub.proof}</a></p>
+                            </div>
+                            <div class="space-y-1">
+                                <button onclick="db.collection('task_submissions').doc('${doc.id}').update({status: 'approved'})" class="bg-emerald-500 text-white px-2 py-1 rounded text-[10px] block">Approve</button>
+                                <button onclick="db.collection('task_submissions').doc('${doc.id}').update({status: 'rejected'})" class="bg-red-500 text-white px-2 py-1 rounded text-[10px] block">Reject</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById('admin-pending-tasks').innerHTML = html || '<p class="text-slate-400">কোনো পেন্ডিং কাজ নেই</p>';
+            });
+
+            // Load Withdrawals
+            db.collection("withdrawals").where("status", "==", "pending").onSnapshot((snapshot) => {
+                let html = '';
+                snapshot.forEach((doc) => {
+                    let w = doc.data();
+                    html += `
+                        <div class="bg-slate-50 p-2.5 rounded-xl border flex justify-between items-center">
+                            <div>
+                                <p class="font-bold">${w.method.toUpperCase()} - ${w.account}</p>
+                                <p class="text-slate-500">ইউজার: ${w.phone} | ৳${w.amount}</p>
+                            </div>
+                            <div class="space-y-1">
+                                <button onclick="db.collection('withdrawals').doc('${doc.id}').update({status: 'approved'})" class="bg-emerald-500 text-white px-2 py-1 rounded text-[10px] block">Approve</button>
+                                <button onclick="db.collection('withdrawals').doc('${doc.id}').update({status: 'rejected'})" class="bg-red-500 text-white px-2 py-1 rounded text-[10px] block">Reject</button>
+                            </div>
+                        </div>
+                    `;
+                });
+                document.getElementById('admin-withdraw-list').innerHTML = html || '<p class="text-slate-400">কোনো উইথড্র রিকোয়েস্ট নেই</p>';
             });
         }
     </script>
