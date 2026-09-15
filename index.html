@@ -148,14 +148,14 @@
                     <button onclick="closeSecretAdmin()" class="bg-slate-200 px-3 py-1 rounded-full text-xs font-bold cursor-pointer">বন্ধ করুন</button>
                 </div>
 
-                <!-- ১. কাজ যোগ করুন (IDs Fixed) -->
+                <!-- ১. কাজ যোগ করার ফর্ম (IDs নিশ্চিত করা হয়েছে) -->
                 <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border">
                     <h3 class="font-bold text-sm text-blue-600">নতুন কাজ যোগ করুন</h3>
-                    <input id="admin-title" type="text" placeholder="কাজের শিরোনাম" class="w-full bg-white border p-2.5 rounded-xl text-xs">
+                    <input type="text" id="admin-title" placeholder="কাজের শিরোনাম (যেমন: ফেসবুক ফলো করুন)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
                     <textarea id="admin-desc" placeholder="কাজের বিবরণ" class="w-full bg-white border p-2.5 rounded-xl text-xs"></textarea>
-                    <input id="admin-link" type="text" placeholder="কাজের লিংক (https://...)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
-                    <input id="admin-reward" type="number" placeholder="রিওয়ার্ড (টাকা)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
-                    <button onclick="adminAddTask()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl font-bold text-xs shadow cursor-pointer transition">কাজ পাবলিশ করুন</button>
+                    <input type="text" id="admin-link" placeholder="কাজের লিংক (https://...)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
+                    <input type="number" id="admin-reward" placeholder="রিওয়ার্ড (টাকা)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
+                    <button type="button" onclick="adminAddTask()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl font-bold text-xs shadow cursor-pointer transition">কাজ পাবলিশ করুন</button>
                 </div>
 
                 <!-- ২. পেন্ডিং কাজ ও স্ক্রিনশট ইমেজ প্রিভিউ -->
@@ -253,7 +253,9 @@
             selectedTask = { title, reward };
             document.getElementById('modal-task-title').innerText = title;
             document.getElementById('proof-modal').style.display = 'flex';
-            window.open(url, '_blank');
+            if(url && url !== 'undefined' && url !== '') {
+                window.open(url, '_blank');
+            }
         }
 
         function closeProofModal() {
@@ -275,6 +277,8 @@
                 alert('কাজের প্রুফ সফলভাবে জমা হয়েছে!');
                 document.getElementById('proof-text').value = '';
                 closeProofModal();
+            }).catch(err => {
+                alert('সাবমিট করতে সমস্যা হয়েছে: ' + err.message);
             });
         }
 
@@ -339,12 +343,20 @@
         }
 
         function adminAddTask() {
-            const title = document.getElementById('admin-title').value.trim();
-            const desc = document.getElementById('admin-desc').value.trim();
-            const link = document.getElementById('admin-link').value.trim();
-            const reward = document.getElementById('admin-reward').value.trim();
+            const titleEl = document.getElementById('admin-title');
+            const descEl = document.getElementById('admin-desc');
+            const linkEl = document.getElementById('admin-link');
+            const rewardEl = document.getElementById('admin-reward');
 
-            if (!title || !reward) { alert('শিরোনাম এবং রিওয়ার্ড অবশ্যই দিতে হবে!'); return; }
+            const title = titleEl ? titleEl.value.trim() : '';
+            const desc = descEl ? descEl.value.trim() : '';
+            const link = linkEl ? linkEl.value.trim() : '';
+            const reward = rewardEl ? rewardEl.value.trim() : '';
+
+            if (!title || !reward) { 
+                alert('কাজের শিরোনাম এবং রিওয়ার্ড অবশ্যই দিতে হবে!'); 
+                return; 
+            }
 
             db.collection("tasks").add({
                 title: title, 
@@ -354,12 +366,13 @@
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
                 alert('কাজ সফলভাবে পাবলিশ হয়েছে!');
-                document.getElementById('admin-title').value = '';
-                document.getElementById('admin-desc').value = '';
-                document.getElementById('admin-link').value = '';
-                document.getElementById('admin-reward').value = '';
+                titleEl.value = '';
+                descEl.value = '';
+                linkEl.value = '';
+                rewardEl.value = '';
             }).catch((error) => {
-                alert('ত্রুটি: ' + error.message);
+                alert('ফায়ারস্টোর এরর: ' + error.message);
+                console.error(error);
             });
         }
 
