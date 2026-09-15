@@ -136,7 +136,7 @@
                     <p class="text-xs text-slate-500">আপনার লিংকে কেউ একাউন্ট খুললে আপনি পাবেন <b class="text-emerald-600">৫ টাকা</b> বোনাস!</p>
                     
                     <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-left space-y-2">
-                        <label class="text-[11px] font-bold text-slate-600 block">আপনার রেফারেল লিংক:</label>
+                        <label class="text-[11px] font-bold text-slate-600 block">আপনার সিক্রেট রেফারেল লিংক:</label>
                         <div class="flex items-center space-x-2">
                             <input type="text" id="refLinkInput" readonly class="w-full bg-white border p-2.5 rounded-xl text-xs text-slate-600" value="">
                             <button onclick="copyReferralLink()" class="bg-blue-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold cursor-pointer">কপি</button>
@@ -298,6 +298,15 @@
         let balance = parseFloat(localStorage.getItem('tp_balance')) || 0.00;
         let selectedTask = null;
 
+        // ফোন নাম্বার থেকে সিক্রেট রেফারেল কোড জেনারেট করার ফাংশন (নাম্বার পুরোপুরি হাইড থাকবে)
+        function generateSecretRefCode(phone) {
+            let hash = 0;
+            for (let i = 0; i < phone.length; i++) {
+                hash = phone.charCodeAt(i) + ((hash << 5) - hash);
+            }
+            return 'TP-' + Math.abs(hash).toString().substring(0, 6);
+        }
+
         function startLiveUserSimulation() {
             let baseUsers = 5140;
             setInterval(() => {
@@ -324,7 +333,14 @@
                 document.getElementById('screen-main').style.display = 'block';
                 document.getElementById('displayUserPhone').innerText = userPhone;
                 document.getElementById('profilePhoneDisplay').innerText = userPhone;
-                document.getElementById('refLinkInput').value = `https://taskpoint005.netlify.app/?ref=${userPhone}`;
+                
+                // লিঙ্কে মোবাইল নাম্বার না দেখিয়ে সিক্রেট রেফারেল কোড সেট করা হলো
+                let secretCode = generateSecretRefCode(userPhone);
+                document.getElementById('refLinkInput').value = `https://taskpoint005.netlify.app/?ref=${secretCode}`;
+                
+                // ইউজারের ডাটাবেজে সিক্রেট কোডটি সেভ করে রাখা যাতে পরে চিনতে সমস্যা না হয়
+                db.collection("users").doc(userPhone).update({ refCode: secretCode }).catch(e => {});
+
                 loadUserTasks();
             } else {
                 document.getElementById('screen-welcome').style.display = 'flex';
@@ -358,13 +374,13 @@
             const input = document.getElementById('refLinkInput');
             input.select();
             navigator.clipboard.writeText(input.value);
-            alert('রেফারেল লিংক কপি করা হয়েছে!');
+            alert('সিক্রেট রেফারেল লিংক কপি করা হয়েছে!');
         }
 
         function performRegister() {
             const phone = document.getElementById('regNumber').value.trim();
             const password = document.getElementById('regPassword').value.trim();
-            const referrer = document.getElementById('regReferral').value.trim();
+            const referralInput = document.getElementById('regReferral').value.trim();
 
             if (phone.length < 10) { alert('সঠিক মোবাইল নাম্বার দিন'); return; }
             if (password.length < 4) { alert('কমপক্ষে ৪ সংখ্যার পাসওয়ার্ড দিন'); return; }
@@ -380,28 +396,52 @@
                     btn.disabled = false;
                     showLoginScreen();
                 } else {
-                    // এখানে রেফারকারী (যিনি রেফার করেছেন) তার ব্যালেন্সে সরাসরি ৫ টাকা যোগ করা হচ্ছে
-                    if(referrer && referrer !== phone) {
-                        db.collection("users").doc(referrer).get().then(refDoc => {
-                            if(refDoc.exists) {
-                                let refCurrBal = refDoc.data().balance || 0;
-                                db.collection("users").doc(referrer).update({ balance: refCurrBal + 5 });
-                            }
-                        });
-                    }
+                    // রেফারকারী খোঁজার জন্য সিক্রেট কোড অথবা সরাসরি নাম্বার দুটিই চেক করা হবে
+                    let refQuery = db.collection("users");
+                    
+                    let processRegistration = (referrerPhone) => {
+                        if(referrerPhone && referrerPhone !== phone) {
+                            db.collection("users").doc(referrerPhone).get().then(refDoc => {
+                                if(refDoc.exists) {
+                                    let refCurrBal = refDoc.data().balance || 0;
+                                    db.collection("users").doc(referrerPhone).update({ balance: refCurrBal + 5 });
+                                }
+                            });
+                        }
 
-                    db.collection("users").doc(phone).set({
-                        phone: phone,
-                        password: password,
-                        balance: 0,
-                        referredBy: referrer || '',
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    }).then(() => {
-                        localStorage.setItem('tp_phone', phone);
-                        localStorage.setItem('tp_balance', 0);
-                        alert('রেজিস্ট্রেশন সফল হয়েছে!');
-                        location.reload();
-                    });
+                        let mySecretCode = generateSecretRefCode(phone);
+
+                        db.collection("users").doc(phone).set({
+                            phone: phone,
+                            password: password,
+                            balance: 0,
+                            refCode: mySecretCode,
+                            referredBy: referrerPhone || '',
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        }).then(() => {
+                            localStorage.setItem('tp_phone', phone);
+                            localStorage.setItem('tp_balance', 0);
+                            localStorage.removeItem('tp_ref');
+                            alert('রেজিস্ট্রেশন সফল হয়েছে!');
+                            location.reload();
+                        });
+                    };
+
+                    if (referralInput) {
+                        // যদি ইনপুটে সিক্রেট কোড দেওয়া হয়, তবে ডাটাবেজ থেকে খুঁজে বের করা কে ওই কোডের মালিক
+                        db.collection("users").where("refCode", "==", referralInput).get().then(snapshot => {
+                            if (!snapshot.empty) {
+                                processRegistration(snapshot.docs[0].id);
+                            } else {
+                                // যদি কোড না মিলে, তবে ধরে নেওয়া যাক সরাসরি নাম্বার দেওয়া হয়েছে
+                                processRegistration(referralInput);
+                            }
+                        }).catch(() => {
+                            processRegistration(referralInput);
+                        });
+                    } else {
+                        processRegistration('');
+                    }
                 }
             }).catch(err => {
                 alert('ত্রুটি: ' + err.message);
@@ -456,7 +496,6 @@
         function loadUserTasks() {
             const container = document.getElementById('tasks-container');
             
-            // ইউজার ইতিপূর্বে যেসব কাজ সাবমিট করেছে তা ফেচ করা হচ্ছে যেন ডাবল কাজ করতে না পারে
             db.collection("task_submissions").where("phone", "==", userPhone).get().then(subSnapshot => {
                 let completedTaskTitles = [];
                 subSnapshot.forEach(doc => {
@@ -469,7 +508,6 @@
                         const task = doc.data();
                         if(!task.title || task.title === 'undefined') return;
 
-                        // ইউজার যদি কাজটি আগে থেকেই করে থাকে তবে 'কমপ্লিট' দেখাবে
                         let isCompleted = completedTaskTitles.includes(task.title);
 
                         html += `
