@@ -148,14 +148,14 @@
                     <button onclick="closeSecretAdmin()" class="bg-slate-200 px-3 py-1 rounded-full text-xs font-bold cursor-pointer">বন্ধ করুন</button>
                 </div>
 
-                <!-- ১. কাজ যোগ করুন -->
+                <!-- ১. কাজ যোগ করুন (IDs Fixed) -->
                 <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border">
                     <h3 class="font-bold text-sm text-blue-600">নতুন কাজ যোগ করুন</h3>
                     <input id="admin-title" type="text" placeholder="কাজের শিরোনাম" class="w-full bg-white border p-2.5 rounded-xl text-xs">
                     <textarea id="admin-desc" placeholder="কাজের বিবরণ" class="w-full bg-white border p-2.5 rounded-xl text-xs"></textarea>
                     <input id="admin-link" type="text" placeholder="কাজের লিংক (https://...)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
                     <input id="admin-reward" type="number" placeholder="রিওয়ার্ড (টাকা)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
-                    <button onclick="adminAddTask()" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold text-xs shadow cursor-pointer">কাজ পাবলিশ করুন</button>
+                    <button onclick="adminAddTask()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl font-bold text-xs shadow cursor-pointer transition">কাজ পাবলিশ করুন</button>
                 </div>
 
                 <!-- ২. পেন্ডিং কাজ ও স্ক্রিনশট ইমেজ প্রিভিউ -->
@@ -344,10 +344,13 @@
             const link = document.getElementById('admin-link').value.trim();
             const reward = document.getElementById('admin-reward').value.trim();
 
-            if (!title || !reward) { alert('শিরোনাম এবং রিওয়ার্ড দিন'); return; }
+            if (!title || !reward) { alert('শিরোনাম এবং রিওয়ার্ড অবশ্যই দিতে হবে!'); return; }
 
             db.collection("tasks").add({
-                title, description: desc, link, reward: Number(reward),
+                title: title, 
+                description: desc, 
+                link: link, 
+                reward: Number(reward),
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
                 alert('কাজ সফলভাবে পাবলিশ হয়েছে!');
@@ -355,11 +358,12 @@
                 document.getElementById('admin-desc').value = '';
                 document.getElementById('admin-link').value = '';
                 document.getElementById('admin-reward').value = '';
+            }).catch((error) => {
+                alert('ত্রুটি: ' + error.message);
             });
         }
 
         function loadAdminData() {
-            // Pending Tasks with Image Screenshot Preview
             db.collection("task_submissions").where("status", "==", "pending").onSnapshot((snapshot) => {
                 let html = '';
                 snapshot.forEach((doc) => {
@@ -386,7 +390,6 @@
                 document.getElementById('admin-pending-tasks').innerHTML = html || '<p class="text-slate-400">কোনো পেন্ডিং কাজ নেই</p>';
             });
 
-            // Withdrawals
             db.collection("withdrawals").where("status", "==", "pending").onSnapshot((snapshot) => {
                 let html = '';
                 snapshot.forEach((doc) => {
