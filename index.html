@@ -97,6 +97,13 @@
             <div id="tab-promotion" class="tab-content space-y-4">
                 <div class="bg-gradient-to-r from-indigo-900 to-blue-900 text-white rounded-3xl p-6 shadow-xl space-y-4 border border-blue-800">
                     <h3 class="font-extrabold text-lg">সোশ্যাল মিডিয়া প্রমোশন</h3>
+                    <div class="bg-white/10 p-3 rounded-2xl text-xs space-y-1.5 border border-white/10">
+                        <p class="font-bold text-amber-300">প্যাকেজসমূহ:</p>
+                        <div class="flex justify-between py-1 border-b border-white/10"><span>৩ দিন</span> <span class="font-bold text-emerald-400">৳১১০</span></div>
+                        <div class="flex justify-between py-1 border-b border-white/10"><span>৭ দিন</span> <span class="font-bold text-emerald-400">৳৩১০</span></div>
+                        <div class="flex justify-between py-1 border-b border-white/10"><span>১৫ দিন</span> <span class="font-bold text-emerald-400">৳৭১০</span></div>
+                        <div class="flex justify-between py-1"><span>৩০ দিন</span> <span class="font-bold text-emerald-400">৳১২৫০</span></div>
+                    </div>
                     <a href="https://wa.me/8801617411391" target="_blank" class="block text-center bg-emerald-500 text-white py-3 rounded-xl font-bold text-sm shadow">WhatsApp এ যোগাযোগ করুন</a>
                 </div>
             </div>
@@ -107,7 +114,7 @@
             <div class="bg-white w-full max-w-sm rounded-3xl p-6 space-y-4">
                 <h3 class="font-bold text-lg text-slate-800">কাজের প্রুফ জমা দিন</h3>
                 <p id="modal-task-title" class="text-xs text-slate-500 font-semibold"></p>
-                <textarea id="proof-text" placeholder="কাজের প্রমাণ বা স্ক্রিনশটের লিংক দিন..." class="w-full border p-3 rounded-xl text-sm h-24"></textarea>
+                <textarea id="proof-text" placeholder="কাজের প্রমাণ বা স্ক্রিনশটের লিংক (Imgbb/Drive) দিন..." class="w-full border p-3 rounded-xl text-sm h-24"></textarea>
                 <div class="flex space-x-2">
                     <button onclick="closeProofModal()" class="w-1/2 bg-slate-200 text-slate-700 py-2.5 rounded-xl font-bold text-xs">বাতিল</button>
                     <button onclick="submitTaskProof()" class="w-1/2 bg-blue-600 text-white py-2.5 rounded-xl font-bold text-xs">জমা দিন</button>
@@ -282,6 +289,16 @@
         function switchTab(tabName) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-' + tabName).classList.add('active');
+            
+            // Highlight active nav
+            ['home', 'withdraw', 'support', 'promotion'].forEach(t => {
+                const btn = document.getElementById('nav-' + t);
+                if(t === tabName) {
+                    btn.className = "text-blue-600 font-bold flex flex-col items-center text-[10px]";
+                } else {
+                    btn.className = "text-slate-400 font-medium flex flex-col items-center text-[10px]";
+                }
+            });
         }
 
         // --- SECRET ADMIN LOGIC ---
@@ -291,7 +308,7 @@
             if (clickCount >= 3) {
                 clickCount = 0;
                 const pin = prompt("অ্যাডমিন পিন কোড দিন:");
-                if (pin === "1234") { // আপনার গোপন পিন এখানে পরিবর্তন করতে পারেন
+                if (pin === "1234") { 
                     document.getElementById('secret-admin-modal').style.display = 'block';
                     loadAdminData();
                 } else {
@@ -331,15 +348,15 @@
                 snapshot.forEach((doc) => {
                     let sub = doc.data();
                     html += `
-                        <div class="bg-slate-50 p-2.5 rounded-xl border flex justify-between items-center">
+                        <div class="bg-slate-50 p-2.5 rounded-xl border space-y-2">
                             <div>
-                                <p class="font-bold">ইউজার: ${sub.phone}</p>
-                                <p class="text-blue-600">কাজ: ${sub.taskTitle} (৳${sub.reward})</p>
-                                <p class="text-slate-500">প্রুফ: <a href="${sub.proof}" target="_blank" class="underline text-blue-500">${sub.proof}</a></p>
+                                <p class="font-bold text-slate-800">ইউজার নাম্বার: ${sub.phone}</p>
+                                <p class="text-blue-600 font-semibold">কাজ: ${sub.taskTitle} (৳${sub.reward})</p>
+                                <p class="text-slate-600 text-xs mt-1">প্রুফ/স্ক্রিনশট লিংক: <a href="${sub.proof}" target="_blank" class="underline text-blue-500 break-all">${sub.proof}</a></p>
                             </div>
-                            <div class="space-y-1">
-                                <button onclick="db.collection('task_submissions').doc('${doc.id}').update({status: 'approved'})" class="bg-emerald-500 text-white px-2 py-1 rounded text-[10px] block">Approve</button>
-                                <button onclick="db.collection('task_submissions').doc('${doc.id}').update({status: 'rejected'})" class="bg-red-500 text-white px-2 py-1 rounded text-[10px] block">Reject</button>
+                            <div class="flex space-x-2 pt-1">
+                                <button onclick="approveTaskSubmission('${doc.id}', ${sub.reward}, '${sub.phone}')" class="bg-emerald-500 text-white px-3 py-1 rounded font-bold text-xs cursor-pointer w-1/2">Approve</button>
+                                <button onclick="rejectTaskSubmission('${doc.id}')" class="bg-red-500 text-white px-3 py-1 rounded font-bold text-xs cursor-pointer w-1/2">Reject</button>
                             </div>
                         </div>
                     `;
@@ -353,19 +370,31 @@
                 snapshot.forEach((doc) => {
                     let w = doc.data();
                     html += `
-                        <div class="bg-slate-50 p-2.5 rounded-xl border flex justify-between items-center">
+                        <div class="bg-slate-50 p-2.5 rounded-xl border space-y-2">
                             <div>
-                                <p class="font-bold">${w.method.toUpperCase()} - ${w.account}</p>
-                                <p class="text-slate-500">ইউজার: ${w.phone} | ৳${w.amount}</p>
+                                <p class="font-bold text-slate-800">${w.method.toUpperCase()} - ${w.account}</p>
+                                <p class="text-slate-600 text-xs">ইউজার: ${w.phone} | পরিমাণ: ৳${w.amount}</p>
                             </div>
-                            <div class="space-y-1">
-                                <button onclick="db.collection('withdrawals').doc('${doc.id}').update({status: 'approved'})" class="bg-emerald-500 text-white px-2 py-1 rounded text-[10px] block">Approve</button>
-                                <button onclick="db.collection('withdrawals').doc('${doc.id}').update({status: 'rejected'})" class="bg-red-500 text-white px-2 py-1 rounded text-[10px] block">Reject</button>
+                            <div class="flex space-x-2 pt-1">
+                                <button onclick="db.collection('withdrawals').doc('${doc.id}').update({status: 'approved'})" class="bg-emerald-500 text-white px-3 py-1 rounded font-bold text-xs cursor-pointer w-1/2">Approve</button>
+                                <button onclick="db.collection('withdrawals').doc('${doc.id}').update({status: 'rejected'})" class="bg-red-500 text-white px-3 py-1 rounded font-bold text-xs cursor-pointer w-1/2">Reject</button>
                             </div>
                         </div>
                     `;
                 });
                 document.getElementById('admin-withdraw-list').innerHTML = html || '<p class="text-slate-400">কোনো উইথড্র রিকোয়েস্ট নেই</p>';
+            });
+        }
+
+        function approveTaskSubmission(subId, reward, phone) {
+            db.collection("task_submissions").doc(subId).update({ status: "approved" }).then(() => {
+                alert('কাজ অ্যাপ্রুভ করা হয়েছে!');
+            });
+        }
+
+        function rejectTaskSubmission(subId) {
+            db.collection("task_submissions").doc(subId).update({ status: "rejected" }).then(() => {
+                alert('কাজটি রিজেক্ট করা হয়েছে!');
             });
         }
     </script>
