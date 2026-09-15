@@ -298,7 +298,6 @@
         let balance = parseFloat(localStorage.getItem('tp_balance')) || 0.00;
         let selectedTask = null;
 
-        // ফোন নাম্বার থেকে সিক্রেট রেফারেল কোড জেনারেট করার ফাংশন (নাম্বার পুরোপুরি হাইড থাকবে)
         function generateSecretRefCode(phone) {
             let hash = 0;
             for (let i = 0; i < phone.length; i++) {
@@ -334,12 +333,17 @@
                 document.getElementById('displayUserPhone').innerText = userPhone;
                 document.getElementById('profilePhoneDisplay').innerText = userPhone;
                 
-                // লিঙ্কে মোবাইল নাম্বার না দেখিয়ে সিক্রেট রেফারেল কোড সেট করা হলো
                 let secretCode = generateSecretRefCode(userPhone);
                 document.getElementById('refLinkInput').value = `https://taskpoint005.netlify.app/?ref=${secretCode}`;
                 
-                // ইউজারের ডাটাবেজে সিক্রেট কোডটি সেভ করে রাখা যাতে পরে চিনতে সমস্যা না হয়
                 db.collection("users").doc(userPhone).update({ refCode: secretCode }).catch(e => {});
+
+                db.collection("users").doc(userPhone).onSnapshot((doc) => {
+                    if(doc.exists) {
+                        balance = doc.data().balance || 0;
+                        updateUI();
+                    }
+                });
 
                 loadUserTasks();
             } else {
@@ -396,8 +400,6 @@
                     btn.disabled = false;
                     showLoginScreen();
                 } else {
-                    let refQuery = db.collection("users");
-                    
                     let processRegistration = (referrerPhone) => {
                         if(referrerPhone && referrerPhone !== phone) {
                             db.collection("users").doc(referrerPhone).get().then(refDoc => {
@@ -516,7 +518,7 @@
                                 </div>
                                 ${isCompleted ? `
                                     <button disabled class="bg-slate-300 text-slate-600 px-4 py-2 rounded-xl text-xs font-bold cursor-not-allowed">
-                                        কমপ্লিট
+                                        জমা দেওয়া হয়েছে
                                     </button>
                                 ` : `
                                     <button onclick="openProofModal('${task.link}', '${task.title}', ${task.reward})" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow cursor-pointer">
@@ -537,12 +539,10 @@
             document.getElementById('proof-file').value = '';
             document.getElementById('proof-modal').style.display = 'flex';
             if(url && url !== 'undefined' && url !== '') {
-                // অ্যান্ড্রয়েড অ্যাপে ওয়েবভিউয়ের বাইরে এক্সটার্নাল ব্রাউজার বা অ্যাপে লিংক ওপেন করার ফিক্স
                 try {
                     if (window.Android && typeof window.Android.openExternal === 'function') {
                         window.Android.openExternal(url);
                     } else {
-                        // যদি অ্যাপের ভেতরে ট্যাগ করা না থাকে, তবে _system বা _blank দিয়ে এক্সটার্নাল ব্রাউজারে ফোর্স করা
                         let a = document.createElement('a');
                         a.href = url;
                         a.target = '_blank';
@@ -575,49 +575,93 @@
 
             const reader = new FileReader();
             reader.readAsDataURL(file);
-            reader.onload = function () {
-                const base64Image = reader.result;
+            reader.onload = function (event) {
+                const img = new Image();
+                img.src = event.target.result;
+                img.onload = function () {
+                    const canvas = document.createElement('canvas');
+                    const MAX_WIDTH = 600;
+                    const MAX_HEIGHT = 600;
+                    let width = img.width;
+                    let height = img.height;
 
-                db.collection("task_submissions").add({
-                    phone: userPhone,
-                    taskTitle: selectedTask.title,
-                    reward: selectedTask.reward,
-                    proofImage: base64Image,
-                    status: "pending",
-                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                }).then(() => {
-                    alert('কাজের প্রুফ সফলভাবে জমা হয়েছে!');
-                    btn.innerText = "জমা দিন";
-                    btn.disabled = false;
-                    closeProofModal();
-                    loadUserTasks();
-                }).catch(err => {
-                    alert('ত্রুটি: ' + err.message);
-                    btn.innerText = "জমা দিন";
-                    btn.disabled = false;
-                });
+                    if (width > height) {
+                        if (width > MAX_WIDTH) {
+                            height *= MAX_WIDTH / width;
+                            width = MAX_WIDTH;
+                        }
+                    } else {
+                        if (height > MAX_HEIGHT) {
+                            width *= MAX_HEIGHT / height;
+                            height = MAX_HEIGHT;
+                        }
+                    }
+
+                    canvas.width = width;
+                    canvas.height = height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.6);
+
+                    db.collection("task_submissions").add({
+                        phone: userPhone,
+                        taskTitle: selectedTask.title,
+                        reward: selectedTask.reward,
+                        proofImage: compressedBase64,
+                        status: "pending",
+                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                    }).then(() => {
+                        alert('কাজের প্রুফ সফলভাবে জমা হয়েছে! অ্যাডমিন চেক করে এপ্রুভ করলে ব্যালেন্স যোগ হবে।');
+                        btn.innerText = "জমা দিন";
+                        btn.disabled = false;
+                        closeProofModal();
+                        loadUserTasks();
+                    }).catch(err => {
+                        alert('ত্রুটি: ' + err.message);
+                        btn.innerText = "জমা দিন";
+                        btn.disabled = false;
+                    });
+                }
             };
         }
 
+        // উইথড্র রিকোয়েস্ট পাঠালে সাথে সাথেই ব্যালেন্স থেকে টাকা কেটে নেওয়া হবে (আগের নিয়মে)
         function requestWithdrawal() {
             const method = document.getElementById('withdrawMethod').value;
             const acc = document.getElementById('accountNumber').value.trim();
             const amt = parseFloat(document.getElementById('withdrawAmount').value);
             
             if (!acc || isNaN(amt) || amt < 100) { alert('সঠিক তথ্য ও সর্বনিম্ন ১০০ টাকা দিন'); return; }
-            if (amt > balance) { alert('পর্যাপ্ত ব্যালেন্স নেই'); return; }
+            if (amt > balance) { alert('আপনার পর্যাপ্ত ব্যালেন্স নেই'); return; }
 
-            db.collection("withdrawals").add({
-                phone: userPhone,
-                method: method,
-                account: acc,
-                amount: amt,
-                status: "pending",
-                createdAt: firebase.firestore.FieldValue.serverTimestamp()
-            }).then(() => {
-                balance -= amt;
-                updateUI();
-                alert('উইথড্র রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে!');
+            db.collection("users").doc(userPhone).get().then((doc) => {
+                if(doc.exists) {
+                    let currentBal = doc.data().balance || 0;
+                    if(currentBal < amt) {
+                        alert('আপনার পর্যাপ্ত ব্যালেন্স নেই!');
+                        return;
+                    }
+
+                    // সাথে সাথে ব্যালেন্স মাইনাস করে দেওয়া
+                    db.collection("users").doc(userPhone).update({
+                        balance: currentBal - amt
+                    }).then(() => {
+                        // উইথড্র রিকোয়েস্ট লিস্টে সেভ করা (পেন্ডing স্ট্যাটাস)
+                        db.collection("withdrawals").add({
+                            phone: userPhone,
+                            method: method,
+                            account: acc,
+                            amount: amt,
+                            status: "pending",
+                            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                        }).then(() => {
+                            document.getElementById('accountNumber').value = '';
+                            document.getElementById('withdrawAmount').value = '';
+                            alert('উইথড্র রিকোয়েস্ট সফলভাবে সাবমিট হয়েছে এবং আপনার ব্যালেন্স থেকে টাকা কেটে নেওয়া হয়েছে!');
+                        });
+                    });
+                }
             });
         }
 
@@ -682,6 +726,7 @@
         }
 
         function loadAdminData() {
+            // পেন্ডিং কাজের লিস্ট (স্ক্রিনশট সহ)
             db.collection("task_submissions").where("status", "==", "pending").onSnapshot((snapshot) => {
                 let html = '';
                 snapshot.forEach((doc) => {
@@ -694,45 +739,74 @@
                     html += `
                         <div class="bg-slate-50 p-3.5 rounded-2xl border space-y-2">
                             <div>
-                                <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md font-bold text-[11px]">📞 ইউজাররা: ${uPhone}</span>
+                                <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md font-bold text-[11px]">📞 ইউজার নাম্বার: ${uPhone}</span>
                                 <p class="font-bold text-slate-800 text-xs mt-1">কাজ: ${tTitle} (৳${tReward})</p>
                             </div>
                             ${sub.proofImage ? `<a href="${sub.proofImage}" target="_blank"><img src="${sub.proofImage}" class="w-24 h-24 object-cover rounded-xl border"></a>` : ''}
                             <div class="flex space-x-2 pt-1">
-                                <button onclick="approveTask('${subId}', '${uPhone}', ${tReward})" class="bg-emerald-500 text-white px-3 py-2 rounded-xl font-bold text-xs w-1/2">Approve & Pay</button>
-                                <button onclick="db.collection('task_submissions').doc('${subId}').update({status: 'rejected'})" class="bg-red-500 text-white px-3 py-2 rounded-xl font-bold text-xs w-1/2">Reject</button>
+                                <button onclick="approveTask('${subId}', '${uPhone}', ${tReward})" class="bg-emerald-500 text-white px-3 py-2 rounded-xl font-bold text-xs w-1/2 cursor-pointer">Approve & Pay</button>
+                                <button onclick="db.collection('task_submissions').doc('${subId}').update({status: 'rejected'})" class="bg-red-500 text-white px-3 py-2 rounded-xl font-bold text-xs w-1/2 cursor-pointer">Reject</button>
                             </div>
                         </div>
                     `;
                 });
-                document.getElementById('admin-pending-tasks').innerHTML = html || '<p class="text-slate-400 text-center py-2">কোনো পেন্ডিং নেই</p>';
+                document.getElementById('admin-pending-tasks').innerHTML = html || '<p class="text-slate-400 text-center py-2">কোনো পেন্ডিং কাজ নেই</p>';
             });
 
+            // উইথড্র রিকোয়েস্ট লিস্ট
             db.collection("withdrawals").where("status", "==", "pending").onSnapshot((snapshot) => {
                 let html = '';
                 snapshot.forEach((doc) => {
                     let w = doc.data();
+                    let wId = doc.id;
+                    let wPhone = w.phone;
+                    let wAmount = w.amount;
+
                     html += `
                         <div class="bg-slate-50 p-3 rounded-2xl border space-y-2 text-xs">
-                            <p>📞 <b>${w.phone}</b> | মেথড: ${w.method.toUpperCase()} | ৳${w.amount}</p>
+                            <p>📞 <b>${wPhone}</b> | মেথড: ${w.method.toUpperCase()} | ৳${wAmount} | অ্যাকাউন্ট: ${w.account}</p>
                             <div class="flex space-x-2">
-                                <button onclick="db.collection('withdrawals').doc('${doc.id}').update({status: 'approved'})" class="bg-emerald-500 text-white px-3 py-1 rounded-lg font-bold w-1/2">Approve</button>
-                                <button onclick="db.collection('withdrawals').doc('${doc.id}').update({status: 'rejected'})" class="bg-red-500 text-white px-3 py-1 rounded-lg font-bold w-1/2">Reject</button>
+                                <button onclick="approveWithdrawal('${wId}')" class="bg-emerald-500 text-white px-3 py-1 rounded-lg font-bold w-1/2 cursor-pointer">Approve</button>
+                                <button onclick="rejectWithdrawal('${wId}', '${wPhone}', ${wAmount})" class="bg-red-500 text-white px-3 py-1 rounded-lg font-bold w-1/2 cursor-pointer">Reject & Refund</button>
                             </div>
                         </div>
                     `;
                 });
-                document.getElementById('admin-withdraw-list').innerHTML = html || '<p class="text-slate-400 text-center py-2">কোনো রিকোয়েস্ট নেই</p>';
+                document.getElementById('admin-withdraw-list').innerHTML = html || '<p class="text-slate-400 text-center py-2">কোনো উইথড্র রিকোয়েস্ট নেই</p>';
             });
         }
 
+        // অ্যাডমিন কাজ এপ্রুভ করলে ইউজারের ব্যালেন্সে রিওয়ার্ডের টাকা যোগ হবে
         function approveTask(subId, phone, rewardAmount) {
             db.collection("task_submissions").doc(subId).update({ status: 'approved' }).then(() => {
                 db.collection("users").doc(phone).get().then((doc) => {
-                    let currentBal = doc.exists ? (doc.data().balance || 0) : 0;
-                    db.collection("users").doc(phone).update({ balance: currentBal + rewardAmount }).then(() => {
-                        alert('সফলভাবে এপ্রুভ ও টাকা যোগ করা হয়েছে!');
-                    });
+                    if(doc.exists) {
+                        let currentBal = doc.data().balance || 0;
+                        db.collection("users").doc(phone).update({ balance: currentBal + rewardAmount }).then(() => {
+                            alert('কাজ সফলভাবে এপ্রুভ করা হয়েছে এবং ইউজারের ব্যালেন্সে টাকা যোগ হয়েছে!');
+                        });
+                    }
+                });
+            });
+        }
+
+        // অ্যাডমিন উইথড্র এপ্রুভ করলে (যেহেতু ব্যালেন্স আগেই কেটে নেওয়া হয়েছে, তাই শুধু স্ট্যাটাস এপ্রুভ হবে)
+        function approveWithdrawal(wId) {
+            db.collection("withdrawals").doc(wId).update({ status: 'approved' }).then(() => {
+                alert('উইথড্র রিকোয়েস্ট সফলভাবে এপ্রুভ করা হয়েছে!');
+            });
+        }
+
+        // অ্যাডমিন উইথড্র রিজেক্ট করলে কেটে নেওয়া টাকা ইউজারের ব্যালেন্সে ফেরত চলে যাবে
+        function rejectWithdrawal(wId, phone, amount) {
+            db.collection("withdrawals").doc(wId).update({ status: 'rejected' }).then(() => {
+                db.collection("users").doc(phone).get().then((doc) => {
+                    if(doc.exists) {
+                        let currentBal = doc.data().balance || 0;
+                        db.collection("users").doc(phone).update({ balance: currentBal + amount }).then(() => {
+                            alert('উইথড্র রিজেক্ট করা হয়েছে এবং কেটে নেওয়া টাকা ইউজারের ব্যালেন্সে ফেরত দেওয়া হয়েছে!');
+                        });
+                    }
                 });
             });
         }
