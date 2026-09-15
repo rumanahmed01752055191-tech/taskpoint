@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <title>TaskPoint - Admin Panel</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Firebase App & Firestore SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
 </head>
@@ -36,94 +37,91 @@
   </div>
 
   <script>
+    // আপনার ফায়ারবেস কনফিগারেশন এখানে বসাতে হবে
     const firebaseConfig = {
-        apiKey: "YOUR_API_KEY",
-        authDomain: "YOUR_AUTH_DOMAIN",
-        projectId: "YOUR_PROJECT_ID",
-        storageBucket: "YOUR_STORAGE_BUCKET",
-        messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-        appId: "YOUR_APP_ID"
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_AUTH_DOMAIN",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_STORAGE_BUCKET",
+      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+      appId: "YOUR_APP_ID"
     };
 
+    // ফায়ারবেস ইনিশিয়ালাইজ
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
+    // কাজ পাবলিশ করার ফাংশন
     function addTask() {
-      let title = document.getElementById('task-title').value.trim();
-      let desc = document.getElementById('task-desc').value.trim();
-      let link = document.getElementById('task-link').value.trim();
-      let reward = parseFloat(document.getElementById('task-reward').value);
+      const title = document.getElementById('task-title').value;
+      const desc = document.getElementById('task-desc').value;
+      const link = document.getElementById('task-link').value;
+      const reward = document.getElementById('task-reward').value;
 
-      if (!title || !link || isNaN(reward)) {
-        alert('দয়া করে শিরোনাম, সঠিক লিংক এবং রিওয়ার্ড পূরণ করুন।');
+      if (!title || !reward) {
+        alert('দয়া করে কাজের শিরোনাম এবং রিওয়ার্ড পূরণ করুন!');
         return;
-      }
-
-      if (link.startsWith('fb://')) {
-        const profileId = link.replace('fb://profile/', '').split('?')[0];
-        link = `https://www.facebook.com/${profileId}`;
-      } else if (link.startsWith('tg://')) {
-        link = link.replace('tg://', 'https://t.me/');
-      } else if (!link.startsWith('http://') && !link.startsWith('https://')) {
-        link = 'https://' + link;
       }
 
       db.collection("tasks").add({
         title: title,
         description: desc,
         link: link,
-        reward: reward,
+        reward: Number(reward),
         createdAt: firebase.firestore.FieldValue.serverTimestamp()
       })
       .then(() => {
-        alert('সফলভাবে নতুন কাজ পাবলিশ করা হয়েছে!');
+        alert('কাজ সফলভাবে পাবলিশ হয়েছে!');
         document.getElementById('task-title').value = '';
         document.getElementById('task-desc').value = '';
         document.getElementById('task-link').value = '';
         document.getElementById('task-reward').value = '';
-        loadAdminTasks();
+        loadTasks();
       })
       .catch((error) => {
-        console.error("Error adding task: ", error);
-        alert('কাজ যোগ করতে সমস্যা হয়েছে।');
+        console.error("ত্রুটি ঘটেছে: ", error);
+        alert('কাজ পাবলিশ করতে সমস্যা হয়েছে!');
       });
     }
 
-    function loadAdminTasks() {
+    // কাজগুলো লাইভ দেখানোর এবং ডিলিট করার ফাংশন
+    function loadTasks() {
       const listDiv = document.getElementById('admin-tasks-list');
-      db.collection("tasks").orderBy("createdAt", "desc").get().then((querySnapshot) => {
-        let html = '';
-        querySnapshot.forEach((doc) => {
+      db.collection("tasks").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
+        listDiv.innerHTML = "";
+        if (snapshot.empty) {
+          listDiv.innerHTML = '<p class="text-slate-400">বর্তমানে কোনো কাজ নেই।</p>';
+          return;
+        }
+        snapshot.forEach((doc) => {
           const task = doc.data();
-          html += `
-            <div class="flex justify-between items-center bg-slate-50 p-3 rounded border">
-              <div>
-                <p class="font-bold text-slate-800">${task.title || 'Untitled'}</p>
-                <p class="text-xs text-blue-600 truncate max-w-xs">${task.link || '#'}</p>
-                <p class="text-xs text-emerald-600 font-semibold">Reward: ৳${task.reward || 0}</p>
-              </div>
-              <button onclick="deleteTask('${doc.id}')" class="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-xs font-bold cursor-pointer">ডিলিট</button>
+          const taskElement = document.createElement('div');
+          taskElement.className = "flex justify-between items-center border p-3 rounded";
+          taskElement.innerHTML = `
+            <div>
+              <p class="font-bold">${task.title}</p>
+              <p class="text-xs text-slate-500">রিওয়ার্ড: ${task.reward} টাকা</p>
             </div>
+            <button onclick="deleteTask('${doc.id}')" class="bg-red-500 text-white px-3 py-1 rounded text-xs cursor-pointer">ডিলিট</button>
           `;
+          listDiv.appendChild(taskElement);
         });
-        listDiv.innerHTML = html || '<p class="text-slate-400 text-center">কোনো কাজ নেই</p>';
       });
     }
 
+    // কাজ ডিলিট করার ফাংশন
     function deleteTask(id) {
-      if (confirm('আপনি কি এই কাজটি ডিলিট করতে চান?')) {
+      if (confirm('আপনি কি এই কাজ borrar করতে চান?')) {
         db.collection("tasks").doc(id).delete().then(() => {
-          alert('কাজটি সফলভাবে ডিলিট করা হয়েছে!');
-          loadAdminTasks();
+          alert('কাজ সফলভাবে মুছে ফেলা হয়েছে!');
         }).catch((error) => {
-          alert('ডিলিট করতে সমস্যা হয়েছে।');
+          console.error("ডিলিট করতে সমস্যা হয়েছে: ", error);
         });
       }
     }
 
-    window.onload = function() {
-      loadAdminTasks();
-    };
+    // পেজ লোড হওয়ার সাথে সাথে কাজগুলো দেখাবে
+    window.onload = loadTasks;
   </script>
 </body>
 </html>
