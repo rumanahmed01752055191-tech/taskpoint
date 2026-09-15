@@ -110,6 +110,13 @@
         <main class="px-4 -mt-4 relative z-10">
             <!-- HOME TAB -->
             <div id="tab-home" class="tab-content active space-y-4">
+                
+                <!-- হোম পেইজের উপরে অ্যান্ড্রয়েড অ্যাপ ডাইরেক্ট ডাউনলোড বাটন -->
+                <a href="https://www.mediafire.com/file/61pi95kplu4oh7u/_TaskPoint_20171775.apk/file" target="_blank" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3.5 rounded-2xl font-bold text-xs flex items-center justify-center space-x-2 shadow-lg cursor-pointer transition">
+                    <i class="fa-solid fa-download text-sm"></i>
+                    <span>অ্যান্ড্রয়েড অ্যাপ ডাউনলোড করুন (.APK)</span>
+                </a>
+
                 <div class="bg-white p-5 rounded-3xl card-shadow border border-slate-100">
                     <h3 class="font-bold text-slate-800 text-base mb-3 flex items-center space-x-2">
                         <i class="fa-solid fa-fire text-orange-500"></i>
@@ -170,13 +177,6 @@
                         <span class="text-base font-extrabold text-emerald-600" id="profileBalanceDisplay">৳0.00</span>
                     </div>
 
-                    <!-- লগইন ঝামেলা ছাড়া সরাসরি ড্রাইভ ডাউনলোড লিংক -->
-                    <a href="https://drive.google.com/uc?export=download&id=1rldYsqtTYUaobdZ8f8Jngj-QaGN7W-cE&confirm=t" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 shadow cursor-pointer transition">
-                        <i class="fa-solid fa-download text-sm"></i>
-                        <span>অ্যান্ড্রয়েড অ্যাপ ডাউনলোড করুন (.APK)</span>
-                    </a>
-
-                    <!-- প্রফাইলের ভেতরে সাপোর্ট ও লগআউট বাটন -->
                     <div class="space-y-2 pt-1">
                         <button onclick="openHiddenSupport()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-xl font-bold text-xs flex items-center justify-center space-x-2 shadow cursor-pointer transition">
                             <i class="fa-brands fa-whatsapp text-base"></i>
@@ -206,16 +206,6 @@
                         যারা ইউটিউব, ফেসবুক, টিকটক, ইনস্টাগ্রাম ফলোয়ার + সাবস্ক্রাইবার বাড়াতে ও ভিডিও লাইক কমেন্ট শেয়ার বাড়াতে চান আমাদের সাথে যোগাযোগ করতে পারেন। 
                     </p>
 
-                    <div class="bg-blue-50/60 p-3.5 rounded-2xl border border-blue-100 space-y-2">
-                        <h4 class="font-bold text-blue-900 text-xs flex items-center space-x-1.5">
-                            <i class="fa-solid fa-circle-check text-blue-600"></i>
-                            <span>আমাদের ওয়েবসাইটের সেবাসমূহ:</span>
-                        </h4>
-                        <p class="text-slate-600 leading-relaxed">
-                            প্রতিদিন ইউজাররা আপনাদের সোশাল মিডিয়া প্ল্যাটফর্মগুলো ফলো করবে + ভিডিও লাইক কমেন্ট ও শেয়ার করবে। চাইলে আপনিও ফ্রিতে ইনকাম করতে পারবেন ইউজারদের মতো।
-                        </p>
-                    </div>
-
                     <div class="space-y-2 pt-1">
                         <h4 class="font-bold text-slate-800 text-xs">আমাদের সেবাগুলোর মূল্য তালিকা (প্যাকেজ):</h4>
                         <div class="grid grid-cols-2 gap-2 text-[11px]">
@@ -227,10 +217,6 @@
                             <div class="bg-slate-50 p-2.5 rounded-xl border text-center"><span class="font-bold text-blue-600">৩০ দিন:</span> ১২৫০৳</div>
                         </div>
                     </div>
-
-                    <p class="text-slate-600 text-justify">
-                        <b>কাজের নিয়ম:</b> নিয়ম অনুযায়ী লিংকগুলো আমাদের কাছে দিবেন এবং যেই প্ল্যান কিনবেন তত দিন লিংকগুলো আমাদের অ্যাপের মধ্যে থাকবে। ফলে প্রতিদিন আপনার সোশাল মিডিয়া প্ল্যাটফর্মগুলোতে ফলো, সাবস্ক্রাইবার, লাইক, কমেন্ট ও শেয়ার বাড়বে।
-                    </p>
 
                     <button onclick="openHiddenSupport()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 rounded-2xl font-bold text-sm shadow-lg flex items-center justify-center space-x-2 cursor-pointer transition mt-2">
                         <i class="fa-brands fa-whatsapp text-lg"></i>
@@ -314,7 +300,6 @@
         let balance = parseFloat(localStorage.getItem('tp_balance')) || 0.00;
         let selectedTask = null;
 
-        // ৫০০০+ লাইভ ইউজার আসা-যাওয়া করার অ্যানিমেশন ফাংশন
         function startLiveUserSimulation() {
             let baseUsers = 5140;
             setInterval(() => {
