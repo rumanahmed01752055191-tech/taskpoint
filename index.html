@@ -574,7 +574,6 @@
             btn.disabled = true;
 
             const reader = new FileReader();
-            reader.readAsDataURL(file);
             
             reader.onerror = function () {
                 alert('ফাইল পড়তে সমস্যা হয়েছে। অন্য ছবি সিলেক্ট করুন।');
@@ -584,7 +583,6 @@
 
             reader.onload = function (event) {
                 const img = new Image();
-                img.src = event.target.result;
                 
                 img.onerror = function () {
                     alert('ছবিটি প্রসেস করা যাচ্ছে না। অন্য ছবি দিন।');
@@ -594,8 +592,8 @@
 
                 img.onload = function () {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 400;  // সাইজ আরও ছোট করা হলো যাতে ফায়ারবেসে ফাস্ট আপলোড হয়
-                    const MAX_HEIGHT = 400;
+                    const MAX_WIDTH = 250;  
+                    const MAX_HEIGHT = 250;
                     let width = img.width;
                     let height = img.height;
 
@@ -616,7 +614,7 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, width, height);
                     
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.5); // কোয়ালিটি ৫০% করা হলো যাতে সাইজ ছোট থাকে
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.3);
 
                     db.collection("task_submissions").add({
                         phone: userPhone,
@@ -626,7 +624,7 @@
                         status: "pending",
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     }).then(() => {
-                        alert('কাজের প্রুফ সফলভাবে জমা হয়েছে! অ্যাডমিন চেক করে এপ্রুভ করলে ব্যালেন্স যোগ হবে।');
+                        alert('কাজের প্রুফ সফলভাবে জমা হয়েছে!');
                         btn.innerText = "জমা দিন";
                         btn.disabled = false;
                         closeProofModal();
@@ -636,11 +634,14 @@
                         btn.innerText = "জমা দিন";
                         btn.disabled = false;
                     });
-                }
+                };
+
+                img.src = event.target.result;
             };
+
+            reader.readAsDataURL(file);
         }
 
-        // উইথড্র রিকোয়েস্ট পাঠালে সাথে সাথেই ব্যালেন্স থেকে টাকা কেটে নেওয়া হবে
         function requestWithdrawal() {
             const method = document.getElementById('withdrawMethod').value;
             const acc = document.getElementById('accountNumber').value.trim();
