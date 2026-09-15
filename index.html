@@ -92,7 +92,7 @@
                 </div>
             </div>
 
-            <!-- SUPPORT TAB (নাম্বার লুকিয়ে রাখা হয়েছে) -->
+            <!-- SUPPORT TAB -->
             <div id="tab-support" class="tab-content space-y-4">
                 <div class="bg-white rounded-3xl p-6 card-shadow text-center space-y-4">
                     <div class="w-12 h-12 bg-emerald-50 text-emerald-600 rounded-2xl mx-auto flex items-center justify-center text-xl">
@@ -107,18 +107,36 @@
                 </div>
             </div>
 
-            <!-- PROMOTION TAB -->
+            <!-- PROMOTION TAB (Updated with full details & packages) -->
             <div id="tab-promotion" class="tab-content space-y-4">
-                <div class="bg-gradient-to-r from-indigo-900 to-blue-900 text-white rounded-3xl p-5 shadow-xl space-y-4 border border-blue-800 text-xs leading-relaxed">
+                <div class="bg-gradient-to-br from-indigo-900 to-blue-900 text-white rounded-3xl p-5 shadow-xl space-y-4 border border-blue-800 text-xs leading-relaxed">
                     <h3 class="font-extrabold text-base text-amber-300 flex items-center space-x-2">
                         <i class="fa-solid fa-bullhorn"></i>
                         <span>সোশ্যাল মিডিয়া প্রমোশন সেবা</span>
                     </h3>
                     <p class="text-slate-200 text-justify">
-                        ইউটিউব, ফেসবুক, টিকটক, ইনস্টাগ্রাম ফলোয়ার বাড়াতে এবং ভিডিও লাইক, কমেন্ট ও শেয়ার বাড়াতে আমাদের সাথে যোগাযোগ করতে পারেন।
+                        যারা ইউটিউব, ফেসবুক, টিকটক, ইনস্টাগ্রাম ফলোয়ার + সাবস্ক্রাইবার বাড়াতে ও ভিডিও লাইক কমেন্ট শেয়ার বাড়াতে চান আমাদের সাথে যোগাযোগ করতে পারেন। আমাদের ওয়েবসাইটের সেবা সমূহ, প্রতিদিন ইউজাররা আপনাদের সোশ্যাল মিডিয়া প্ল্যাটফর্মগুলো ফলো করবে + ভিডিও লাইক কমেন্ট ও শেয়ার করবে। চাইলে আপনিও ফ্রিতে ইনকাম করতে পারবেন ইউজারদের মতো।
                     </p>
-                    <button onclick="openHiddenSupport()" class="w-full text-center bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-xl font-bold text-sm shadow transition cursor-pointer">
-                        <i class="fa-brands fa-whatsapp mr-1.5"></i> WhatsApp এ অর্ডার করুন
+                    
+                    <div class="bg-white/10 p-3.5 rounded-2xl border border-white/10 space-y-2">
+                        <p class="font-bold text-amber-300 text-center text-xs">আমাদের সেবাগুলোর ফ্রি প্লান মূল্যতালিকা:</p>
+                        <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-200">
+                            <div class="bg-black/20 p-2 rounded-xl">৩ দিন: <b>৳১১০</b></div>
+                            <div class="bg-black/20 p-2 rounded-xl">৭ দিন: <b>৳৩১০</b></div>
+                            <div class="bg-black/20 p-2 rounded-xl">১০ দিন: <b>৳৪১০</b></div>
+                            <div class="bg-black/20 p-2 rounded-xl">১৫ দিন: <b>৳৭১০</b></div>
+                            <div class="bg-black/20 p-2 rounded-xl">২০ দিন: <b>৳৯১০</b></div>
+                            <div class="bg-black/20 p-2 rounded-xl">৩০ দিন: <b>৳১২৫০</b></div>
+                        </div>
+                    </div>
+
+                    <p class="text-slate-300 text-[11px] text-justify">
+                        <b>কাজের নিয়ম:</b> অনুযায়ী লিংকগুলো আমাদের কাছে দিবেন এবং যেই প্লান কিনবেন তত দিন লিংকগুলো আমাদের অ্যাপের মধ্যে থাকবে ফলে প্রতিদিন আপনার সোশ্যাল মিডিয়া প্ল্যাটফর্মগুলোতে ফলো, সাবস্ক্রাইবার, লাইক কমেন্ট ও শেয়ার বাড়বে।
+                    </p>
+
+                    <button onclick="openHiddenSupport()" class="w-full text-center bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 rounded-xl font-bold text-sm shadow transition cursor-pointer flex items-center justify-center space-x-2">
+                        <i class="fa-brands fa-whatsapp text-lg"></i>
+                        <span>WhatsApp এ অর্ডার করুন</span>
                     </button>
                 </div>
             </div>
@@ -148,10 +166,10 @@
                 <!-- নতুন কাজ যোগ করার ফর্ম -->
                 <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border">
                     <h3 class="font-bold text-sm text-blue-600">নতুন কাজ যোগ করুন</h3>
-                    <input type="text" id="admin-title" placeholder="কাজের শিরোনাম" class="w-full bg-white border p-2.5 rounded-xl text-xs">
-                    <textarea id="admin-desc" placeholder="কাজের বিবরণ" class="w-full bg-white border p-2.5 rounded-xl text-xs"></textarea>
+                    <input type="text" id="admin-title" placeholder="কাজের শিরোনাম (যেমন: ফেসবুক ফলো)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
+                    <textarea id="admin-desc" placeholder="কাজের বিবরণ (যেমন: নিচের ফেসবুক প্রোফাইলটি ফলো করুন)" class="w-full bg-white border p-2.5 rounded-xl text-xs"></textarea>
                     <input type="text" id="admin-link" placeholder="কাজের লিংক (https://...)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
-                    <input type="number" id="admin-reward" placeholder="রিওয়ার্ড (টাকা)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
+                    <input type="number" id="admin-reward" placeholder="রিওয়ার্ড (টাকা, যেমন: 2)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
                     <button type="button" onclick="adminAddTask()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl font-bold text-xs shadow cursor-pointer transition">কাজ পাবলিশ করুন</button>
                 </div>
 
@@ -197,7 +215,6 @@
         let balance = parseFloat(localStorage.getItem('tp_balance')) || 0.00;
         let selectedTask = null;
 
-        // গোপন হোয়াটসঅ্যাপ নাম্বার ফাংশন
         function openHiddenSupport() {
             const part1 = "880";
             const part2 = "1617411391";
@@ -235,6 +252,7 @@
                 let html = '';
                 snapshot.forEach((doc) => {
                     const task = doc.data();
+                    if(!task.title || task.title === 'undefined') return; // ভ্যালিড নয় এমন কাজ ফিল্টার করার জন্য
                     html += `
                         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
                             <div>
@@ -404,7 +422,7 @@
                     html += `
                         <div class="bg-slate-50 p-3 rounded-xl border space-y-2">
                             <div>
-                                <p class="font-bold text-slate-800">ইউজাররা: ${w.phone}</p>
+                                <p class="font-bold text-slate-800">ইউজার: ${w.phone}</p>
                                 <p class="text-slate-600 text-xs">${w.method.toUpperCase()} - ${w.account} | পরিমাণ: ৳${w.amount}</p>
                             </div>
                             <div class="flex space-x-2 pt-1">
