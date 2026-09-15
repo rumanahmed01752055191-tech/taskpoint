@@ -107,7 +107,35 @@
                 </div>
             </div>
 
-            <!-- PROMOTION TAB (Updated with full details & packages) -->
+            <!-- PROFILE TAB -->
+            <div id="tab-profile" class="tab-content space-y-4">
+                <div class="bg-white rounded-3xl p-6 card-shadow space-y-5 text-center">
+                    <div class="w-20 h-20 bg-blue-50 text-blue-600 rounded-full mx-auto flex items-center justify-center text-3xl shadow-inner border border-blue-100">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-extrabold text-lg text-slate-800" id="profilePhoneDisplay">-</h3>
+                        <p class="text-xs text-slate-400">TaskPoint ভেরিফাইড ইউজার</p>
+                    </div>
+                    
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-100 flex justify-between items-center">
+                        <span class="text-xs text-slate-500 font-semibold">বর্তমান ব্যালেন্স:</span>
+                        <span class="text-base font-extrabold text-emerald-600" id="profileBalanceDisplay">৳0.00</span>
+                    </div>
+
+                    <div class="pt-2 space-y-2">
+                        <button onclick="openHiddenSupport()" class="w-full bg-emerald-500 hover:bg-emerald-600 text-white py-3 rounded-xl font-bold text-xs shadow transition flex items-center justify-center space-x-2">
+                            <i class="fa-brands fa-whatsapp text-base"></i>
+                            <span>সাপোর্টের জন্য WhatsApp যোগাযোগ</span>
+                        </button>
+                        <button onclick="logoutUser()" class="w-full bg-red-50 hover:bg-red-100 text-red-600 py-3 rounded-xl font-bold text-xs transition">
+                            <i class="fa-solid fa-right-from-bracket mr-1"></i> লগআউট করুন
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PROMOTION TAB -->
             <div id="tab-promotion" class="tab-content space-y-4">
                 <div class="bg-gradient-to-br from-indigo-900 to-blue-900 text-white rounded-3xl p-5 shadow-xl space-y-4 border border-blue-800 text-xs leading-relaxed">
                     <h3 class="font-extrabold text-base text-amber-300 flex items-center space-x-2">
@@ -166,10 +194,10 @@
                 <!-- নতুন কাজ যোগ করার ফর্ম -->
                 <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border">
                     <h3 class="font-bold text-sm text-blue-600">নতুন কাজ যোগ করুন</h3>
-                    <input type="text" id="admin-title" placeholder="কাজের শিরোনাম (যেমন: ফেসবুক ফলো)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
-                    <textarea id="admin-desc" placeholder="কাজের বিবরণ (যেমন: নিচের ফেসবুক প্রোফাইলটি ফলো করুন)" class="w-full bg-white border p-2.5 rounded-xl text-xs"></textarea>
+                    <input type="text" id="admin-title" placeholder="কাজের শিরোনাম" class="w-full bg-white border p-2.5 rounded-xl text-xs">
+                    <textarea id="admin-desc" placeholder="কাজের বিবরণ" class="w-full bg-white border p-2.5 rounded-xl text-xs"></textarea>
                     <input type="text" id="admin-link" placeholder="কাজের লিংক (https://...)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
-                    <input type="number" id="admin-reward" placeholder="রিওয়ার্ড (টাকা, যেমন: 2)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
+                    <input type="number" id="admin-reward" placeholder="রিওয়ার্ড (টাকা)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
                     <button type="button" onclick="adminAddTask()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl font-bold text-xs shadow cursor-pointer transition">কাজ পাবলিশ করুন</button>
                 </div>
 
@@ -185,12 +213,13 @@
             </div>
         </div>
 
-        <!-- NAV -->
-        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 backdrop-blur-md border-t border-slate-200 px-4 py-3 flex justify-around items-center z-40 rounded-t-3xl shadow-lg">
+        <!-- NAV (সাপোর্ট এবং প্রোফাইল সহ মোট ৫টি ট্যাব) -->
+        <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 backdrop-blur-md border-t border-slate-200 px-2 py-3 flex justify-around items-center z-40 rounded-t-3xl shadow-lg">
             <button onclick="switchTab('home')" id="nav-home" class="text-blue-600 font-bold flex flex-col items-center text-[10px]"><i class="fa-solid fa-house text-lg"></i>Home</button>
             <button onclick="switchTab('withdraw')" id="nav-withdraw" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-wallet text-lg"></i>Withdraw</button>
             <button onclick="switchTab('support')" id="nav-support" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-headset text-lg"></i>Support</button>
-            <button onclick="switchTab('promotion')" id="nav-promotion" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-rectangle-ad text-lg"></i>Promotion</button>
+            <button onclick="switchTab('profile')" id="nav-profile" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-user text-lg"></i>Profile</button>
+            <button onclick="switchTab('promotion')" id="nav-promotion" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-rectangle-ad text-lg"></i>Promo</button>
         </nav>
     </div>
 
@@ -227,6 +256,7 @@
                 document.getElementById('screen-login').style.display = 'none';
                 document.getElementById('screen-main').style.display = 'block';
                 document.getElementById('displayUserPhone').innerText = userPhone;
+                document.getElementById('profilePhoneDisplay').innerText = userPhone;
                 loadUserTasks();
             } else {
                 document.getElementById('screen-welcome').style.display = 'flex';
@@ -246,13 +276,20 @@
             location.reload();
         }
 
+        function logoutUser() {
+            if(confirm('আপনি কি লগআউট করতে চান?')) {
+                localStorage.removeItem('tp_phone');
+                location.reload();
+            }
+        }
+
         function loadUserTasks() {
             const container = document.getElementById('tasks-container');
             db.collection("tasks").onSnapshot((snapshot) => {
                 let html = '';
                 snapshot.forEach((doc) => {
                     const task = doc.data();
-                    if(!task.title || task.title === 'undefined') return; // ভ্যালিড নয় এমন কাজ ফিল্টার করার জন্য
+                    if(!task.title || task.title === 'undefined') return;
                     html += `
                         <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
                             <div>
@@ -328,7 +365,9 @@
         }
 
         function updateUI() {
-            document.getElementById('userBalance').innerText = '৳' + balance.toFixed(2);
+            const formattedBal = '৳' + balance.toFixed(2);
+            document.getElementById('userBalance').innerText = formattedBal;
+            document.getElementById('profileBalanceDisplay').innerText = formattedBal;
             localStorage.setItem('tp_balance', balance);
         }
 
@@ -336,7 +375,7 @@
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-' + tabName).classList.add('active');
             
-            ['home', 'withdraw', 'support', 'promotion'].forEach(t => {
+            ['home', 'withdraw', 'support', 'profile', 'promotion'].forEach(t => {
                 const btn = document.getElementById('nav-' + t);
                 if(t === tabName) {
                     btn.className = "text-blue-600 font-bold flex flex-col items-center text-[10px]";
