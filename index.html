@@ -496,9 +496,9 @@
             const container = document.getElementById('tasks-container');
             
             db.collection("task_submissions").where("phone", "==", userPhone).get().then(subSnapshot => {
-                let completedTaskTitles = [];
+                let submittedTasksMap = {};
                 subSnapshot.forEach(doc => {
-                    completedTaskTitles.push(doc.data().taskTitle);
+                    submittedTasksMap[doc.data().taskTitle] = doc.data().status; 
                 });
 
                 db.collection("tasks").onSnapshot((snapshot) => {
@@ -507,7 +507,18 @@
                         const task = doc.data();
                         if(!task.title || task.title === 'undefined') return;
 
-                        let isCompleted = completedTaskTitles.includes(task.title);
+                        let status = submittedTasksMap[task.title];
+
+                        let actionButton = '';
+                        if (status === 'pending') {
+                            actionButton = `<button disabled class="bg-amber-500 text-white px-4 py-2 rounded-xl text-xs font-bold cursor-not-allowed">পেন্ডিং</button>`;
+                        } else if (status === 'approved') {
+                            actionButton = `<button disabled class="bg-emerald-600 text-white px-4 py-2 rounded-xl text-xs font-bold cursor-not-allowed">এপ্রুভড</button>`;
+                        } else if (status === 'rejected') {
+                            actionButton = `<button onclick="openProofModal('${task.link}', '${task.title}', ${task.reward})" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow cursor-pointer">রিজেক্টেড - পুনরায় জমা দিন</button>`;
+                        } else {
+                            actionButton = `<button onclick="openProofModal('${task.link}', '${task.title}', ${task.reward})" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow cursor-pointer">কাজ শুরু করুন</button>`;
+                        }
 
                         html += `
                             <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
@@ -516,15 +527,7 @@
                                     <p class="text-xs text-slate-500">${task.description || ''}</p>
                                     <p class="text-xs text-emerald-600 font-bold mt-1">Reward: ৳${task.reward}</p>
                                 </div>
-                                ${isCompleted ? `
-                                    <button disabled class="bg-slate-300 text-slate-600 px-4 py-2 rounded-xl text-xs font-bold cursor-not-allowed">
-                                        জমা দেওয়া হয়েছে
-                                    </button>
-                                ` : `
-                                    <button onclick="openProofModal('${task.link}', '${task.title}', ${task.reward})" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow cursor-pointer">
-                                        কাজ শুরু করুন
-                                    </button>
-                                `}
+                                ${actionButton}
                             </div>
                         `;
                     });
@@ -582,61 +585,25 @@
             };
 
             reader.onload = function (event) {
-                const img = new Image();
-                
-                img.onerror = function () {
-                    alert('ছবিটি প্রসেস করা যাচ্ছে না। অন্য ছবি দিন।');
+                const base64Image = event.target.result;
+
+                db.collection("task_submissions").add({
+                    phone: userPhone,
+                    taskTitle: selectedTask.title,
+                    reward: selectedTask.reward,
+                    proofImage: base64Image,
+                    status: "pending",
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
                     btn.innerText = "জমা দিন";
                     btn.disabled = false;
-                };
-
-                img.onload = function () {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 250;  
-                    const MAX_HEIGHT = 250;
-                    let width = img.width;
-                    let height = img.height;
-
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height *= MAX_WIDTH / width;
-                            width = MAX_WIDTH;
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width *= MAX_HEIGHT / height;
-                            height = MAX_HEIGHT;
-                        }
-                    }
-
-                    canvas.width = width;
-                    canvas.height = height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, width, height);
-                    
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.3);
-
-                    db.collection("task_submissions").add({
-                        phone: userPhone,
-                        taskTitle: selectedTask.title,
-                        reward: selectedTask.reward,
-                        proofImage: compressedBase64,
-                        status: "pending",
-                        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-                    }).then(() => {
-                        alert('কাজের প্রুফ সফলভাবে জমা হয়েছে!');
-                        btn.innerText = "জমা দিন";
-                        btn.disabled = false;
-                        closeProofModal();
-                        loadUserTasks();
-                    }).catch(err => {
-                        alert('ত্রুটি: ' + err.message);
-                        btn.innerText = "জমা দিন";
-                        btn.disabled = false;
-                    });
-                };
-
-                img.src = event.target.result;
+                    closeProofModal();
+                    loadUserTasks();
+                }).catch(err => {
+                    alert('ত্রুটি: ' + err.message);
+                    btn.innerText = "জমা দিন";
+                    btn.disabled = false;
+                });
             };
 
             reader.readAsDataURL(file);
