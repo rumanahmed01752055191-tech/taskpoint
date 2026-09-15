@@ -23,7 +23,6 @@
     <!-- WELCOME SCREEN WITH LOGO -->
     <div id="screen-welcome" class="max-w-md mx-auto min-h-screen flex flex-col justify-center items-center p-6 bg-gradient-to-br from-indigo-950 via-blue-900 to-slate-900 text-white fixed inset-0 z-50">
         <div class="w-full max-w-sm space-y-6 text-center">
-            <!-- App Logo Design -->
             <div class="relative w-24 h-24 mx-auto">
                 <div class="absolute inset-0 bg-blue-500 rounded-3xl blur-xl opacity-50 animate-pulse"></div>
                 <div class="relative w-24 h-24 bg-gradient-to-tr from-blue-600 to-indigo-500 rounded-3xl mx-auto flex items-center justify-center text-4xl shadow-2xl border border-white/20">
@@ -43,19 +42,20 @@
 
     <!-- REGISTER SCREEN -->
     <div id="screen-register" class="max-w-md mx-auto min-h-screen flex flex-col justify-center p-6 bg-slate-50 fixed inset-0 z-40" style="display: none;">
-        <div class="bg-white rounded-[2.5rem] p-8 card-shadow border border-slate-100 space-y-6">
+        <div class="bg-white rounded-[2.5rem] p-8 card-shadow border border-slate-100 space-y-5">
             <div class="text-center space-y-2">
-                <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl mx-auto flex items-center justify-center text-2xl font-bold mb-2 shadow-inner">
+                <div class="w-14 h-14 bg-blue-50 text-blue-600 rounded-2xl mx-auto flex items-center justify-center text-xl font-bold mb-1 shadow-inner">
                     <i class="fa-solid fa-user-plus"></i>
                 </div>
-                <h2 class="text-xl font-extrabold text-slate-800">নতুন অ্যাকাউন্ট</h2>
-                <p class="text-xs text-slate-400">তথ্য দিয়ে রেজিস্ট্রেশন সম্পন্ন করুন</p>
+                <h2 class="text-lg font-extrabold text-slate-800">নতুন অ্যাকাউন্ট</h2>
+                <p class="text-[11px] text-slate-400">তথ্য দিয়ে রেজিস্ট্রেশন সম্পন্ন করুন</p>
             </div>
-            <div class="space-y-4">
-                <input type="number" id="regNumber" placeholder="মোবাইল নাম্বার (যেমন: 017XXXXXXXX)" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:border-blue-500">
-                <input type="password" id="regPassword" placeholder="পাসওয়ার্ড দিন" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3.5 text-sm focus:outline-none focus:border-blue-500">
-                <button onclick="performRegister()" id="reg-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-4 rounded-2xl font-bold text-sm shadow-lg cursor-pointer transition">রেজিস্ট্রেশন করুন</button>
-                <p class="text-center text-xs text-slate-500 pt-2">আগে থেকেই অ্যাকাউন্ট আছে? <span onclick="showLoginScreen()" class="text-blue-600 font-bold cursor-pointer underline">লগইন করুন</span></p>
+            <div class="space-y-3">
+                <input type="number" id="regNumber" placeholder="মোবাইল নাম্বার (যেমন: 017XXXXXXXX)" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-xs focus:outline-none focus:border-blue-500">
+                <input type="password" id="regPassword" placeholder="পাসওয়ার্ড দিন" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-xs focus:outline-none focus:border-blue-500">
+                <input type="text" id="regReferral" placeholder="রেফারেল কোড (ঐচ্ছিক)" class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 text-xs focus:outline-none focus:border-blue-500">
+                <button onclick="performRegister()" id="reg-btn" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-3.5 rounded-2xl font-bold text-xs shadow-lg cursor-pointer transition">রেজিস্ট্রেশন করুন</button>
+                <p class="text-center text-xs text-slate-500 pt-1">আগে থেকেই অ্যাকাউন্ট আছে? <span onclick="showLoginScreen()" class="text-blue-600 font-bold cursor-pointer underline">লগইন করুন</span></p>
             </div>
         </div>
     </div>
@@ -104,6 +104,25 @@
                     </h3>
                     <div id="tasks-container" class="space-y-3">
                         <p class="text-xs text-slate-400 text-center py-4">কাজ লোড হচ্ছে...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- REFERRAL TAB -->
+            <div id="tab-referral" class="tab-content space-y-4">
+                <div class="bg-white rounded-3xl p-6 card-shadow border border-slate-100 space-y-4 text-center">
+                    <div class="w-16 h-16 bg-amber-50 text-amber-600 rounded-2xl mx-auto flex items-center justify-center text-2xl shadow-inner">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <h3 class="font-bold text-lg text-slate-800">রেফার করুন ও আয় করুন</h3>
+                    <p class="text-xs text-slate-500">আপনার লিংকে কেউ একাউন্ট খুললে আপনি পাবেন <b class="text-emerald-600">৫ টাকা</b> বোনাস!</p>
+                    
+                    <div class="bg-slate-50 p-4 rounded-2xl border border-slate-200 text-left space-y-2">
+                        <label class="text-[11px] font-bold text-slate-600 block">আপনার রেফারেল লিংক:</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="refLinkInput" readonly class="w-full bg-white border p-2.5 rounded-xl text-xs text-slate-600" value="">
+                            <button onclick="copyReferralLink()" class="bg-blue-600 text-white px-4 py-2.5 rounded-xl text-xs font-bold cursor-pointer">কপি</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -173,21 +192,8 @@
                         <span>সোশ্যাল মিডিয়া প্রমোশন সেবা</span>
                     </h3>
                     <p class="text-slate-200 text-justify">
-                        যারা ইউটিউব, ফেসবুক, টিকটক, ইনস্টাগ্রাম ফলোয়ার + সাবস্ক্রাইবার বাড়াতে ও ভিডিও লাইক কমেন্ট শেয়ার বাড়াতে চান আমাদের সাথে যোগাযোগ করতে পারেন। আমাদের ওয়েবসাইটের সেবা সমূহ, প্রতিদিন ইউজাররা আপনাদের সোশ্যাল মিডিয়া প্ল্যাটফর্মগুলো ফলো করবে + ভিডিও লাইক কমেন্ট ও শেয়ার করবে। চাইলে আপনিও ফ্রিতে ইনকাম করতে পারবেন ইউজারদের মতো।
+                        যারা ইউটিউব, ফেসবুক, টিকটক, ইনস্টাগ্রাম ফলোয়ার বাড়াতে চান আমাদের সাথে যোগাযোগ করতে পারেন।
                     </p>
-                    
-                    <div class="bg-white/10 p-3.5 rounded-2xl border border-white/10 space-y-2">
-                        <p class="font-bold text-amber-300 text-center text-xs">আমাদের সেবাগুলোর ফ্রি প্লান মূল্যতালিকা:</p>
-                        <div class="grid grid-cols-2 gap-2 text-[11px] text-slate-200">
-                            <div class="bg-black/20 p-2 rounded-xl">৩ দিন: <b>৳১১০</b></div>
-                            <div class="bg-black/20 p-2 rounded-xl">৭ দিন: <b>৳৩১০</b></div>
-                            <div class="bg-black/20 p-2 rounded-xl">১০ দিন: <b>৳৪১০</b></div>
-                            <div class="bg-black/20 p-2 rounded-xl">১৫ দিন: <b>৳৭১০</b></div>
-                            <div class="bg-black/20 p-2 rounded-xl">২০ দিন: <b>৳৯১০</b></div>
-                            <div class="bg-black/20 p-2 rounded-xl">৩০ দিন: <b>৳১২৫০</b></div>
-                        </div>
-                    </div>
-
                     <button onclick="openHiddenSupport()" class="w-full text-center bg-emerald-500 hover:bg-emerald-600 text-white py-3.5 rounded-xl font-bold text-sm shadow transition cursor-pointer flex items-center justify-center space-x-2">
                         <i class="fa-brands fa-whatsapp text-lg"></i>
                         <span>WhatsApp এ অর্ডার করুন</span>
@@ -204,7 +210,7 @@
                 
                 <div class="space-y-2">
                     <label class="block text-xs font-bold text-slate-600">কাজের স্ক্রিনশট ছবি সিলেক্ট করুন:</label>
-                    <input type="file" id="proof-file" accept="image/*" class="w-full border border-slate-300 p-2.5 rounded-xl text-xs bg-slate-50 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                    <input type="file" id="proof-file" accept="image/*" class="w-full border border-slate-300 p-2.5 rounded-xl text-xs bg-slate-50 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-150">
                 </div>
 
                 <div class="flex space-x-2 pt-2">
@@ -222,14 +228,13 @@
                     <button onclick="closeSecretAdmin()" class="bg-slate-200 px-3 py-1 rounded-full text-xs font-bold cursor-pointer">বন্ধ করুন</button>
                 </div>
 
-                <!-- নতুন কাজ যোগ করার ফর্ম -->
                 <div class="space-y-3 bg-slate-50 p-4 rounded-2xl border">
                     <h3 class="font-bold text-sm text-blue-600">নতুন কাজ যোগ করুন</h3>
                     <input type="text" id="admin-title" placeholder="কাজের শিরোনাম" class="w-full bg-white border p-2.5 rounded-xl text-xs">
                     <textarea id="admin-desc" placeholder="কাজের বিবরণ" class="w-full bg-white border p-2.5 rounded-xl text-xs"></textarea>
                     <input type="text" id="admin-link" placeholder="কাজের লিংক (https://...)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
                     <input type="number" id="admin-reward" placeholder="রিওয়ার্ড (টাকা)" class="w-full bg-white border p-2.5 rounded-xl text-xs">
-                    <button type="button" onclick="adminAddTask()" class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2.5 rounded-xl font-bold text-xs shadow cursor-pointer transition">কাজ পাবলিশ করুন</button>
+                    <button type="button" onclick="adminAddTask()" class="w-full bg-blue-600 text-white py-2.5 rounded-xl font-bold text-xs shadow cursor-pointer">কাজ পাবলিশ করুন</button>
                 </div>
 
                 <div class="space-y-3">
@@ -247,10 +252,10 @@
         <!-- NAV -->
         <nav class="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-white/90 backdrop-blur-md border-t border-slate-200 px-2 py-3 flex justify-around items-center z-40 rounded-t-3xl shadow-lg">
             <button onclick="switchTab('home')" id="nav-home" class="text-blue-600 font-bold flex flex-col items-center text-[10px]"><i class="fa-solid fa-house text-lg"></i>Home</button>
+            <button onclick="switchTab('referral')" id="nav-referral" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-users text-lg"></i>Referral</button>
             <button onclick="switchTab('withdraw')" id="nav-withdraw" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-wallet text-lg"></i>Withdraw</button>
             <button onclick="switchTab('support')" id="nav-support" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-headset text-lg"></i>Support</button>
             <button onclick="switchTab('profile')" id="nav-profile" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-user text-lg"></i>Profile</button>
-            <button onclick="switchTab('promotion')" id="nav-promotion" class="text-slate-400 font-medium flex flex-col items-center text-[10px]"><i class="fa-solid fa-rectangle-ad text-lg"></i>Promo</button>
         </nav>
     </div>
 
@@ -264,24 +269,20 @@
             appId: "1:378740952776:web:09af7b6e8f7d765bd81ffd"
         };
         
-        try {
-            firebase.initializeApp(firebaseConfig);
-        } catch (e) {
-            console.error(e);
-        }
+        try { firebase.initializeApp(firebaseConfig); } catch (e) {}
         const db = firebase.firestore();
 
         let userPhone = localStorage.getItem('tp_phone') || '';
         let balance = parseFloat(localStorage.getItem('tp_balance')) || 0.00;
         let selectedTask = null;
 
-        function openHiddenSupport() {
-            const part1 = "880";
-            const part2 = "1617411391";
-            window.open(`https://wa.me/${part1}${part2}`, '_blank');
-        }
-
         window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const refParam = urlParams.get('ref');
+            if(refParam) {
+                localStorage.setItem('tp_ref', refParam);
+            }
+
             if (userPhone && userPhone.length >= 10) {
                 document.getElementById('screen-welcome').style.display = 'none';
                 document.getElementById('screen-register').style.display = 'none';
@@ -289,12 +290,23 @@
                 document.getElementById('screen-main').style.display = 'block';
                 document.getElementById('displayUserPhone').innerText = userPhone;
                 document.getElementById('profilePhoneDisplay').innerText = userPhone;
+                document.getElementById('refLinkInput').value = `https://taskpoint005.netlify.app/?ref=${userPhone}`;
                 loadUserTasks();
             } else {
                 document.getElementById('screen-welcome').style.display = 'flex';
+                setTimeout(() => {
+                    let savedRef = localStorage.getItem('tp_ref');
+                    if(savedRef && document.getElementById('regReferral')) {
+                        document.getElementById('regReferral').value = savedRef;
+                    }
+                }, 500);
             }
             updateUI();
         };
+
+        function openHiddenSupport() {
+            window.open("https://wa.me/8801617411391", '_blank');
+        }
 
         function showRegisterScreen() {
             document.getElementById('screen-welcome').style.display = 'none';
@@ -308,10 +320,17 @@
             document.getElementById('screen-login').style.display = 'flex';
         }
 
-        // নতুন রেজিস্ট্রেশন হ্যান্ডলার
+        function copyReferralLink() {
+            const input = document.getElementById('refLinkInput');
+            input.select();
+            navigator.clipboard.writeText(input.value);
+            alert('রেফারেল লিংক কপি করা হয়েছে!');
+        }
+
         function performRegister() {
             const phone = document.getElementById('regNumber').value.trim();
             const password = document.getElementById('regPassword').value.trim();
+            const referrer = document.getElementById('regReferral').value.trim();
 
             if (phone.length < 10) { alert('সঠিক মোবাইল নাম্বার দিন'); return; }
             if (password.length < 4) { alert('কমপক্ষে ৪ সংখ্যার পাসওয়ার্ড দিন'); return; }
@@ -322,19 +341,31 @@
 
             db.collection("users").doc(phone).get().then((doc) => {
                 if (doc.exists) {
-                    alert('এই নাম্বার দিয়ে ইতিমধ্যে একটি অ্যাকাউন্ট রয়েছে! দয়া করে লগইন করুন।');
+                    alert('এই নাম্বার দিয়ে ইতিমধ্যে অ্যাকাউন্ট রয়েছে! লগইন করুন।');
                     btn.innerText = "রেজিস্ট্রেশন করুন";
                     btn.disabled = false;
                     showLoginScreen();
                 } else {
+                    // শুধু রেফারকারীকে ৫ টাকা দেওয়া হবে, নতুন ইউজার পাবে ০ টাকা
+                    if(referrer && referrer !== phone) {
+                        db.collection("users").doc(referrer).get().then(refDoc => {
+                            if(refDoc.exists) {
+                                let refCurrBal = refDoc.data().balance || 0;
+                                db.collection("users").doc(referrer).update({ balance: refCurrBal + 5 });
+                            }
+                        });
+                    }
+
                     db.collection("users").doc(phone).set({
                         phone: phone,
                         password: password,
-                        balance: 0.00,
+                        balance: 0,
+                        referredBy: referrer || '',
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     }).then(() => {
                         localStorage.setItem('tp_phone', phone);
                         localStorage.setItem('tp_balance', 0);
+                        alert('রেজিস্ট্রেশন সফল হয়েছে!');
                         location.reload();
                     });
                 }
@@ -345,7 +376,6 @@
             });
         }
 
-        // লগইন হ্যান্ডলার
         function performLogin() {
             const phone = document.getElementById('loginNumber').value.trim();
             const password = document.getElementById('loginPassword').value.trim();
@@ -358,7 +388,7 @@
 
             db.collection("users").doc(phone).get().then((doc) => {
                 if (!doc.exists) {
-                    alert('এই নাম্বার দিয়ে কোনো অ্যাকাউন্ট নেই! প্রথমে রেজিস্ট্রেশন করুন।');
+                    alert('এই নাম্বার দিয়ে কোনো অ্যাকাউন্ট নেই! রেজিস্ট্রেশন করুন।');
                     btn.innerText = "প্রবেশ করুন";
                     btn.disabled = false;
                     showRegisterScreen();
@@ -369,7 +399,7 @@
                         localStorage.setItem('tp_balance', userData.balance || 0);
                         location.reload();
                     } else {
-                        alert('ভুল পাসওয়ার্ড! আবার চেষ্টা করুন।');
+                        alert('ভুল পাসওয়ার্ড!');
                         btn.innerText = "প্রবেশ করুন";
                         btn.disabled = false;
                     }
@@ -382,7 +412,7 @@
         }
 
         function logoutUser() {
-            if(confirm('আপনি কি লগআউট করতে চান?')) {
+            if(confirm('লগআউট করতে চান?')) {
                 localStorage.removeItem('tp_phone');
                 localStorage.removeItem('tp_balance');
                 location.reload();
@@ -391,25 +421,41 @@
 
         function loadUserTasks() {
             const container = document.getElementById('tasks-container');
-            db.collection("tasks").onSnapshot((snapshot) => {
-                let html = '';
-                snapshot.forEach((doc) => {
-                    const task = doc.data();
-                    if(!task.title || task.title === 'undefined') return;
-                    html += `
-                        <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
-                            <div>
-                                <h4 class="font-bold text-sm text-slate-800">${task.title}</h4>
-                                <p class="text-xs text-slate-500">${task.description || ''}</p>
-                                <p class="text-xs text-emerald-600 font-bold mt-1">Reward: ৳${task.reward}</p>
-                            </div>
-                            <button onclick="openProofModal('${task.link}', '${task.title}', ${task.reward})" class="bg-blue-600 text-white px-4 py-2 rounded-xl text-xs font-bold shadow cursor-pointer">
-                                Complete
-                            </button>
-                        </div>
-                    `;
+            db.collection("task_submissions").where("phone", "==", userPhone).get().then(subSnapshot => {
+                let completedTaskTitles = [];
+                subSnapshot.forEach(doc => {
+                    completedTaskTitles.push(doc.data().taskTitle);
                 });
-                container.innerHTML = html || '<p class="text-xs text-slate-400 text-center py-4">বর্তমানে কোনো কাজ নেই</p>';
+
+                db.collection("tasks").onSnapshot((snapshot) => {
+                    let html = '';
+                    snapshot.forEach((doc) => {
+                        const task = doc.data();
+                        if(!task.title || task.title === 'undefined') return;
+
+                        let isCompleted = completedTaskTitles.includes(task.title);
+
+                        html += `
+                            <div class="p-4 rounded-2xl bg-slate-50 border border-slate-200/60 flex items-center justify-between">
+                                <div>
+                                    <h4 class="font-bold text-sm text-slate-800">${task.title}</h4>
+                                    <p class="text-xs text-slate-500">${task.description || ''}</p>
+                                    <p class="text-xs text-emerald-600 font-bold mt-1">Reward: ৳${task.reward}</p>
+                                </div>
+                                ${isCompleted ? `
+                                    <button disabled class="bg-slate-300 text-slate-600 px-4 py-2 rounded-xl text-xs font-bold cursor-not-allowed">
+                                        কমপ্লিট
+                                    </button>
+                                ` : `
+                                    <button onclick="openProofModal('${task.link}', '${task.title}', ${task.reward})" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl text-xs font-bold shadow cursor-pointer">
+                                        কাজ শুরু করুন
+                                    </button>
+                                `}
+                            </div>
+                        `;
+                    });
+                    container.innerHTML = html || '<p class="text-xs text-slate-400 text-center py-4">বর্তমানে কোনো কাজ নেই</p>';
+                });
             });
         }
 
@@ -452,12 +498,13 @@
                     status: "pending",
                     createdAt: firebase.firestore.FieldValue.serverTimestamp()
                 }).then(() => {
-                    alert('কাজের প্রুফ স্ক্রিনশট সফলভাবে জমা হয়েছে!');
+                    alert('কাজের প্রুফ সফলভাবে জমা হয়েছে!');
                     btn.innerText = "জমা দিন";
                     btn.disabled = false;
                     closeProofModal();
+                    loadUserTasks();
                 }).catch(err => {
-                    alert('সাবমিট করতে সমস্যা হয়েছে: ' + err.message);
+                    alert('ত্রুটি: ' + err.message);
                     btn.innerText = "জমা দিন";
                     btn.disabled = false;
                 });
@@ -497,12 +544,14 @@
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-' + tabName).classList.add('active');
             
-            ['home', 'withdraw', 'support', 'profile', 'promotion'].forEach(t => {
+            ['home', 'referral', 'withdraw', 'support', 'profile', 'promotion'].forEach(t => {
                 const btn = document.getElementById('nav-' + t);
-                if(t === tabName) {
-                    btn.className = "text-blue-600 font-bold flex flex-col items-center text-[10px]";
-                } else {
-                    btn.className = "text-slate-400 font-medium flex flex-col items-center text-[10px]";
+                if(btn) {
+                    if(t === tabName) {
+                        btn.className = "text-blue-600 font-bold flex flex-col items-center text-[10px]";
+                    } else {
+                        btn.className = "text-slate-400 font-medium flex flex-col items-center text-[10px]";
+                    }
                 }
             });
         }
@@ -516,8 +565,6 @@
                 if (pin === "1234") { 
                     document.getElementById('secret-admin-modal').style.display = 'block';
                     loadAdminData();
-                } else {
-                    alert('ভুল পিন!');
                 }
             }
         }
@@ -535,13 +582,10 @@
             if (!title || !reward) { alert('শিরোনাম এবং রিওয়ার্ড দিন!'); return; }
 
             db.collection("tasks").add({
-                title: title, 
-                description: desc, 
-                link: link, 
-                reward: Number(reward),
+                title: title, description: desc, link: link, reward: Number(reward),
                 createdAt: firebase.firestore.FieldValue.serverTimestamp()
             }).then(() => {
-                alert('কাজ সফলভাবে পাবলিশ হয়েছে!');
+                alert('কাজ পাবলিশ হয়েছে!');
                 document.getElementById('admin-title').value = '';
                 document.getElementById('admin-desc').value = '';
                 document.getElementById('admin-link').value = '';
@@ -555,33 +599,25 @@
                 snapshot.forEach((doc) => {
                     let sub = doc.data();
                     let subId = doc.id;
-                    let uPhone = sub.phone || 'অজানা নাম্বার';
+                    let uPhone = sub.phone || 'অজানা';
                     let tTitle = sub.taskTitle || 'কাজ';
                     let tReward = sub.reward || 0;
                     
                     html += `
-                        <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-2">
+                        <div class="bg-slate-50 p-3.5 rounded-2xl border space-y-2">
                             <div>
-                                <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md font-bold text-[11px]">📞 ইউজার নাম্বার: ${uPhone}</span>
-                                <p class="font-bold text-slate-800 text-xs mt-1.5">কাজ: ${tTitle} (<span class="text-emerald-600 font-extrabold">৳${tReward}</span>)</p>
+                                <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-md font-bold text-[11px]">📞 ইউজার: ${uPhone}</span>
+                                <p class="font-bold text-slate-800 text-xs mt-1">কাজ: ${tTitle} (৳${tReward})</p>
                             </div>
-                            ${sub.proofImage ? `
-                                <div>
-                                    <p class="text-[10px] text-slate-400 mb-1 font-semibold">প্রুফ স্ক্রিনশট:</p>
-                                    <a href="${sub.proofImage}" target="_blank">
-                                        <img src="${sub.proofImage}" class="w-28 h-28 object-cover rounded-xl border-2 border-slate-200 shadow-sm cursor-pointer hover:opacity-90">
-                                    </a>
-                                </div>
-                            ` : '<p class="text-xs text-slate-400">কোনো ছবি নেই</p>'}
-                            
+                            ${sub.proofImage ? `<a href="${sub.proofImage}" target="_blank"><img src="${sub.proofImage}" class="w-24 h-24 object-cover rounded-xl border"></a>` : ''}
                             <div class="flex space-x-2 pt-1">
-                                <button onclick="approveTask('${subId}', '${uPhone}', ${tReward})" class="bg-emerald-500 hover:bg-emerald-600 text-white px-3 py-2 rounded-xl font-bold text-xs cursor-pointer w-1/2 transition shadow">Approve & Pay</button>
-                                <button onclick="db.collection('task_submissions').doc('${subId}').update({status: 'rejected'})" class="bg-red-500 hover:bg-red-600 text-white px-3 py-2 rounded-xl font-bold text-xs cursor-pointer w-1/2 transition shadow">Reject</button>
+                                <button onclick="approveTask('${subId}', '${uPhone}', ${tReward})" class="bg-emerald-500 text-white px-3 py-2 rounded-xl font-bold text-xs w-1/2">Approve & Pay</button>
+                                <button onclick="db.collection('task_submissions').doc('${subId}').update({status: 'rejected'})" class="bg-red-500 text-white px-3 py-2 rounded-xl font-bold text-xs w-1/2">Reject</button>
                             </div>
                         </div>
                     `;
                 });
-                document.getElementById('admin-pending-tasks').innerHTML = html || '<p class="text-slate-400 text-center py-2">কোনো পেন্ডিং কাজ নেই</p>';
+                document.getElementById('admin-pending-tasks').innerHTML = html || '<p class="text-slate-400 text-center py-2">কোনো পেন্ডিং নেই</p>';
             });
 
             db.collection("withdrawals").where("status", "==", "pending").onSnapshot((snapshot) => {
@@ -589,36 +625,27 @@
                 snapshot.forEach((doc) => {
                     let w = doc.data();
                     html += `
-                        <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-2">
-                            <div>
-                                <span class="bg-amber-100 text-amber-700 px-2 py-0.5 rounded-md font-bold text-[11px]">📞 ইউজার নাম্বার: ${w.phone}</span>
-                                <p class="text-slate-700 text-xs mt-1.5">মেথড: <b>${w.method.toUpperCase()}</b> | নাম্বার: <b>${w.account}</b></p>
-                                <p class="text-slate-900 font-extrabold text-xs">পরিমাণ: ৳${w.amount}</p>
-                            </div>
-                            <div class="flex space-x-2 pt-1">
-                                <button onclick="db.collection('withdrawals').doc('${doc.id}').update({status: 'approved'})" class="bg-emerald-500 text-white px-3 py-1.5 rounded-lg font-bold text-xs cursor-pointer w-1/2">Approve</button>
-                                <button onclick="db.collection('withdrawals').doc('${doc.id}').update({status: 'rejected'})" class="bg-red-500 text-white px-3 py-1.5 rounded-lg font-bold text-xs cursor-pointer w-1/2">Reject</button>
+                        <div class="bg-slate-50 p-3 rounded-2xl border space-y-2 text-xs">
+                            <p>📞 <b>${w.phone}</b> | মেথড: ${w.method.toUpperCase()} | ৳${w.amount}</p>
+                            <div class="flex space-x-2">
+                                <button onclick="db.collection('withdrawals').doc('${doc.id}').update({status: 'approved'})" class="bg-emerald-500 text-white px-3 py-1 rounded-lg font-bold w-1/2">Approve</button>
+                                <button onclick="db.collection('withdrawals').doc('${doc.id}').update({status: 'rejected'})" class="bg-red-500 text-white px-3 py-1 rounded-lg font-bold w-1/2">Reject</button>
                             </div>
                         </div>
                     `;
                 });
-                document.getElementById('admin-withdraw-list').innerHTML = html || '<p class="text-slate-400 text-center py-2">কোনো উইথড্র রিকোয়েস্ট নেই</p>';
+                document.getElementById('admin-withdraw-list').innerHTML = html || '<p class="text-slate-400 text-center py-2">কোনো রিকোয়েস্ট নেই</p>';
             });
         }
 
         function approveTask(subId, phone, rewardAmount) {
-            db.collection("task_submissions").doc(subId).update({
-                status: 'approved'
-            }).then(() => {
+            db.collection("task_submissions").doc(subId).update({ status: 'approved' }).then(() => {
                 db.collection("users").doc(phone).get().then((doc) => {
                     let currentBal = doc.exists ? (doc.data().balance || 0) : 0;
-                    let newBal = currentBal + rewardAmount;
-                    db.collection("users").doc(phone).update({ balance: newBal }).then(() => {
-                        alert(`সফলভাবে এপ্রুভ করা হয়েছে! ইউজার (${phone}) এর অ্যাকাউন্টে ৳${rewardAmount} জমা হয়েছে।`);
+                    db.collection("users").doc(phone).update({ balance: currentBal + rewardAmount }).then(() => {
+                        alert('সফলভাবে এপ্রুভ ও টাকা যোগ করা হয়েছে!');
                     });
                 });
-            }).catch(err => {
-                alert('ত্রুটি: ' + err.message);
             });
         }
     </script>
