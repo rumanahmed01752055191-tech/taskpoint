@@ -314,14 +314,14 @@
             </div>
         </div>
 
-        <!-- BOTTOM NAVIGATION (এখানে Submissions অপশনটি যুক্ত করা হয়েছে) -->
+        <!-- BOTTOM NAVIGATION (Fixed with 6 equally-spaced tabs) -->
         <nav class="fixed bottom-12 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t border-slate-200 px-1 py-3 flex justify-around items-center z-40 rounded-t-3xl shadow-lg">
-            <button onclick="switchTab('home')" id="nav-home" class="text-blue-600 font-bold flex flex-col items-center text-[9px]"><i class="fa-solid fa-house text-base"></i>Home</button>
-            <button onclick="switchTab('submissions')" id="nav-submissions" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-clipboard-list text-base"></i>My Subs</button>
-            <button onclick="switchTab('referral')" id="nav-referral" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-users text-base"></i>Referral</button>
-            <button onclick="switchTab('withdraw')" id="nav-withdraw" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-wallet text-base"></i>Withdraw</button>
-            <button onclick="switchTab('promotion')" id="nav-promotion" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-bullhorn text-base"></i>Promotion</button>
-            <button onclick="switchTab('profile')" id="nav-profile" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-user text-base"></i>Profile</button>
+            <button onclick="switchTab('home')" id="nav-home" class="text-blue-600 font-bold flex flex-col items-center text-[9px] w-1/6"><i class="fa-solid fa-house text-base"></i>Home</button>
+            <button onclick="switchTab('submissions')" id="nav-submissions" class="text-slate-400 font-medium flex flex-col items-center text-[9px] w-1/6"><i class="fa-solid fa-clipboard-list text-base"></i>Subs</button>
+            <button onclick="switchTab('referral')" id="nav-referral" class="text-slate-400 font-medium flex flex-col items-center text-[9px] w-1/6"><i class="fa-solid fa-users text-base"></i>Refer</button>
+            <button onclick="switchTab('withdraw')" id="nav-withdraw" class="text-slate-400 font-medium flex flex-col items-center text-[9px] w-1/6"><i class="fa-solid fa-wallet text-base"></i>Withdraw</button>
+            <button onclick="switchTab('promotion')" id="nav-promotion" class="text-slate-400 font-medium flex flex-col items-center text-[9px] w-1/6"><i class="fa-solid fa-bullhorn text-base"></i>Promo</button>
+            <button onclick="switchTab('profile')" id="nav-profile" class="text-slate-400 font-medium flex flex-col items-center text-[9px] w-1/6"><i class="fa-solid fa-user text-base"></i>Profile</button>
         </nav>
     </div>
 
@@ -596,11 +596,11 @@
                     
                     let statusBadge = '';
                     if(status === 'pending') {
-                        statusBadge = `<span class="bg-amber-100 text-amber-700 font-bold px-2.5 py-1 rounded-lg text-[10px]">পেন্ডিং (Pending)</span>`;
+                        statusBadge = `<span class="bg-amber-100 text-amber-700 font-bold px-2.5 py-1 rounded-lg text-[10px]">পেন্ডিং</span>`;
                     } else if(status === 'approved') {
-                        statusBadge = `<span class="bg-emerald-100 text-emerald-700 font-bold px-2.5 py-1 rounded-lg text-[10px]">এপ্রুভড (Approved)</span>`;
+                        statusBadge = `<span class="bg-emerald-100 text-emerald-700 font-bold px-2.5 py-1 rounded-lg text-[10px]">এপ্রুভড</span>`;
                     } else if(status === 'rejected') {
-                        statusBadge = `<span class="bg-red-100 text-red-700 font-bold px-2.5 py-1 rounded-lg text-[10px]">রিজেক্টেড (Rejected)</span>`;
+                        statusBadge = `<span class="bg-red-100 text-red-700 font-bold px-2.5 py-1 rounded-lg text-[10px]">রিজেক্টেড</span>`;
                     }
 
                     html += `
@@ -779,9 +779,9 @@
                 const btn = document.getElementById('nav-' + t);
                 if(btn) {
                     if(t === tabName) {
-                        btn.className = "text-blue-600 font-bold flex flex-col items-center text-[9px]";
+                        btn.className = "text-blue-600 font-bold flex flex-col items-center text-[9px] w-1/6";
                     } else {
-                        btn.className = "text-slate-400 font-medium flex flex-col items-center text-[9px]";
+                        btn.className = "text-slate-400 font-medium flex flex-col items-center text-[9px] w-1/6";
                     }
                 }
             });
@@ -902,7 +902,6 @@
         }
 
         function approveWithdrawal(wId) {
-            db.changes?.(); // safety
             db.collection("withdrawals").doc(wId).update({ status: 'approved' }).then(() => {
                 alert('উইথড্র রিকোয়েস্ট সফলভাবে এপ্রুভ করা হয়েছে!');
             });
