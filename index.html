@@ -20,7 +20,7 @@
 </head>
 <body class="bg-slate-50 min-h-screen pb-44">
 
-    <!-- WELCOME SCREEN WITH LOGO -->
+    <!-- WELCOME SCREEN -->
     <div id="screen-welcome" class="max-w-md mx-auto min-h-screen flex flex-col justify-center items-center p-6 bg-gradient-to-br from-indigo-950 via-blue-900 to-slate-900 text-white fixed inset-0 z-50">
         <div class="max-w-sm w-full space-y-6 text-center">
             <div class="relative w-24 h-24 mx-auto">
@@ -114,10 +114,14 @@
                     <span>অ্যান্ড্রয়েড অ্যাপ ডাউনলোড করুন (.APK)</span>
                 </a>
 
-                <!-- কাজের তালিকার উপরে নোটিশ বক্স -->
-                <div class="bg-amber-50 border border-amber-200 text-amber-800 p-3.5 rounded-2xl text-xs space-y-1 shadow-sm">
-                    <p class="font-bold flex items-center"><i class="fa-solid fa-circle-exclamation mr-1.5 text-amber-600"></i> গুরুত্বপূর্ণ নির্দেশিকা:</p>
-                    <p>কাজ জমা দেওয়ার সময় অবশ্যই গ্যালারি থেকে ফাইলটি ছোট বা ক্রপ করে দিবেন, অন্যথায় সার্ভারে আপলোড হতে সমস্যা হতে পারে।</p>
+                <!-- কাজের তালিকার উপরে স্পষ্টভাবে দৃশ্যমান নোটিশ বক্স -->
+                <div class="bg-amber-100 border-2 border-amber-400 text-amber-900 p-4 rounded-3xl text-xs space-y-1.5 shadow-md">
+                    <p class="font-extrabold flex items-center text-sm text-amber-950">
+                        <i class="fa-solid fa-triangle-exclamation mr-2 text-amber-600 text-base"></i> জরুরি নির্দেশিকা:
+                    </p>
+                    <p class="leading-relaxed font-medium">
+                        কাজ জমা দেওয়ার সময় অবশ্যই গ্যালারি থেকে স্ক্রিনশটটি ছোট বা ক্রপ (Crop) করে দেবেন, অন্যথায় বড় সাইজের ছবি আপলোড হতে আটকে যেতে পারে।
+                    </p>
                 </div>
 
                 <div class="bg-white p-5 rounded-3xl card-shadow border border-slate-100">
@@ -255,9 +259,9 @@
                     <label class="block text-xs font-bold text-slate-600">কাজের স্ক্রিনশট ছবি সিলেক্ট করুন:</label>
                     <input type="file" id="proof-file" accept="image/*" class="w-full border border-slate-300 p-2.5 rounded-xl text-xs bg-slate-50 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                     
-                    <div class="bg-amber-50 border border-amber-200 text-amber-800 p-2.5 rounded-xl text-[11px] space-y-1">
-                        <p class="font-bold"><i class="fa-solid fa-circle-exclamation mr-1"></i> নির্দেশিকা:</p>
-                        <p>গ্যালারি থেকে স্ক্রিনশটটি ছোট বা ক্রপ করে সিলেক্ট করুন। অ্যাপ নিজে থেকেই সাইজ অপ্টিমাইজ করে নেবে।</p>
+                    <div class="bg-amber-50 border border-amber-300 text-amber-900 p-3 rounded-2xl text-[11px] space-y-1">
+                        <p class="font-bold"><i class="fa-solid fa-circle-exclamation mr-1"></i> বিশেষ সতর্কতা:</p>
+                        <p>ছবি সিলেক্ট করার আগে গ্যালারি থেকে স্ক্রিনশটটি ক্রপ করে ছোট করে নিন।</p>
                     </div>
                 </div>
 
@@ -306,7 +310,7 @@
             </div>
         </div>
 
-        <!-- BOTTOM NAVIGATION (মাই সাবমিশনসহ আপডেট করা) -->
+        <!-- BOTTOM NAVIGATION -->
         <nav class="fixed bottom-12 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t border-slate-200 px-1 py-3 flex justify-around items-center z-40 rounded-t-3xl shadow-lg">
             <button onclick="switchTab('home')" id="nav-home" class="text-blue-600 font-bold flex flex-col items-center text-[9px]"><i class="fa-solid fa-house text-base"></i>Home</button>
             <button onclick="switchTab('submissions')" id="nav-submissions" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-clipboard-list text-base"></i>Submissions</button>
