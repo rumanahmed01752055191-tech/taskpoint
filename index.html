@@ -4,15 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskPoint - Micro Tasking Platform</title>
+    <!-- প্রফিটেবল রেট সিপিএম নেটওয়ার্ক স্ক্রিপ্ট -->
+    <script src="https://pl31371656.profitableratecpmnetwork.com/00/9e/fd/009efdbce89b0b2aa38c726b8873be4d.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.5/lib/index.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
-    
-    <!-- Adsterra Popunder Ad Code Integrated -->
-    <script src="https://pl31371656.profitableratecpmnetwork.com/00/9e/fd/009efdbce89b0b2aa38c726b8873be4d.js"></script>
-
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #0f172a; }
@@ -129,18 +127,10 @@
                 </div>
 
                 <div class="bg-white p-5 rounded-3xl card-shadow border border-slate-100">
-                    <!-- এখানে অ্যাভেইলেবল কাজের পাশে মাই সাবমিশন বাটনটি যুক্ত করা হয়েছে -->
-                    <div class="flex justify-between items-center mb-3">
-                        <h3 class="font-bold text-slate-800 text-base flex items-center space-x-2">
-                            <i class="fa-solid fa-fire text-orange-500"></i>
-                            <span>অ্যাভেইলেবল কাজসমূহ</span>
-                        </h3>
-                        <button onclick="switchTab('submissions')" class="bg-blue-50 hover:bg-blue-100 text-blue-600 text-xs font-bold px-3 py-1.5 rounded-xl border border-blue-200 transition flex items-center space-x-1.5 cursor-pointer">
-                            <i class="fa-solid fa-clipboard-list"></i>
-                            <span>মাই সাবমিশন</span>
-                        </button>
-                    </div>
-
+                    <h3 class="font-bold text-slate-800 text-base mb-3 flex items-center space-x-2">
+                        <i class="fa-solid fa-fire text-orange-500"></i>
+                        <span>অ্যাভেইলেবল কাজসমূহ</span>
+                    </h3>
                     <div id="tasks-container" class="space-y-3">
                         <p class="text-xs text-slate-400 text-center py-4">কাজ লোড হচ্ছে...</p>
                     </div>
@@ -322,13 +312,14 @@
             </div>
         </div>
 
-        <!-- BOTTOM NAVIGATION (5 Tabs now) -->
-        <nav class="fixed bottom-12 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t border-slate-200 px-2 py-3 flex justify-around items-center z-40 rounded-t-3xl shadow-lg">
-            <button onclick="switchTab('home')" id="nav-home" class="text-blue-600 font-bold flex flex-col items-center text-[10px] w-1/5"><i class="fa-solid fa-house text-base"></i>Home</button>
-            <button onclick="switchTab('referral')" id="nav-referral" class="text-slate-400 font-medium flex flex-col items-center text-[10px] w-1/5"><i class="fa-solid fa-users text-base"></i>Refer</button>
-            <button onclick="switchTab('withdraw')" id="nav-withdraw" class="text-slate-400 font-medium flex flex-col items-center text-[10px] w-1/5"><i class="fa-solid fa-wallet text-base"></i>Withdraw</button>
-            <button onclick="switchTab('promotion')" id="nav-promotion" class="text-slate-400 font-medium flex flex-col items-center text-[10px] w-1/5"><i class="fa-solid fa-bullhorn text-base"></i>Promo</button>
-            <button onclick="switchTab('profile')" id="nav-profile" class="text-slate-400 font-medium flex flex-col items-center text-[10px] w-1/5"><i class="fa-solid fa-user text-base"></i>Profile</button>
+        <!-- BOTTOM NAVIGATION (সঠিকভাবে Submissions সহ ৬টি ট্যাব) -->
+        <nav class="fixed bottom-12 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t border-slate-200 px-1 py-3 flex justify-around items-center z-40 rounded-t-3xl shadow-lg">
+            <button onclick="switchTab('home')" id="nav-home" class="text-blue-600 font-bold flex flex-col items-center text-[9px]"><i class="fa-solid fa-house text-base"></i>Home</button>
+            <button onclick="switchTab('submissions')" id="nav-submissions" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-clipboard-list text-base"></i>Submissions</button>
+            <button onclick="switchTab('referral')" id="nav-referral" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-users text-base"></i>Referral</button>
+            <button onclick="switchTab('withdraw')" id="nav-withdraw" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-wallet text-base"></i>Withdraw</button>
+            <button onclick="switchTab('promotion')" id="nav-promotion" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-bullhorn text-base"></i>Promotion</button>
+            <button onclick="switchTab('profile')" id="nav-profile" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-user text-base"></i>Profile</button>
         </nav>
     </div>
 
@@ -603,11 +594,11 @@
                     
                     let statusBadge = '';
                     if(status === 'pending') {
-                        statusBadge = `<span class="bg-amber-100 text-amber-700 font-bold px-2.5 py-1 rounded-lg text-[10px]">পেন্ডিং</span>`;
+                        statusBadge = `<span class="bg-amber-100 text-amber-700 font-bold px-2.5 py-1 rounded-lg text-[10px]">পেন্ডিং (Pending)</span>`;
                     } else if(status === 'approved') {
-                        statusBadge = `<span class="bg-emerald-100 text-emerald-700 font-bold px-2.5 py-1 rounded-lg text-[10px]">এপ্রুভড</span>`;
+                        statusBadge = `<span class="bg-emerald-100 text-emerald-700 font-bold px-2.5 py-1 rounded-lg text-[10px]">এপ্রুভড (Approved)</span>`;
                     } else if(status === 'rejected') {
-                        statusBadge = `<span class="bg-red-100 text-red-700 font-bold px-2.5 py-1 rounded-lg text-[10px]">রিজেক্টেড</span>`;
+                        statusBadge = `<span class="bg-red-100 text-red-700 font-bold px-2.5 py-1 rounded-lg text-[10px]">রিজেক্টেড (Rejected)</span>`;
                     }
 
                     html += `
@@ -782,13 +773,13 @@
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.getElementById('tab-' + tabName).classList.add('active');
             
-            ['home', 'referral', 'withdraw', 'promotion', 'profile'].forEach(t => {
+            ['home', 'submissions', 'referral', 'withdraw', 'promotion', 'profile'].forEach(t => {
                 const btn = document.getElementById('nav-' + t);
                 if(btn) {
                     if(t === tabName) {
-                        btn.className = "text-blue-600 font-bold flex flex-col items-center text-[10px] w-1/5";
+                        btn.className = "text-blue-600 font-bold flex flex-col items-center text-[9px]";
                     } else {
-                        btn.className = "text-slate-400 font-medium flex flex-col items-center text-[10px] w-1/5";
+                        btn.className = "text-slate-400 font-medium flex flex-col items-center text-[9px]";
                     }
                 }
             });
