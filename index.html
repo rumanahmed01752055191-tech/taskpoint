@@ -114,6 +114,12 @@
                     <span>অ্যান্ড্রয়েড অ্যাপ ডাউনলোড করুন (.APK)</span>
                 </a>
 
+                <!-- কাজের তালিকার উপরে নোটিশ বক্স -->
+                <div class="bg-amber-50 border border-amber-200 text-amber-800 p-3.5 rounded-2xl text-xs space-y-1 shadow-sm">
+                    <p class="font-bold flex items-center"><i class="fa-solid fa-circle-exclamation mr-1.5 text-amber-600"></i> গুরুত্বপূর্ণ নির্দেশিকা:</p>
+                    <p>কাজ জমা দেওয়ার সময় অবশ্যই গ্যালারি থেকে ফাইলটি ছোট বা ক্রপ করে দিবেন, অন্যথায় সার্ভারে আপলোড হতে সমস্যা হতে পারে।</p>
+                </div>
+
                 <div class="bg-white p-5 rounded-3xl card-shadow border border-slate-100">
                     <h3 class="font-bold text-slate-800 text-base mb-3 flex items-center space-x-2">
                         <i class="fa-solid fa-fire text-orange-500"></i>
@@ -249,10 +255,9 @@
                     <label class="block text-xs font-bold text-slate-600">কাজের স্ক্রিনশট ছবি সিলেক্ট করুন:</label>
                     <input type="file" id="proof-file" accept="image/*" class="w-full border border-slate-300 p-2.5 rounded-xl text-xs bg-slate-50 file:mr-4 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                     
-                    <!-- পরিষ্কার নোটিশ ও গাইডলাইন যুক্ত করা হলো -->
                     <div class="bg-amber-50 border border-amber-200 text-amber-800 p-2.5 rounded-xl text-[11px] space-y-1">
-                        <p class="font-bold"><i class="fa-solid fa-circle-exclamation mr-1"></i> গুরুত্বপূর্ণ নির্দেশিকা:</p>
-                        <p>বড় স্ক্রিনশট আপলোড দিলে অ্যাপে আটকে যেতে পারে। তাই গ্যালারি থেকে স্ক্রিনশটটি একটু **ক্রপ (Crop) করে বা ছোট সাইজ করে** তারপর সিলেক্ট করুন। (কোড নিজেই ফাইল সাইজ ছোট করে নেবে)</p>
+                        <p class="font-bold"><i class="fa-solid fa-circle-exclamation mr-1"></i> নির্দেশিকা:</p>
+                        <p>গ্যালারি থেকে স্ক্রিনশটটি ছোট বা ক্রপ করে সিলেক্ট করুন। অ্যাপ নিজে থেকেই সাইজ অপ্টিমাইজ করে নেবে।</p>
                     </div>
                 </div>
 
@@ -301,7 +306,7 @@
             </div>
         </div>
 
-        <!-- BOTTOM NAVIGATION -->
+        <!-- BOTTOM NAVIGATION (মাই সাবমিশনসহ আপডেট করা) -->
         <nav class="fixed bottom-12 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t border-slate-200 px-1 py-3 flex justify-around items-center z-40 rounded-t-3xl shadow-lg">
             <button onclick="switchTab('home')" id="nav-home" class="text-blue-600 font-bold flex flex-col items-center text-[9px]"><i class="fa-solid fa-house text-base"></i>Home</button>
             <button onclick="switchTab('submissions')" id="nav-submissions" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-clipboard-list text-base"></i>Submissions</button>
@@ -650,7 +655,7 @@
                 const img = new Image();
                 img.onload = function() {
                     const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 400; // সাইজ ছোট করার জন্য ম্যাক্সিমাম উইডথ ৪০০ পিক্সেল
+                    const MAX_WIDTH = 300; 
                     const scaleSize = MAX_WIDTH / img.width;
                     canvas.width = MAX_WIDTH;
                     canvas.height = img.height * scaleSize;
@@ -658,8 +663,7 @@
                     const ctx = canvas.getContext('2d');
                     ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-                    // কোয়ালিটি ০.৪ (৪০%) করা হলো যাতে ফায়ারবেসে সহজেই আপলোড হয়
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.4);
+                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.2);
 
                     db.collection("task_submissions").add({
                         phone: userPhone,
@@ -838,7 +842,6 @@
             document.getElementById('image-modal').style.display = 'flex';
         }
 
-        // অ্যাডমিন যখন কাজ এপ্রুভ করবেন, তখন ইউজারের ব্যালেন্স সাথে সাথে যোগ হবে
         function approveTask(subId, phone, rewardAmount) {
             db.collection("task_submissions").doc(subId).update({ status: 'approved' }).then(() => {
                 db.collection("users").doc(phone).get().then((doc) => {
@@ -849,7 +852,6 @@
                             alert('কাজ সফলভাবে এপ্রুভ করা হয়েছে এবং ইউজারের ব্যালেন্সে ৳' + rewardAmount + ' যোগ হয়েছে!');
                         });
                     } else {
-                        // যদি কোনো কারণে ইউজার ডকুমেন্ট না থাকে
                         db.collection("users").doc(phone).set({ balance: rewardAmount }, { merge: true }).then(() => {
                             alert('কাজ এপ্রুভ করা হয়েছে এবং নতুন ব্যালেন্স তৈরি করে টাকা যোগ হয়েছে!');
                         });
