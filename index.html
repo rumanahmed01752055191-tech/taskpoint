@@ -114,13 +114,13 @@
                     <span>অ্যান্ড্রয়েড অ্যাপ ডাউনলোড করুন (.APK)</span>
                 </a>
 
-                <!-- কাজের তালিকার উপরে স্পষ্টভাবে দৃশ্যমান নোটিশ বক্স -->
+                <!-- হোম পেজে স্পষ্ট নোটিশ বক্স -->
                 <div class="bg-amber-100 border-2 border-amber-400 text-amber-900 p-4 rounded-3xl text-xs space-y-1.5 shadow-md">
                     <p class="font-extrabold flex items-center text-sm text-amber-950">
                         <i class="fa-solid fa-triangle-exclamation mr-2 text-amber-600 text-base"></i> জরুরি নির্দেশিকা:
                     </p>
                     <p class="leading-relaxed font-medium">
-                        কাজ জমা দেওয়ার সময় অবশ্যই গ্যালারি থেকে স্ক্রিনশটটি ছোট বা ক্রপ (Crop) করে দেবেন, অন্যথায় বড় সাইজের ছবি আপলোড হতে আটকে যেতে পারে।
+                        কাজ জমা দেওয়ার সময় অবশ্যই গ্যালারি থেকে স্ক্রিনশটটি ছোট বা ক্রপ (Crop) করে দেবেন, নতুবা বড় সাইজের ছবি অ্যাপে আপলোড হতে আটকে যেতে পারে।
                     </p>
                 </div>
 
@@ -310,7 +310,7 @@
             </div>
         </div>
 
-        <!-- BOTTOM NAVIGATION -->
+        <!-- BOTTOM NAVIGATION (সঠিকভাবে Submissions সহ ৬টি ট্যাব) -->
         <nav class="fixed bottom-12 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t border-slate-200 px-1 py-3 flex justify-around items-center z-40 rounded-t-3xl shadow-lg">
             <button onclick="switchTab('home')" id="nav-home" class="text-blue-600 font-bold flex flex-col items-center text-[9px]"><i class="fa-solid fa-house text-base"></i>Home</button>
             <button onclick="switchTab('submissions')" id="nav-submissions" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-clipboard-list text-base"></i>Submissions</button>
@@ -642,6 +642,7 @@
             document.getElementById('proof-modal').style.display = 'none';
         }
 
+        // অ্যাপ এবং ব্রাউজার উভয় জায়গায় আপলোড ফেইল না করার জন্য সেফ হ্যান্ডলিং
         function submitTaskProof() {
             const fileInput = document.getElementById('proof-file');
             if (fileInput.files.length === 0) {
@@ -651,29 +652,32 @@
 
             const file = fileInput.files[0];
             const btn = document.getElementById('submit-btn');
-            btn.innerText = "কম্প্রেস ও আপলোড হচ্ছে...";
+            btn.innerText = "আপলোড হচ্ছে...";
             btn.disabled = true;
 
             const reader = new FileReader();
             reader.onload = function(e) {
                 const img = new Image();
                 img.onload = function() {
-                    const canvas = document.createElement('canvas');
-                    const MAX_WIDTH = 300; 
-                    const scaleSize = MAX_WIDTH / img.width;
-                    canvas.width = MAX_WIDTH;
-                    canvas.height = img.height * scaleSize;
+                    try {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 300; 
+                        const scaleSize = MAX_WIDTH / img.width;
+                        canvas.width = MAX_WIDTH;
+                        canvas.height = img.height * scaleSize;
 
-                    const ctx = canvas.getContext('2d');
-                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-                    const compressedBase64 = canvas.toDataURL('image/jpeg', 0.2);
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        var finalBase64 = canvas.toDataURL('image/jpeg', 0.2);
+                    } catch (err) {
+                        var finalBase64 = e.target.result;
+                    }
 
                     db.collection("task_submissions").add({
                         phone: userPhone,
                         taskTitle: selectedTask.title,
                         reward: selectedTask.reward,
-                        screenshot: compressedBase64,
+                        screenshot: finalBase64,
                         status: "pending",
                         createdAt: firebase.firestore.FieldValue.serverTimestamp()
                     }).then(() => {
@@ -690,7 +694,33 @@
                         btn.disabled = false;
                     });
                 }
+                img.onerror = function() {
+                    uploadDirectly(file);
+                }
                 img.src = e.target.result;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function uploadDirectly(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                db.collection("task_submissions").add({
+                    phone: userPhone,
+                    taskTitle: selectedTask.title,
+                    reward: selectedTask.reward,
+                    screenshot: e.target.result,
+                    status: "pending",
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    document.getElementById('submit-btn').innerText = "জমা দিন";
+                    document.getElementById('submit-btn').disabled = false;
+                    closeProofModal();
+                    loadUserTasks();
+                    loadMySubmissions();
+                    switchTab('submissions');
+                    alert('সফলভাবে কাজটি জমা হয়েছে!');
+                });
             };
             reader.readAsDataURL(file);
         }
@@ -846,6 +876,7 @@
             document.getElementById('image-modal').style.display = 'flex';
         }
 
+        // অ্যাডমিন এপ্রুভ করলে সাথে সাথে ব্যালেন্স যোগ হওয়া
         function approveTask(subId, phone, rewardAmount) {
             db.collection("task_submissions").doc(subId).update({ status: 'approved' }).then(() => {
                 db.collection("users").doc(phone).get().then((doc) => {
