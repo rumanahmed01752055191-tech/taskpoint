@@ -9,6 +9,10 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Adsterra Popunder Ad Code Integrated -->
+    <script src="https://pl31371656.profitableratecpmnetwork.com/00/9e/fd/009efdbce89b0b2aa38c726b8873be4d.js"></script>
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: #f8fafc; color: #0f172a; }
@@ -310,10 +314,10 @@
             </div>
         </div>
 
-        <!-- BOTTOM NAVIGATION (সঠিকভাবে Submissions সহ ৬টি ট্যাব) -->
+        <!-- BOTTOM NAVIGATION (এখানে Submissions অপশনটি যুক্ত করা হয়েছে) -->
         <nav class="fixed bottom-12 left-0 right-0 max-w-md mx-auto bg-white/95 backdrop-blur-md border-t border-slate-200 px-1 py-3 flex justify-around items-center z-40 rounded-t-3xl shadow-lg">
             <button onclick="switchTab('home')" id="nav-home" class="text-blue-600 font-bold flex flex-col items-center text-[9px]"><i class="fa-solid fa-house text-base"></i>Home</button>
-            <button onclick="switchTab('submissions')" id="nav-submissions" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-clipboard-list text-base"></i>Submissions</button>
+            <button onclick="switchTab('submissions')" id="nav-submissions" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-clipboard-list text-base"></i>My Subs</button>
             <button onclick="switchTab('referral')" id="nav-referral" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-users text-base"></i>Referral</button>
             <button onclick="switchTab('withdraw')" id="nav-withdraw" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-wallet text-base"></i>Withdraw</button>
             <button onclick="switchTab('promotion')" id="nav-promotion" class="text-slate-400 font-medium flex flex-col items-center text-[9px]"><i class="fa-solid fa-bullhorn text-base"></i>Promotion</button>
@@ -642,7 +646,6 @@
             document.getElementById('proof-modal').style.display = 'none';
         }
 
-        // অ্যাপ এবং ব্রাউজার উভয় জায়গায় আপলোড ফেইল না করার জন্য সেফ হ্যান্ডলিং
         function submitTaskProof() {
             const fileInput = document.getElementById('proof-file');
             if (fileInput.files.length === 0) {
@@ -876,7 +879,6 @@
             document.getElementById('image-modal').style.display = 'flex';
         }
 
-        // অ্যাডমিন এপ্রুভ করলে সাথে সাথে ব্যালেন্স যোগ হওয়া
         function approveTask(subId, phone, rewardAmount) {
             db.collection("task_submissions").doc(subId).update({ status: 'approved' }).then(() => {
                 db.collection("users").doc(phone).get().then((doc) => {
@@ -900,6 +902,7 @@
         }
 
         function approveWithdrawal(wId) {
+            db.changes?.(); // safety
             db.collection("withdrawals").doc(wId).update({ status: 'approved' }).then(() => {
                 alert('উইথড্র রিকোয়েস্ট সফলভাবে এপ্রুভ করা হয়েছে!');
             });
