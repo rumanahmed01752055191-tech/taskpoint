@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskPoint - Micro Tasking Platform</title>
+    <!-- Monetag Verification Meta Tag -->
+    <meta name="monetag" content="আপনার_মেলিট্যাগ_ট্যাগ_এখানে_বসবে">
     <!-- পপআন্ডার স্ক্রিপ্টটি হেডার থেকে সরিয়ে দেওয়া হয়েছে, যাতে সাইটে ঢুকার সময় বিরক্ত না করে -->
     <script src="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.5/lib/index.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
@@ -643,7 +645,7 @@
             document.getElementById('proof-modal').style.display = 'none';
         }
 
-        // এখানে পপআন্ডার অ্যাড ট্রিগার করার ফাংশন যুক্ত করা হলো
+        // পপআন্ডার অ্যাড ট্রিগার করার ফাংশন
         function triggerPopunderAd() {
             try {
                 let script = document.createElement('script');
@@ -700,7 +702,6 @@
                         loadMySubmissions();
                         switchTab('submissions');
                         
-                        // কাজ সফলভাবে জমা হওয়ার পর এখানে পপআন্ডার অ্যাড শো করবে
                         triggerPopunderAd();
 
                         alert('সফলভাবে কাজটি জমা হয়েছে!');
@@ -736,7 +737,6 @@
                     loadMySubmissions();
                     switchTab('submissions');
                     
-                    // কাজ সফলভাবে জমা হওয়ার পর এখানে পপআন্ডার অ্যাড শো করবে
                     triggerPopunderAd();
 
                     alert('সফলভাবে কাজটি জমা হয়েছে!');
