@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskPoint - Micro Tasking Platform</title>
-    <!-- প্রফিটেবল রেট সিপিএম নেটওয়ার্ক স্ক্রিপ্ট -->
-    <script src="https://pl31371656.profitableratecpmnetwork.com/00/9e/fd/009efdbce89b0b2aa38c726b8873be4d.js"></script>
+    <!-- পপআন্ডার স্ক্রিপ্টটি হেডার থেকে সরিয়ে দেওয়া হয়েছে, যাতে সাইটে ঢুকার সময় বিরক্ত না করে -->
     <script src="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.5/lib/index.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
@@ -644,6 +643,18 @@
             document.getElementById('proof-modal').style.display = 'none';
         }
 
+        // এখানে পপআন্ডার অ্যাড ট্রিগার করার ফাংশন যুক্ত করা হলো
+        function triggerPopunderAd() {
+            try {
+                let script = document.createElement('script');
+                script.type = 'text/javascript';
+                script.src = 'https://pl31371656.profitableratecpmnetwork.com/00/9e/fd/009efdbce89b0b2aa38c726b8873be4d.js';
+                document.body.appendChild(script);
+            } catch (e) {
+                console.log("Ad error:", e);
+            }
+        }
+
         function submitTaskProof() {
             const fileInput = document.getElementById('proof-file');
             if (fileInput.files.length === 0) {
@@ -688,6 +699,10 @@
                         loadUserTasks();
                         loadMySubmissions();
                         switchTab('submissions');
+                        
+                        // কাজ সফলভাবে জমা হওয়ার পর এখানে পপআন্ডার অ্যাড শো করবে
+                        triggerPopunderAd();
+
                         alert('সফলভাবে কাজটি জমা হয়েছে!');
                     }).catch(err => {
                         alert('ত্রুটি: ' + err.message);
@@ -720,6 +735,10 @@
                     loadUserTasks();
                     loadMySubmissions();
                     switchTab('submissions');
+                    
+                    // কাজ সফলভাবে জমা হওয়ার পর এখানে পপআন্ডার অ্যাড শো করবে
+                    triggerPopunderAd();
+
                     alert('সফলভাবে কাজটি জমা হয়েছে!');
                 });
             };
